@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.accent-border {
+	box-shadow: inset 0 -3px 0 var(--green);
+}
+
+::-webkit-scrollbar {
+	display: none;
+}
+
+@layer utilities {
+	.text-balance {
+		text-wrap: balance;
+	}
+	* {
+		@apply text-foreground;
+	}
+}
+
+@layer base {
+	:root {
+		/* Базовые цвета */
+		--black: #121212;
+		--white: #ffffff;
+		--gray: #efefef;
+		--green: #42b883;
+		--dark-gray: #242424;
+
+		/* Цвета для светлой темы */
+		--background-light: var(--white);
+		--foreground-light: #1e1e2f;
+		--muted-light: #f2f2f2;
+		--muted-foreground-light: #6b7280;
+		--accent-light: var(--green); /* Пастельный фиолетовый */
+		--accent-foreground-light: var(--white);
+		--popover-light: #ffffff;
+		--popover-foreground-light: #1e1e2f;
+		--border-light: var(--gray);
+		--input-light: #f9fafb;
+		--card-light: var(--white);
+		--card-foreground-light: #1e1e2f;
+		--primary-light: var(--gray); /* Мягкий синий */
+		--primary-foreground-light: var(--white);
+		--secondary-light: var(--green); /* Пастельный оранжевый */
+		--secondary-foreground-light: var(--white);
+		--destructive-light: #ef4444;
+		--destructive-foreground-light: var(--white);
+		--ring-light: var(--green);
+
+		/* Цвета для тёмной темы */
+		--background-dark: var(--black);
+		--foreground-dark: #e5e7eb;
+		--muted-dark: #1f2937;
+		--muted-foreground-dark: #9ca3af;
+		--accent-dark: var(--green); /* Пастельный фиолетовый */
+		--accent-foreground-dark: var(--white);
+		--popover-dark: #1e1e2f;
+		--popover-foreground-dark: #e5e7eb;
+		--border-dark: #374151;
+		--input-dark: #1f2937;
+		--card-dark: #1e1e2f;
+		--card-foreground-dark: #e5e7eb;
+		--primary-dark: var(--dark-gray); /* Мягкий синий */
+		--primary-foreground-dark: var(--white);
+		--secondary-dark: var(--green); /* Пастельный оранжевый */
+		--secondary-foreground-dark: var(--black);
+		--destructive-dark: #ef4444;
+		--destructive-foreground-dark: var(--white);
+		--ring-dark: var(--accent-dark);
+
+		/* Глобальные переменные для текущей темы */
+		--background: var(--background-light);
+		--foreground: var(--foreground-light);
+		--muted: var(--muted-light);
+		--muted-foreground: var(--muted-foreground-light);
+		--accent: var(--accent-light);
+		--accent-foreground: var(--accent-foreground-light);
+		--popover: var(--popover-light);
+		--popover-foreground: var(--popover-foreground-light);
+		--border: var(--border-light);
+		--input: var(--input-light);
+		--card: var(--card-light);
+		--card-foreground: var(--card-foreground-light);
+		--primary: var(--primary-light);
+		--primary-foreground: var(--primary-foreground-light);
+		--secondary: var(--secondary-light);
+		--secondary-foreground: var(--secondary-foreground-light);
+		--destructive: var(--destructive-light);
+		--destructive-foreground: var(--destructive-foreground-light);
+		--ring: var(--ring-light);
+	}
+
+	.dark {
+		--background: var(--background-dark);
+		--foreground: var(--foreground-dark);
+		--muted: var(--muted-dark);
+		--muted-foreground: var(--muted-foreground-dark);
+		--accent: var(--accent-dark);
+		--accent-foreground: var(--accent-foreground-dark);
+		--popover: var(--popover-dark);
+		--popover-foreground: var(--popover-foreground-dark);
+		--border: var(--border-dark);
+		--input: var(--input-dark);
+		--card: var(--card-dark);
+		--card-foreground: var(--card-foreground-dark);
+		--primary: var(--primary-dark);
+		--primary-foreground: var(--primary-foreground-dark);
+		--secondary: var(--secondary-dark);
+		--secondary-foreground: var(--secondary-foreground-dark);
+		--destructive: var(--destructive-dark);
+		--destructive-foreground: var(--destructive-foreground-dark);
+		--ring: var(--ring-dark);
+	}
+}
