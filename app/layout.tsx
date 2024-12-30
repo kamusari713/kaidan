@@ -1,7 +1,6 @@
-'use'
+'use client'
 
 import { ThemeProvider } from '@/shared/components'
-import { Header } from '@/shared/components/shared'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
@@ -14,7 +13,7 @@ export const metadata: Metadata = {
 	title: 'Kaidan',
 }
 
-export default function RootLayout({
+export default function AppLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode
@@ -24,7 +23,6 @@ export default function RootLayout({
 			<head />
 			<body className={`${nunito.className} antialiased w-auto bg-background`}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-					<Header />
 					{children}
 				</ThemeProvider>
 			</body>
