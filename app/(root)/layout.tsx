@@ -1,7 +1,7 @@
 import { Header } from '@/shared/components'
 import React from 'react'
 
-export function RootLayout({
+export default function HomeLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode
