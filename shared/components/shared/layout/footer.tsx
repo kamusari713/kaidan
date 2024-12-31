@@ -6,7 +6,7 @@ export const Footer: React.FC = () => {
 		<Container className="flex justify-between items-end text-[16px] p-4 bg-card w-full mt-[20px] border shadow rounded-xl">
 			<div className="flex flex-col">
 				<div>Обращайтесь на почту manfigy@mail.ru</div>
-				<div>Политика конфиденциальности: Мы уважаем ваши права, даже если вы Омежка.</div>
+				<div>Этот проект создан исключительно в образовательных целях. Вдохновлён дизайном [anilib.me]</div>
 			</div>
 			<div>©2024 KAIDAN</div>
 		</Container>
