@@ -1,4 +1,4 @@
-import { Header } from '@/shared/components'
+import { Footer, Header } from '@/shared/components'
 import React from 'react'
 
 export default function HomeLayout({
@@ -10,6 +10,7 @@ export default function HomeLayout({
 		<main>
 			<Header />
 			{children}
+			<Footer />
 		</main>
 	)
 }
