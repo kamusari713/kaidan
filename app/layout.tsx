@@ -4,7 +4,7 @@ import localFont from 'next/font/local'
 import './globals.css'
 
 const nunito = localFont({
-	src: '../public/fonts/NunitoRegular.woff',
+	src: '../public/fonts/Montserrat[wght].woff2',
 })
 
 export const metadata: Metadata = {
