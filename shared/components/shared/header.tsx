@@ -1,9 +1,5 @@
 import { Container, ThemeToggle } from '@/shared/components'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
-import { Button } from '@/shared/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/components/ui/dropdown-menu'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover'
-import { Separator } from '@/shared/components/ui/separator'
+import { Avatar, AvatarFallback, AvatarImage, Button, DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, Popover, PopoverContent, PopoverTrigger, Separator } from '@/shared/components/ui'
 import { AlignJustify, Bell, Layers, List, MessageCircle, MessagesSquare, Search, User } from 'lucide-react'
 import React from 'react'
 

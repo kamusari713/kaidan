@@ -1,6 +1,5 @@
 import { Container } from '@/shared/components'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui'
-import { Separator } from '@/shared/components/ui/separator'
+import { Separator, Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui'
 import { ArrowRight, MessagesSquare } from 'lucide-react'
 
 export default function Home() {
