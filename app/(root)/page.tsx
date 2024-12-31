@@ -1,4 +1,5 @@
 import { Container } from '@/shared/components'
+import { Footer } from '@/shared/components/shared/footer'
 import { Separator, Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui'
 import { ArrowRight, MessagesSquare } from 'lucide-react'
 
@@ -76,13 +77,7 @@ export default function Home() {
 					</div>
 				</div>
 			</Container>
-			<Container className="flex justify-between items-end text-[16px] p-4 bg-card w-full mt-[20px] border shadow rounded-xl">
-				<div className="flex flex-col">
-					<div>Обращайтесь на почту manfigy@mail.ru</div>
-					<div>Политика конфиденциальности: Мы уважаем ваши права, даже если вы Омежка.</div>
-				</div>
-				<div>©2024 KAIDAN</div>
-			</Container>
+			<Footer />
 		</>
 	)
 }
