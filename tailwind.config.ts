@@ -60,6 +60,6 @@ const config: Config = {
 			animation: {},
 		},
 	},
-	plugins: [require('tailwindcss-animate')],
+	plugins: [require('tailwindcss-animate'), require('@tailwindcss/line-clamp')],
 }
 export default config
