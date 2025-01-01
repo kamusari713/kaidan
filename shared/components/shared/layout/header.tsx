@@ -7,7 +7,7 @@ import { Container } from './container'
 
 export const Header: React.FC = () => {
 	return (
-		<Container className="flex flex-row items-center justify-between bg-card px-10 py-4 rounded-xl border shadow">
+		<Container className="flex flex-row items-center justify-between bg-card px-10 rounded-xl rounded-t-none border border-t-0 shadow">
 			<Link href="/">
 				<div className="text-[50px] tracking-[12px]">KAIDAN</div>
 			</Link>
