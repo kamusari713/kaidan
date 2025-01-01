@@ -1,4 +1,4 @@
-import { Footer, Header } from '@/shared/components'
+import { Header } from '@/shared/components/shared/layout'
 import React from 'react'
 
 export default function HomeLayout({
@@ -7,10 +7,9 @@ export default function HomeLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<main>
+		<div className="flex flex-col w-full min-h-screen gap-10">
 			<Header />
 			{children}
-			<Footer />
-		</main>
+		</div>
 	)
 }
