@@ -1,86 +1,36 @@
-import { Container, ThemeToggle } from '@/shared/components'
-import { Avatar, AvatarFallback, AvatarImage, Button, DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, Popover, PopoverContent, PopoverTrigger, Separator } from '@/shared/components/ui'
-import { AlignJustify, Bell, Layers, List, MessageCircle, MessagesSquare, Search, User } from 'lucide-react'
+import { CatalogDropdownMenu, NotificationPopover, UserDropdownMenu } from '@/shared/components/shared/header'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui'
+import { MessagesSquare, Search } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
+import { Container } from './container'
 
 export const Header: React.FC = () => {
 	return (
 		<Container className="flex flex-row items-center justify-between bg-card px-10 py-4 rounded-xl border shadow">
-			<div className="text-[50px] tracking-[12px]">KAIDAN</div>
+			<Link href="/">
+				<div className="text-[50px] tracking-[12px]">KAIDAN</div>
+			</Link>
 			<div className="flex flex-row gap-6 items-center justify-center">
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="group text-[16px]">
-							<Layers className="stroke-accent group-hover:stroke-card" size={20} absoluteStrokeWidth />
-							Каталог
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent>
-						<Button variant="ghost" className="w-full">
-							Тайтлы
-						</Button>
-						<Separator />
-						<Button variant="ghost" className="w-full">
-							TV-Сериал
-						</Button>
-						<Button variant="ghost" className="w-full">
-							Фильм
-						</Button>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<CatalogDropdownMenu />
 				<div className="group flex flex-row items-center gap-4 hover:bg-accent hover:text-accent-foreground hover:cursor-pointer rounded-xl p-2">
 					<Search className="stroke-accent group-hover:stroke-card" size={20} absoluteStrokeWidth />
 					Поиск
 				</div>
-				<div className="group flex flex-row items-center gap-4 hover:bg-accent hover:text-accent-foreground hover:cursor-pointer rounded-xl p-2">
+				<Link href="/forum" className="group flex flex-row items-center gap-4 hover:bg-accent hover:text-accent-foreground hover:cursor-pointer rounded-xl p-2">
 					<MessagesSquare className="stroke-accent group-hover:stroke-card" size={20} absoluteStrokeWidth />
 					Форум
-				</div>
+				</Link>
 			</div>
-			<div className="group flex flex-row items-center justify-center gap-6">
-				<Popover>
-					<PopoverTrigger asChild>
-						<Button variant="ghost" className="group/bell">
-							<Bell className="stroke-accent fill-accent group-hover/bell:stroke-card group-hover/bell:fill-card" size={20} absoluteStrokeWidth />
-						</Button>
-					</PopoverTrigger>
-					<PopoverContent>
-						<div className="p-2">Уведомления</div>
-						<Separator />
-						<div>asdasdasdasd</div>
-					</PopoverContent>
-				</Popover>
-				<Avatar className="bg-card">
-					<AvatarImage src="images/avatar.png" alt="avatar"></AvatarImage>
-					<AvatarFallback>User</AvatarFallback>
-				</Avatar>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="group/user">
-							<AlignJustify className="stroke-accent fill-accent group-hover/user:stroke-card group-hover/user:fill-card" size={20} strokeWidth={2} absoluteStrokeWidth />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent className="bg-card flex flex-col">
-						<Button variant="ghost" className="group flex justify-start">
-							<User className="stroke-accent fill-accent group-hover:stroke-card group-hover:fill-card" />
-							Мой профиль
-						</Button>
-						<Separator />
-						<Button variant="ghost" className="group flex justify-start">
-							<Bell className="stroke-accent fill-accent group-hover:stroke-card group-hover:fill-card" absoluteStrokeWidth />
-							Уведомления
-						</Button>
-						<Button variant="ghost" className="group flex justify-start">
-							<MessageCircle className="stroke-accent fill-accent group-hover:stroke-card group-hover:fill-card" />
-							Комментарии
-						</Button>
-						<Button variant="ghost" className="group flex justify-start">
-							<List className="stroke-accent fill-accent group-hover:stroke-card group-hover:fill-card" />
-							Тайтлы
-						</Button>
-						<ThemeToggle />
-					</DropdownMenuContent>
-				</DropdownMenu>
+			<div className="group flex flex-row items-center justify-center gap-2">
+				<NotificationPopover />
+				<Link href="/profile/1/titles">
+					<Avatar className="bg-card">
+						<AvatarImage src="/images/avatar.png" alt="avatar"></AvatarImage>
+						<AvatarFallback>User</AvatarFallback>
+					</Avatar>
+				</Link>
+				<UserDropdownMenu />
 			</div>
 		</Container>
 	)

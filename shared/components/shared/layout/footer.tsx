@@ -3,7 +3,7 @@ import { Container } from './container'
 
 export const Footer: React.FC = () => {
 	return (
-		<Container className="flex justify-between items-end text-[16px] p-4 bg-card w-full mt-[20px] border shadow rounded-xl">
+		<Container className="flex justify-between items-end text-[16px] p-4 bg-card border shadow rounded-xl">
 			<div className="flex flex-col">
 				<div>Обращайтесь на почту manfigy@mail.ru</div>
 				<div>Этот проект создан исключительно в образовательных целях. Вдохновлён дизайном [anilib.me]</div>
