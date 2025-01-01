@@ -3,7 +3,23 @@ export { Avatar, AvatarFallback, AvatarImage } from './avatar'
 export { Button } from './button'
 export { Checkbox } from './checkbox'
 export { Dialog, DialogContent, DialogTrigger } from './dialog'
-export { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './dropdown-menu'
+export {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuPortal,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
+	DropdownMenuSeparator,
+	DropdownMenuShortcut,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
+	DropdownMenuTrigger,
+} from './dropdown-menu'
 export { Input } from './input'
 export { Label } from './label'
 export { Popover, PopoverContent, PopoverTrigger } from './popover'
