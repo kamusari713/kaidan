@@ -37,10 +37,6 @@ interface Props {
 }
 
 export const TitlesCardSection: React.FC<Props> = ({ tab }) => {
-	console.log(tab)
-	console.log(tabCards[tab])
-	console.log(tabCards[tab].length)
-
 	return (
 		<div className="flex flex-col flex-grow gap-6">
 			<Input type="text" placeholder="Фильтр по названию" />
