@@ -26,14 +26,14 @@ export const ThemeToggle = () => {
 	return (
 		<Button className="group" variant="ghost" onClick={toggleTheme}>
 			{resolvedTheme === 'light' && (
-				<div className="flex flex-row items-center justify-start gap-2 w-full group-hover:text-accent-foreground">
-					<Sun className="stroke-accent fill-accent group-hover:stroke-card group-hover:fill-card w-5 h-5" />
+				<div className="flex flex-row items-center justify-start gap-2 w-full group-hover:text-accent">
+					<Sun className="stroke-foreground fill-foreground group-hover:stroke-accent group-hover:fill-accent" size={5} />
 					Светлая
 				</div>
 			)}
 			{resolvedTheme === 'dark' && (
-				<div className="flex flex-row items-center justify-start gap-2 w-full group-hover:text-accent-foreground">
-					<Moon className="stroke-accent fill-accent group-hover:stroke-card group-hover:fill-card w-5 h-5" />
+				<div className="flex flex-row items-center justify-start gap-2 w-full group-hover:text-accent/60">
+					<Moon className="stroke-foreground fill-foreground group-hover:stroke-accent/60 group-hover:fill-accent/60" size={5} />
 					Темная
 				</div>
 			)}

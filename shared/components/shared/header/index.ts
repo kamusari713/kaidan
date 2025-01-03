@@ -1,3 +1,3 @@
-export { CatalogDropdownMenu } from './catalog-dropdown-menu'
+export { CatalogPopover } from './catalog-popover'
 export { NotificationPopover } from './notification-popover'
-export { UserDropdownMenu } from './user-dropdown-menu'
+export { UserPopover } from './user-popover'
