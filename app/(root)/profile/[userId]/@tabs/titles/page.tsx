@@ -1,7 +1,7 @@
 'use client'
 
-import { TitlesCardSection } from '@/shared/components/shared/profile/tabs'
-import { FilterSeparator, Input, Label, RadioGroup, RadioGroupItem, Separator } from '@/shared/components/ui'
+import { TitlesCardSection } from '@/shared/components/shared/profile/tabs/titles'
+import { FilterSeparator, Label, RadioGroup, RadioGroupItem, Separator } from '@/shared/components/ui'
 import { useState } from 'react'
 
 const tabs = ['Все', 'Смотрю', 'Запланированно', 'Брошено', 'Посмотренно']
@@ -10,19 +10,19 @@ export default function TitlesTab() {
 	const [activeTab, setActiveTab] = useState('Все')
 
 	return (
-		<>
+		<div className="flex gap-6 w-full">
 			<div className="flex flex-col w-[300px] text-[14px] pb-2 bg-card rounded-xl border shadow">
 				<FilterSeparator>Списки</FilterSeparator>
 				<div className="flex flex-col gap-2">
 					{tabs.map((tab, index) => (
 						<div
-							className="hover:bg-accent/20 rounded-xl p-2 mx-2 data-[state=active]:bg-accent/20 data-[state=active]:text-foreground text-foreground/60 flex justify-between items-center transition-all duration-200 hover:cursor-pointer"
+							className="hover:bg-accent/20 hover:text-accent/60 rounded-xl p-2 mx-2 data-[state=active]:bg-accent/20 data-[state=active]:text-accent/60 text-foreground/60 flex justify-between items-center transition-all duration-200 hover:cursor-pointer"
 							data-state={activeTab === tab ? 'active' : 'not-active'}
 							onClick={() => setActiveTab(tab)}
 							key={index}
 						>
 							{tab}
-							<div data-state={activeTab === tab ? 'active' : 'not-active'} className="data-[state=active]:text-foreground text-foreground/60 transition-all duration-200">
+							<div data-state={activeTab === tab ? 'active' : 'not-active'} className="data-[state=active]:text-accent/60 text-foreground/60 transition-all duration-200">
 								0
 							</div>
 						</div>
@@ -61,10 +61,8 @@ export default function TitlesTab() {
 					</div>
 				</RadioGroup>
 			</div>
-			<div className="w-full">
-				<Input type="text" placeholder="Фильтр по названию" />
-				<TitlesCardSection tab={activeTab} />
-			</div>
-		</>
+
+			<TitlesCardSection tab={activeTab} />
+		</div>
 	)
 }
