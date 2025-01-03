@@ -20,6 +20,7 @@ export {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from './dropdown-menu'
+export { FilterSeparator } from './filter-separator'
 export { Input } from './input'
 export { Label } from './label'
 export { Popover, PopoverContent, PopoverTrigger } from './popover'
