@@ -13,9 +13,10 @@ export const ProfileTabs: React.FC = () => {
 	const handleTabChange = (tab: string) => {
 		router.push(`/profile/1/${tab}`)
 	}
+
 	return (
 		<Tabs value={currentTab || 'titles'} onValueChange={handleTabChange}>
-			<TabsList>
+			<TabsList className="px-4">
 				<TabsTrigger variant="section" value="titles">
 					Тайтлы
 				</TabsTrigger>

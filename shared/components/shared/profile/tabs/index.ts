@@ -1,1 +1,1 @@
-export { TitlesFilter } from './titles-filter'
+export { TitlesCardSection } from './titles-card-section'

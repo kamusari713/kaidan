@@ -14,7 +14,7 @@ export const ProfileHeader: React.FC = () => {
 				</div>
 				<div className="flex flex-col justify-center">
 					<div className="font-bold">User</div>
-					<div className="text-foreground/60">Уровень - 1</div>
+					<div className="text-foreground/60 text-[13px]">Уровень - 1</div>
 				</div>
 			</div>
 			<div>
