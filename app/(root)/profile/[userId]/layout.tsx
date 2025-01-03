@@ -5,8 +5,8 @@ import { ReactNode } from 'react'
 
 export default function ProfileLayout({ tabs }: { tabs: ReactNode }) {
 	return (
-		<main className="flex flex-col flex-grow gap-10">
-			<Container className="flex flex-col gap-10">
+		<main className="flex flex-col flex-grow gap-10 mb-10">
+			<Container className="flex flex-col gap-6">
 				<div className="flex flex-col bg-card rounded-xl border shadow ">
 					<ProfileHeader />
 					<Separator />
