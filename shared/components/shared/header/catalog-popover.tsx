@@ -11,7 +11,7 @@ export const CatalogPopover: React.FC = () => {
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
-				<Button variant="ghost" className="group text-[1px]">
+				<Button variant="ghost" className="group text-[14px]">
 					<Layers className="stroke-foreground group-hover:stroke-accent/60" size={20} absoluteStrokeWidth />
 					Каталог
 				</Button>
