@@ -1,19 +1,14 @@
 spring:
-    application:
-        name:
-            backend
-    data:
-        mongodb:
-            host: localhost
-            port: 27017
-            database: database
-            uri: mongodb://localhost:27017/kaidan-local
+  application:
+    name:
+      backend
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: database
+      uri: mongodb://localhost:27017/kaidan-database
 
 jwt:
-    secret: ${SECRET_KEY}
-    accessToken:
-        expiration: 900000
-        cookie-name: access
-    refreshToken:
-        expiration: 604800000
-        cookie-name: refresh
+  secret: ${SECRET_KEY}
+  expiration: 900000
