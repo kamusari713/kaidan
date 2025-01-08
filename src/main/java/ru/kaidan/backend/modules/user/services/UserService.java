@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.kaidan.backend.modules.auth.dto.RegisterRequest;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
 
@@ -21,9 +22,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public UserEntity addUser(UserEntity user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public void registerUser(RegisterRequest registerRequest) {
+        UserEntity user = new UserEntity();
+        user.setUsername(registerRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setEmail(registerRequest.getEmail());
+        user.setRole("USER");
+        userRepository.save(user);
     }
 
     @Override

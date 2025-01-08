@@ -31,11 +31,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Проверяем наличие токена в заголовке
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7); // Убираем "Bearer "
+            token = authHeader.substring(7);
             try {
-                username = jwtUtil.extractUsername(token); // Достаём username из токена
+                username = jwtUtil.extractUsername(token);
             } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 logger.warn("JWT Token is invalid: {}");
+                return;
             }
         }
 
@@ -48,10 +50,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken); // Устанавливаем пользователя как аутентифицированного
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Invalid or expired token");
+                return;
             }
         }
 
-        filterChain.doFilter(request, response); // Продолжаем цепочку фильтров
+        filterChain.doFilter(request, response);
     }
 }
