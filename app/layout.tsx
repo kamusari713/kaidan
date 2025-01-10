@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import localFont from 'next/font/local'
@@ -11,6 +12,8 @@ export const metadata: Metadata = {
 	title: 'Kaidan',
 }
 
+const queryClient = new QueryClient()
+
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -20,9 +23,11 @@ export default function RootLayout({
 		<html lang="en">
 			<head />
 			<body className={`${montserrat.className} antialiased w-auto bg-background`}>
-				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-					{children}
-				</ThemeProvider>
+				<QueryClientProvider client={queryClient}>
+					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+						{children}
+					</ThemeProvider>
+				</QueryClientProvider>
 			</body>
 		</html>
 	)
