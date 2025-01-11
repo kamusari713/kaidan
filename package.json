@@ -22,7 +22,9 @@
         "@radix-ui/react-tooltip": "^1.1.6",
         "@tailwindcss/line-clamp": "^0.4.4",
         "@tanstack/react-query": "^5.63.0",
+        "@tanstack/react-query-devtools": "^5.63.0",
         "@tanstack/react-table": "^8.20.6",
+        "axios": "^1.7.9",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "lucide-react": "^0.469.0",
@@ -31,7 +33,8 @@
         "react": "^18",
         "react-dom": "^18",
         "tailwind-merge": "^2.6.0",
-        "tailwindcss-animate": "^1.0.7"
+        "tailwindcss-animate": "^1.0.7",
+        "video.js": "^8.21.0"
     },
     "devDependencies": {
         "@types/node": "^20",
