@@ -1,5 +1,5 @@
 import { SectionLatestForum, SectionLatestRatings, SectionLatestUpdates, SectionUpdatesTabs } from '@/shared/components/shared/home'
-import { Container, Footer } from '@/shared/components/shared/layout'
+import { Container } from '@/shared/components/shared/layout'
 
 export default function HomePage() {
 	return (
@@ -13,8 +13,6 @@ export default function HomePage() {
 						<SectionLatestRatings />
 					</div>
 				</div>
-
-				<Footer />
 			</Container>
 		</>
 	)

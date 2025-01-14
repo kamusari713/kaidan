@@ -1,4 +1,4 @@
-import { Header } from '@/shared/components/shared/layout'
+import { Footer, Header } from '@/shared/components/shared/layout'
 import React from 'react'
 
 export default function HomeLayout({
@@ -10,6 +10,7 @@ export default function HomeLayout({
 		<div className="flex flex-col w-full min-h-screen gap-10">
 			<Header />
 			{children}
+			<Footer />
 		</div>
 	)
 }
