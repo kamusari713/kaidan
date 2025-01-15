@@ -1,5 +1,7 @@
+'use client'
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import type { Metadata } from 'next'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ThemeProvider } from 'next-themes'
 import localFont from 'next/font/local'
 import './globals.css'
@@ -8,9 +10,9 @@ const montserrat = localFont({
 	src: '../public/fonts/Montserrat[wght].woff2',
 })
 
-export const metadata: Metadata = {
-	title: 'Kaidan',
-}
+// export const metadata: Metadata = {
+// 	title: 'Kaidan',
+// }
 
 const queryClient = new QueryClient()
 
@@ -27,6 +29,7 @@ export default function RootLayout({
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 						{children}
 					</ThemeProvider>
+					<ReactQueryDevtools initialIsOpen={false} />
 				</QueryClientProvider>
 			</body>
 		</html>
