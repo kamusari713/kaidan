@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kaidan.backend.modules.auth.dto.RegisterRequest;
+import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
 

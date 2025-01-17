@@ -1,4 +1,4 @@
-package ru.kaidan.backend.modules.auth.dto;
+package ru.kaidan.backend.modules.auth.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
