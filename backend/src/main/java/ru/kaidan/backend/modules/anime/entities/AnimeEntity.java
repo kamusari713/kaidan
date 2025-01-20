@@ -16,8 +16,8 @@ public class AnimeEntity {
     private List<String> synonyms;
     private Description description;
     private String watchRating;
-    private int episodes;
-    private int duration;
+    private Integer episodes;
+    private Integer duration;
 
     private LocalDate startDate;
     private LocalDate endDate;
@@ -26,10 +26,13 @@ public class AnimeEntity {
     private CoverImage coverImage;
 
     private List<ExternalLink> externalLinks;
-    private double shikimoriScore;
+    private Double shikimoriScore;
     private String shikimoriUrl;
-    private double averageScore;
-    private int scoresCount;
+    private Double averageScore;
+    private Integer scoresCount;
+
+    private List<String> streamingUrls;
+    private List<CommentEntity> comments;
 
     private List<Genre> genres;
     private List<Tag> tags;

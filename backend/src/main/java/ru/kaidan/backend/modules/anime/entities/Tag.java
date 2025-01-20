@@ -5,6 +5,6 @@ public class Tag {
     private String name_RU;
     private String description_EN;
     private String description_RU;
-    private int rank;
-    private boolean isSpoiler;
+    private Integer rank;
+    private Boolean isSpoiler;
 }
