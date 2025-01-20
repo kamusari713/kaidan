@@ -19,7 +19,7 @@ public class UserEntity implements UserDetails {
     private String username;
     private String email;
     private String password;
-    private String role;
+    private Role role;
     @JsonIgnore
     @Transient
     private List<String> authorities;
