@@ -1,0 +1,54 @@
+package ru.kaidan.backend.modules.auth.contollers;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.kaidan.backend.modules.auth.DTO.AuthRequest;
+import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
+import ru.kaidan.backend.modules.auth.DTO.TokenResponse;
+import ru.kaidan.backend.modules.auth.jwt.JwtUtil;
+import ru.kaidan.backend.modules.user.entities.UserEntity;
+import ru.kaidan.backend.modules.user.repositories.UserRepository;
+import ru.kaidan.backend.modules.user.services.UserService;
+
+import java.util.Map;
+import java.util.Optional;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/auth")
+public class AuthController {
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final UserService userService;
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+        try {
+            Optional<UserEntity> userOpt = userRepository.findByEmail(authRequest.getUsernameOrEmail());
+            String username = userOpt.map(UserEntity::getUsername).orElse(authRequest.getUsernameOrEmail());
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, authRequest.getPassword())
+            );
+            String token = jwtUtil.generateToken(username);
+            return ResponseEntity.ok(new TokenResponse(token));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Неверный логин или пароль"));
+        }
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody RegisterRequest registerRequest) {
+        userService.registerUser(registerRequest);
+        return ResponseEntity.ok("Пользователь зарегистрирован");
+    }
+}
