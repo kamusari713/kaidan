@@ -1,13 +1,18 @@
 package ru.kaidan.backend.modules.auth.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kaidan.backend.modules.auth.DTO.*;
+import ru.kaidan.backend.modules.auth.DTO.AuthRequest;
+import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
+import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
 import ru.kaidan.backend.modules.auth.entities.TokenEntity;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
 import ru.kaidan.backend.modules.user.entities.Role;
@@ -28,7 +33,56 @@ public class AuthService {
     private final TokenRepository tokenRepository;
     private final JwtService jwtService;
 
-    public RegisterResponse registerUser(RegisterRequest registerRequest) {
+    @Value("${jwt.accessToken.cookie-name}")
+    private String accessCookieName;
+    @Value("${jwt.refreshToken.cookie-name}")
+    private String refreshCookieName;
+
+    @Value("${jwt.accessToken.expiration}")
+    private long accessTokenExpiration;
+    @Value("${jwt.refreshToken.expiration}")
+    private long refreshTokenExpiration;
+
+    private void revokeAllUserTokens(UserEntity user) {
+        List<TokenEntity> validUserTokens = tokenRepository.findByUserIdAndRevokedFalse(user.getId());
+        if (validUserTokens.isEmpty()) {
+            return;
+        }
+        validUserTokens.forEach(token ->
+                token.setRevoked(true));
+        tokenRepository.saveAll(validUserTokens);
+    }
+
+    private void saveUserToken(UserEntity user, String accessToken) {
+        TokenEntity token = TokenEntity.builder()
+                .userId(user.getId())
+                .token(accessToken)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
+    }
+
+    private CookieResponse buildCookies(String accessToken, String refreshToken) {
+        ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, accessToken)
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(accessTokenExpiration)
+                .path("/")
+                .sameSite("Strict")
+                .build();
+
+        ResponseCookie refreshCookie = ResponseCookie.from(refreshCookieName, refreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(refreshTokenExpiration)
+                .path("/")
+                .sameSite("Strict")
+                .build();
+
+        return new CookieResponse(accessCookie, refreshCookie);
+    }
+
+    public CookieResponse registerUser(RegisterRequest registerRequest) {
         UserEntity user = new UserEntity();
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
@@ -39,12 +93,13 @@ public class AuthService {
         UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
         String accessToken = jwtService.generateAccessToken(userDetails);
         String refreshToken = jwtService.generateRefreshToken(userDetails);
+        revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
 
-        return new RegisterResponse(accessToken, refreshToken);
+        return buildCookies(accessToken, refreshToken);
     }
 
-    public AuthResponse login(AuthRequest authRequest) {
+    public CookieResponse login(AuthRequest authRequest) {
         Optional<UserEntity> userOpt = userRepository.findByEmail(authRequest.getUsernameOrEmail());
         String username = userOpt.map(UserEntity::getUsername).orElse(authRequest.getUsernameOrEmail());
         authenticationManager.authenticate(
@@ -58,30 +113,11 @@ public class AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         saveUserToken(user, accessToken);
 
-        return new AuthResponse(accessToken, refreshToken);
+        return buildCookies(accessToken, refreshToken);
     }
 
-    private void saveUserToken(UserEntity user, String accessToken) {
-        TokenEntity token = TokenEntity.builder()
-                .userId(user.getId())
-                .token(accessToken)
-                .revoked(false)
-                .build();
-        tokenRepository.save(token);
-    }
-
-    private void revokeAllUserTokens(UserEntity user) {
-        List<TokenEntity> validUserTokens = tokenRepository.findByUserIdAndRevokedFalse(user.getId());
-        if (validUserTokens.isEmpty()) {
-            return;
-        }
-        validUserTokens.forEach(token ->
-                token.setRevoked(true));
-        tokenRepository.saveAll(validUserTokens);
-    }
-
-    public AuthResponse refresh(RefreshRequest refreshRequest) throws Exception {
-        String refreshToken = refreshRequest.getRefreshToken();
+    public CookieResponse refresh(HttpServletRequest request) throws Exception {
+        String refreshToken = request.getHeader(refreshCookieName);
         if (refreshToken == null) {
             throw new Exception("Refresh token is missing");
         }
@@ -97,7 +133,6 @@ public class AuthService {
         UserEntity user = userRepository.findByUsernameOrEmail(username, username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-
         if (!jwtService.isTokenValid(refreshToken, userDetails)) {
             throw new Exception("Invalid refresh token");
         }
@@ -106,6 +141,6 @@ public class AuthService {
         revokeAllUserTokens(user);
         saveUserToken(user, newAccessToken);
 
-        return new AuthResponse(newAccessToken, refreshToken);
+        return buildCookies(newAccessToken, refreshToken);
     }
 }

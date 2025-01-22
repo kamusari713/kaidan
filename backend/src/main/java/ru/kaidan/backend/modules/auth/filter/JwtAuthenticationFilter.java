@@ -4,8 +4,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,9 +22,11 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtService jwtUtil;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
+    @Value("${jwt.refreshToken.cookie-name}")
+    private String accessCookieName;
 
     @Override
     protected void doFilterInternal(
@@ -31,30 +34,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
+        final String token = getTokenFromCookies(request, accessCookieName);
         String username = null;
-        String token = null;
 
-        // Проверяем наличие токена в заголовке
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
+        if (token != null) {
             try {
-                username = jwtUtil.extractUsername(token);
+                username = jwtService.extractUsername(token);
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 logger.warn("JWT Token is invalid: {}");
-                return;
             }
         }
 
-        // Если username найден, но пользователь ещё не аутентифицирован
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             var tokenValid = tokenRepository.findByToken(token)
                     .map(t -> !t.getRevoked())
                     .orElse(false);
-            // Проверяем токен на валидность
-            if (jwtUtil.isTokenValid(token, userDetails) && tokenValid) {
+            if (jwtService.isTokenValid(token, userDetails) && tokenValid) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -67,7 +64,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
         filterChain.doFilter(request, response);
+    }
+
+    private String getTokenFromCookies(HttpServletRequest request, String cookieName) {
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if (cookieName.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
