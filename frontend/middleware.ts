@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export default function middleware(request: NextRequest) {
-	const token = request.cookies.get('token')?.value
+	// const token = request.cookies.get('refreshToken')?.value
 
-	if (!token) {
-		const login = new URL('/auth/login', request.url)
-		if (request.nextUrl.pathname !== '/auth/login' && request.nextUrl.pathname !== '/auth/register') {
-			return NextResponse.redirect(login)
-		}
-	}
+	// if (!token) {
+	// 	const login = new URL('/auth/login', request.url)
+	// 	if (request.nextUrl.pathname !== '/auth/login' && request.nextUrl.pathname !== '/auth/register') {
+	// 		return NextResponse.redirect(login)
+	// 	}
+	// }
 
 	return NextResponse.next()
 }
