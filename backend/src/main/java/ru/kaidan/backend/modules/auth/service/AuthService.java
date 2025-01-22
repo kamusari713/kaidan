@@ -14,6 +14,7 @@ import ru.kaidan.backend.modules.auth.DTO.AuthRequest;
 import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
 import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
 import ru.kaidan.backend.modules.auth.entities.TokenEntity;
+import ru.kaidan.backend.modules.auth.entities.TokenType;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
 import ru.kaidan.backend.modules.user.entities.RoleType;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
@@ -53,10 +54,21 @@ public class AuthService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    private void saveUserToken(UserEntity user, String accessToken) {
+    private void revokeAllUserTokens(UserEntity user, TokenType tokenType) {
+        List<TokenEntity> validUserTokens = tokenRepository.findByUserIdAndRevokedFalseAndType(user.getId(), tokenType);
+        if (validUserTokens.isEmpty()) {
+            return;
+        }
+        validUserTokens.forEach(token ->
+                token.setRevoked(true));
+        tokenRepository.saveAll(validUserTokens);
+    }
+
+    private void saveUserToken(UserEntity user, String accessToken, TokenType tokenType) {
         TokenEntity token = TokenEntity.builder()
                 .userId(user.getId())
                 .token(accessToken)
+                .type(tokenType)
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
@@ -93,8 +105,8 @@ public class AuthService {
         UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
         String accessToken = jwtService.generateAccessToken(userDetails);
         String refreshToken = jwtService.generateRefreshToken(userDetails);
-        revokeAllUserTokens(user);
-        saveUserToken(user, accessToken);
+        saveUserToken(user, accessToken, TokenType.ACCESS);
+        saveUserToken(user, refreshToken, TokenType.REFRESH);
 
         return buildCookies(accessToken, refreshToken);
     }
@@ -111,7 +123,9 @@ public class AuthService {
         String refreshToken = jwtService.generateRefreshToken(userDetails);
         UserEntity user = userRepository.findByUsernameOrEmail(username, username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        saveUserToken(user, accessToken);
+        revokeAllUserTokens(user);
+        saveUserToken(user, accessToken, TokenType.ACCESS);
+        saveUserToken(user, refreshToken, TokenType.REFRESH);
 
         return buildCookies(accessToken, refreshToken);
     }
@@ -138,8 +152,8 @@ public class AuthService {
         }
 
         String newAccessToken = jwtService.generateAccessToken(userDetails);
-        revokeAllUserTokens(user);
-        saveUserToken(user, newAccessToken);
+        revokeAllUserTokens(user, TokenType.ACCESS);
+        saveUserToken(user, newAccessToken, TokenType.ACCESS);
 
         return buildCookies(newAccessToken, refreshToken);
     }
