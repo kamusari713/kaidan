@@ -1,5 +1,5 @@
 package ru.kaidan.backend.modules.auth.entities;
 
-public enum Token {
+public enum TokenType {
     REFRESH, ACCESS
 }

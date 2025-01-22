@@ -15,7 +15,7 @@ import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
 import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
 import ru.kaidan.backend.modules.auth.entities.TokenEntity;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
-import ru.kaidan.backend.modules.user.entities.Role;
+import ru.kaidan.backend.modules.user.entities.RoleType;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
 import ru.kaidan.backend.modules.user.services.UserService;
@@ -87,7 +87,7 @@ public class AuthService {
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
-        user.setRole(Role.USER);
+        user.setRole(RoleType.USER);
         userRepository.save(user);
 
         UserDetails userDetails = userService.loadUserByUsername(user.getUsername());

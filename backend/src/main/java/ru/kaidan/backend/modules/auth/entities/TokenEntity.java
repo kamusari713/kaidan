@@ -17,6 +17,6 @@ public class TokenEntity {
     private String id;
     private String token;
     private Boolean revoked;
-    private Token type;
+    private TokenType type;
     private String userId;
 }
