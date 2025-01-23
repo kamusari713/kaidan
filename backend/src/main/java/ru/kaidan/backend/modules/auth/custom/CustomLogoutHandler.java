@@ -1,4 +1,4 @@
-package ru.kaidan.backend.modules.auth.service;
+package ru.kaidan.backend.modules.auth.custom;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,12 +11,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 import ru.kaidan.backend.modules.auth.entities.TokenType;
+import ru.kaidan.backend.modules.auth.service.JwtService;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class LogoutService implements LogoutHandler {
+public class CustomLogoutHandler implements LogoutHandler {
     private final JwtService jwtService;
     private final UserRepository userRepository;
 

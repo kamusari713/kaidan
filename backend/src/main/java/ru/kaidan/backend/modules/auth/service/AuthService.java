@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
 import ru.kaidan.backend.modules.auth.DTO.LoginRequest;
 import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
-import ru.kaidan.backend.modules.auth.details.CustomUserDetails;
+import ru.kaidan.backend.modules.auth.custom.CustomUserDetails;
 import ru.kaidan.backend.modules.auth.entities.TokenType;
 import ru.kaidan.backend.modules.user.entities.RoleType;
 import ru.kaidan.backend.modules.user.entities.UserEntity;

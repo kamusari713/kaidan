@@ -1,4 +1,4 @@
-package ru.kaidan.backend.modules.auth.details;
+package ru.kaidan.backend.modules.auth.custom;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

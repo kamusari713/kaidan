@@ -1,4 +1,4 @@
-package ru.kaidan.backend.modules.auth.details;
+package ru.kaidan.backend.modules.auth.custom;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
