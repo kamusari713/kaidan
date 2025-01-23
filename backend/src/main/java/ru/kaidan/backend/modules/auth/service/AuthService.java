@@ -6,23 +6,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kaidan.backend.modules.auth.DTO.AuthRequest;
 import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
 import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
+import ru.kaidan.backend.modules.auth.details.CustomUserDetails;
 import ru.kaidan.backend.modules.auth.entities.TokenEntity;
 import ru.kaidan.backend.modules.auth.entities.TokenType;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
 import ru.kaidan.backend.modules.user.entities.RoleType;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
-import ru.kaidan.backend.modules.user.services.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +28,6 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
     private final TokenRepository tokenRepository;
     private final JwtService jwtService;
 
@@ -94,6 +91,17 @@ public class AuthService {
         return new CookieResponse(accessCookie, refreshCookie);
     }
 
+    private String getTokenFromCookies(HttpServletRequest request, String cookieName) {
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if (cookieName.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
     public CookieResponse registerUser(RegisterRequest registerRequest) {
         UserEntity user = new UserEntity();
         user.setUsername(registerRequest.getUsername());
@@ -102,36 +110,35 @@ public class AuthService {
         user.setRole(RoleType.USER);
         userRepository.save(user);
 
-        UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
-        String accessToken = jwtService.generateAccessToken(userDetails);
-        String refreshToken = jwtService.generateRefreshToken(userDetails);
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        String accessToken = jwtService.generateAccessToken(customUserDetails);
+        String refreshToken = jwtService.generateRefreshToken(customUserDetails);
         saveUserToken(user, accessToken, TokenType.ACCESS);
         saveUserToken(user, refreshToken, TokenType.REFRESH);
 
         return buildCookies(accessToken, refreshToken);
     }
 
-    public CookieResponse login(AuthRequest authRequest) {
-        Optional<UserEntity> userOpt = userRepository.findByEmail(authRequest.getUsernameOrEmail());
-        String username = userOpt.map(UserEntity::getUsername).orElse(authRequest.getUsernameOrEmail());
+    public CookieResponse loginUser(AuthRequest authRequest) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, authRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(
+                        authRequest.getUsername(),
+                        authRequest.getPassword())
         );
+        UserEntity user = userRepository.findByUsername(authRequest.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        final UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsernameOrEmail());
-        String accessToken = jwtService.generateAccessToken(userDetails);
-        String refreshToken = jwtService.generateRefreshToken(userDetails);
-        UserEntity user = userRepository.findByUsernameOrEmail(username, username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        String accessToken = jwtService.generateAccessToken(customUserDetails);
+        String refreshToken = jwtService.generateRefreshToken(customUserDetails);
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken, TokenType.ACCESS);
         saveUserToken(user, refreshToken, TokenType.REFRESH);
-
         return buildCookies(accessToken, refreshToken);
     }
 
-    public CookieResponse refresh(HttpServletRequest request) throws Exception {
-        String refreshToken = request.getHeader(refreshCookieName);
+    public CookieResponse refreshToken(HttpServletRequest request) throws Exception {
+        String refreshToken = getTokenFromCookies(request, refreshCookieName);
         if (refreshToken == null) {
             throw new Exception("Refresh token is missing");
         }
@@ -143,15 +150,15 @@ public class AuthService {
             throw new Exception("Invalid refresh token");
         }
 
-        UserDetails userDetails = userService.loadUserByUsername(username);
-        UserEntity user = userRepository.findByUsernameOrEmail(username, username)
+        UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (!jwtService.isTokenValid(refreshToken, userDetails)) {
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        if (!jwtService.isTokenValid(refreshToken, customUserDetails)) {
             throw new Exception("Invalid refresh token");
         }
 
-        String newAccessToken = jwtService.generateAccessToken(userDetails);
+        String newAccessToken = jwtService.generateAccessToken(customUserDetails);
         revokeAllUserTokens(user, TokenType.ACCESS);
         saveUserToken(user, newAccessToken, TokenType.ACCESS);
 

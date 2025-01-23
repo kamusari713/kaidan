@@ -26,7 +26,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(AuthRequest authRequest) {
         try {
-            CookieResponse cookies = authService.login(authRequest);
+            CookieResponse cookies = authService.loginUser(authRequest);
             return ResponseEntity
                     .ok()
                     .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
@@ -56,7 +56,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(HttpServletRequest request) {
         try {
-            CookieResponse cookies = authService.refresh(request);
+            CookieResponse cookies = authService.refreshToken(request);
             return ResponseEntity
                     .ok()
                     .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
