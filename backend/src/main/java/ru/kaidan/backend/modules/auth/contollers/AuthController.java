@@ -24,7 +24,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(AuthRequest authRequest) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {
             CookieResponse cookies = authService.loginUser(authRequest);
             return ResponseEntity
@@ -35,7 +35,7 @@ public class AuthController {
         } catch (AuthenticationException e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Wrong username or password"));
+                    .body(Map.of("message", "Wrong username or password", "error", e.getMessage()));
         }
     }
 
@@ -49,7 +49,7 @@ public class AuthController {
                     .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
                     .body(Map.of("message", "User successfully registered"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -63,7 +63,7 @@ public class AuthController {
                     .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
                     .body(Map.of("message", "Access token successfully refreshed"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
         }
     }
 }
