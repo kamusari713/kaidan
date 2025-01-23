@@ -1,6 +1,9 @@
 package ru.kaidan.backend.modules.anime.entities;
 
-public class Tag {
+import lombok.Data;
+
+@Data
+public class AnimeTag {
     private String name_EN;
     private String name_RU;
     private String description_EN;

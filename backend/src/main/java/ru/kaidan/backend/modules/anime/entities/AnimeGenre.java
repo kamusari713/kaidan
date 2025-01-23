@@ -1,6 +1,9 @@
 package ru.kaidan.backend.modules.anime.entities;
 
-public class Genre {
+import lombok.Data;
+
+@Data
+public class AnimeGenre {
     private String EN;
     private String RU;
 }

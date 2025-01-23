@@ -1,6 +1,9 @@
 package ru.kaidan.backend.modules.anime.entities;
 
-public class Description {
+import lombok.Data;
+
+@Data
+public class AnimeDescription {
     private String EN;
     private String RU;
 }

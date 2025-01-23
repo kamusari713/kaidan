@@ -1,6 +1,9 @@
 package ru.kaidan.backend.modules.anime.entities;
 
-public class ExternalLink {
+import lombok.Data;
+
+@Data
+public class AnimeExternalLink {
     private String source;
     private String url;
 }

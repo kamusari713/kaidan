@@ -12,29 +12,30 @@ import java.util.List;
 public class AnimeEntity {
     @Id
     private String id;
-    private Title title;
+    private AnimeTitle title;
     private List<String> synonyms;
-    private Description description;
+    private AnimeDescription description;
     private String watchRating;
     private Integer episodes;
     private Integer duration;
+    private AnimeType type;
 
     private LocalDate startDate;
     private LocalDate endDate;
 
     private String bannerImage;
-    private CoverImage coverImage;
+    private AnimeCoverImage coverImage;
 
-    private List<ExternalLink> externalLinks;
+    private List<AnimeExternalLink> externalLinks;
     private Double shikimoriScore;
     private String shikimoriUrl;
+    private String shikimoriId;
     private Double averageScore;
     private Integer scoresCount;
 
-    private List<String> streamingUrls;
     private List<CommentEntity> comments;
 
-    private List<Genre> genres;
-    private List<Tag> tags;
+    private List<AnimeGenre> genres;
+    private List<AnimeTag> tags;
     private List<String> studios;
 }
