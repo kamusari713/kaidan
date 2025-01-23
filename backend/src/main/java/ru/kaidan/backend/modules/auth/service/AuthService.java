@@ -9,8 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kaidan.backend.modules.auth.DTO.AuthRequest;
 import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
+import ru.kaidan.backend.modules.auth.DTO.LoginRequest;
 import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
 import ru.kaidan.backend.modules.auth.details.CustomUserDetails;
 import ru.kaidan.backend.modules.auth.entities.TokenEntity;
@@ -119,7 +119,7 @@ public class AuthService {
         return buildCookies(accessToken, refreshToken);
     }
 
-    public CookieResponse loginUser(AuthRequest authRequest) {
+    public CookieResponse loginUser(LoginRequest authRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getUsername(),
