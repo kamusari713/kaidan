@@ -73,16 +73,16 @@ public class AuthService {
 
     private CookieResponse buildCookies(String accessToken, String refreshToken) {
         ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, accessToken)
-                .httpOnly(true)
-                .secure(true)
+                .httpOnly(false)
+                .secure(false)
                 .maxAge(accessTokenExpiration)
                 .path("/")
                 .sameSite("Strict")
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from(refreshCookieName, refreshToken)
-                .httpOnly(true)
-                .secure(true)
+                .httpOnly(false)
+                .secure(false)
                 .maxAge(refreshTokenExpiration)
                 .path("/")
                 .sameSite("Strict")
