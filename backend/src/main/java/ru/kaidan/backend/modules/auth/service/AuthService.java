@@ -2,7 +2,6 @@ package ru.kaidan.backend.modules.auth.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,9 +23,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-
-    @Value("${jwt.refreshToken.cookie-name}")
-    private String refreshCookieName;
 
     public CookieResponse registerUser(RegisterRequest registerRequest) {
         UserEntity user = new UserEntity();
@@ -64,7 +60,7 @@ public class AuthService {
     }
 
     public CookieResponse refreshToken(HttpServletRequest request) throws Exception {
-        String refreshToken = jwtService.getTokenFromCookies(request, refreshCookieName);
+        String refreshToken = jwtService.getTokenFromCookies(request, jwtService.refreshCookieName);
         if (refreshToken == null) {
             throw new Exception("Refresh token is missing");
         }

@@ -25,14 +25,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtService {
     private final TokenRepository tokenRepository;
+    @Value("${jwt.accessToken.cookie-name}")
+    public String accessCookieName;
+    @Value("${jwt.refreshToken.cookie-name}")
+    public String refreshCookieName;
     @Value("${jwt.secret}")
     private String secret;
-    @Value("${jwt.accessToken.cookie-name}")
-    private String accessCookieName;
     @Value("${jwt.accessToken.expiration}")
     private long accessTokenExpiration;
-    @Value("${jwt.refreshToken.cookie-name}")
-    private String refreshCookieName;
     @Value("${jwt.refreshToken.expiration}")
     private long refreshTokenExpiration;
 

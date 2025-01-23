@@ -3,7 +3,6 @@ package ru.kaidan.backend.modules.auth.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
@@ -20,24 +19,20 @@ import ru.kaidan.backend.modules.user.repositories.UserRepository;
 public class LogoutService implements LogoutHandler {
     private final JwtService jwtService;
     private final UserRepository userRepository;
-    @Value("${jwt.accessToken.cookie-name}")
-    private String accessCookieName;
-    @Value("${jwt.refreshToken.cookie-name}")
-    private String refreshCookieName;
 
     @Override
     public void logout(
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication) {
-        ResponseCookie accessCookie = ResponseCookie.from(accessCookieName)
+        ResponseCookie accessCookie = ResponseCookie.from(jwtService.accessCookieName)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
                 .maxAge(0)
                 .build();
 
-        ResponseCookie refreshCookie = ResponseCookie.from(refreshCookieName)
+        ResponseCookie refreshCookie = ResponseCookie.from(jwtService.refreshCookieName)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -46,7 +41,7 @@ public class LogoutService implements LogoutHandler {
         response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-        final String refreshToken = jwtService.getTokenFromCookies(request, refreshCookieName);
+        final String refreshToken = jwtService.getTokenFromCookies(request, jwtService.refreshCookieName);
         if (refreshToken == null || refreshToken.isEmpty()) {
             throw new IllegalStateException("No refresh token found in cookies");
         }
