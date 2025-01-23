@@ -13,13 +13,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfigurationSource;
-import ru.kaidan.backend.modules.auth.filter.JwtAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationFilter jwtAuthenticationFilter;
     private final LogoutHandler logoutHandler;
     private final AuthenticationProvider authenticationProvider;
 
