@@ -10,11 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Document(collection = "tag")
-public class TagEntity extends Tag {
+public class TagEntity extends AnimeTag {
     @Id
     private String id;
 
     @JsonIgnore
     @Transient
-    private int rank;
+    private Integer rank;
 }
