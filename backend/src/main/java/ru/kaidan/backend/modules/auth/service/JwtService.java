@@ -81,7 +81,7 @@ public class JwtService {
 
     public CookieResponse buildCookies(String accessToken, String refreshToken) {
         ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, accessToken)
-                .httpOnly(false)
+                .httpOnly(true)
                 .secure(false)
                 .maxAge(accessTokenExpiration)
                 .path("/")
@@ -89,7 +89,7 @@ public class JwtService {
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from(refreshCookieName, refreshToken)
-                .httpOnly(false)
+                .httpOnly(true)
                 .secure(false)
                 .maxAge(refreshTokenExpiration)
                 .path("/")
