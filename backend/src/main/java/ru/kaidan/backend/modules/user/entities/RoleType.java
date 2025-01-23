@@ -1,5 +1,5 @@
 package ru.kaidan.backend.modules.user.entities;
 
 public enum RoleType {
-    ADMIN, MODERATOR, USER
+    ROLE_ADMIN, ROLE_MODERATOR, ROLE_USER
 }

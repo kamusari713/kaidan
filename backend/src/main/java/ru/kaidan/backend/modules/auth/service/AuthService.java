@@ -29,7 +29,7 @@ public class AuthService {
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
-        user.setRole(RoleType.USER);
+        user.setRole(RoleType.ROLE_USER);
         userRepository.save(user);
 
         CustomUserDetails customUserDetails = new CustomUserDetails(user);
