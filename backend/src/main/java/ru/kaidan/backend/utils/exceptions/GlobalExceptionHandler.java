@@ -9,9 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.kaidan.backend.utils.exceptions.custom.ExpiredRefreshToken;
-import ru.kaidan.backend.utils.exceptions.custom.InvalidRefreshTokenException;
-import ru.kaidan.backend.utils.exceptions.custom.RefreshTokenMissingException;
+import ru.kaidan.backend.utils.exceptions.custom.ExpiredTokenException;
+import ru.kaidan.backend.utils.exceptions.custom.InvalidTokenException;
+import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -28,7 +28,9 @@ public class GlobalExceptionHandler {
 
         return buildResponse(
                 HttpStatus.NOT_FOUND,
-                "User not found", ex.getMessage(), request.getRequestURI());
+                "User not found",
+                ex.getMessage(),
+                request.getRequestURI());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -39,7 +41,9 @@ public class GlobalExceptionHandler {
 
         return buildResponse(
                 HttpStatus.UNAUTHORIZED,
-                "Invalid credentials", ex.getMessage(), request.getRequestURI());
+                "Invalid credentials",
+                ex.getMessage(),
+                request.getRequestURI());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -55,7 +59,9 @@ public class GlobalExceptionHandler {
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
-                "Validation error", errors.toString(), request.getRequestURI());
+                "Validation error",
+                errors.toString(),
+                request.getRequestURI());
     }
 
     @ExceptionHandler(Exception.class)
@@ -64,40 +70,48 @@ public class GlobalExceptionHandler {
 
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "Unexpected error", ex.getMessage(), request.getRequestURI());
+                "Unexpected error",
+                ex.getMessage(),
+                request.getRequestURI());
     }
 
-    @ExceptionHandler(RefreshTokenMissingException.class)
+    @ExceptionHandler(MissingTokenException.class)
     public ResponseEntity<ApiExceptionResponse> handleRefreshTokenMissing(
-            RefreshTokenMissingException ex,
+            MissingTokenException ex,
             HttpServletRequest request) {
-        log.warn("Refresh token missing: {}", ex.getMessage());
+        log.warn("Missing token: {}", ex.getMessage());
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
-                "Refresh token error", ex.getMessage(), request.getRequestURI());
+                "Token error",
+                ex.getMessage(),
+                request.getRequestURI());
     }
 
-    @ExceptionHandler(InvalidRefreshTokenException.class)
+    @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ApiExceptionResponse> handleInvalidRefreshToken(
-            InvalidRefreshTokenException ex,
+            InvalidTokenException ex,
             HttpServletRequest request) {
-        log.warn("Invalid refresh token: {}", ex.getMessage());
+        log.warn("Invalid token: {}", ex.getMessage());
 
         return buildResponse(
                 HttpStatus.UNAUTHORIZED,
-                "Invalid refresh token", ex.getMessage(), request.getRequestURI());
+                "Invalid token",
+                ex.getMessage(),
+                request.getRequestURI());
     }
 
-    @ExceptionHandler(ExpiredRefreshToken.class)
+    @ExceptionHandler(ExpiredTokenException.class)
     public ResponseEntity<ApiExceptionResponse> handleInvalidRefreshToken(
-            ExpiredRefreshToken ex,
+            ExpiredTokenException ex,
             HttpServletRequest request) {
-        log.warn("Expired refresh token: {}", ex.getMessage());
+        log.warn("Expired token: {}", ex.getMessage());
 
         return buildResponse(
                 HttpStatus.UNAUTHORIZED,
-                "Expired refresh token", ex.getMessage(), request.getRequestURI());
+                "Expired token",
+                ex.getMessage(),
+                request.getRequestURI());
     }
 
     private ResponseEntity<ApiExceptionResponse> buildResponse(

@@ -15,9 +15,9 @@ import ru.kaidan.backend.modules.auth.entities.TokenType;
 import ru.kaidan.backend.modules.user.entities.RoleType;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
-import ru.kaidan.backend.utils.exceptions.custom.ExpiredRefreshToken;
-import ru.kaidan.backend.utils.exceptions.custom.InvalidRefreshTokenException;
-import ru.kaidan.backend.utils.exceptions.custom.RefreshTokenMissingException;
+import ru.kaidan.backend.utils.exceptions.custom.ExpiredTokenException;
+import ru.kaidan.backend.utils.exceptions.custom.InvalidTokenException;
+import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
 @Service
 @RequiredArgsConstructor
@@ -65,12 +65,12 @@ public class AuthService {
     public CookieResponse refreshToken(HttpServletRequest request) {
         String refreshToken = jwtService.getTokenFromCookies(request, jwtService.refreshCookieName);
         if (refreshToken == null) {
-            throw new RefreshTokenMissingException("Refresh token is missing");
+            throw new MissingTokenException("Refresh token is missing");
         }
 
         String username = jwtService.extractUsername(refreshToken);
         if (username == null) {
-            throw new InvalidRefreshTokenException("Invalid refresh token");
+            throw new InvalidTokenException("Refresh token is invalid");
         }
 
         UserEntity user = userRepository.findByUsername(username)
@@ -78,7 +78,7 @@ public class AuthService {
 
         CustomUserDetails customUserDetails = new CustomUserDetails(user);
         if (!jwtService.isTokenValid(refreshToken, customUserDetails)) {
-            throw new ExpiredRefreshToken("Expired refresh token");
+            throw new ExpiredTokenException(" Refresh token is expired");
         }
 
         String newAccessToken = jwtService.generateAccessToken(customUserDetails);
