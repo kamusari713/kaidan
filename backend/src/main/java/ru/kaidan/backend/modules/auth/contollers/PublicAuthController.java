@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
 import ru.kaidan.backend.modules.auth.DTO.LoginRequest;
 import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
-import ru.kaidan.backend.modules.auth.service.AuthService;
+import ru.kaidan.backend.modules.auth.services.AuthService;
 
 import java.util.Map;
 

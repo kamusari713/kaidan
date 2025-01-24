@@ -1,4 +1,4 @@
-package ru.kaidan.backend.modules.auth.service;
+package ru.kaidan.backend.modules.auth.services;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

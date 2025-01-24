@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 import ru.kaidan.backend.modules.auth.entities.TokenType;
-import ru.kaidan.backend.modules.auth.service.JwtService;
+import ru.kaidan.backend.modules.auth.services.JwtService;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
 

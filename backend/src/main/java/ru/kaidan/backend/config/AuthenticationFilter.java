@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
-import ru.kaidan.backend.modules.auth.service.JwtService;
+import ru.kaidan.backend.modules.auth.services.JwtService;
 
 import java.io.IOException;
 
