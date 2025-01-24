@@ -1,4 +1,4 @@
-package ru.kaidan.backend.config;
+package ru.kaidan.backend.configs;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

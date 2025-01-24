@@ -1,4 +1,4 @@
-package ru.kaidan.backend.config;
+package ru.kaidan.backend.configs;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

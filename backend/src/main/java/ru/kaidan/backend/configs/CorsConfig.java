@@ -1,4 +1,4 @@
-package ru.kaidan.backend.config;
+package ru.kaidan.backend.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
