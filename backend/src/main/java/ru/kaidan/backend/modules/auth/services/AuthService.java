@@ -68,10 +68,8 @@ public class AuthService {
             throw new RefreshTokenMissingException("Refresh token is missing");
         }
 
-        String username;
-        try {
-            username = jwtService.extractUsername(refreshToken);
-        } catch (Exception e) {
+        String username = jwtService.extractUsername(refreshToken);
+        if (username == null) {
             throw new InvalidRefreshTokenException("Invalid refresh token");
         }
 
