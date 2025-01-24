@@ -32,7 +32,16 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain) throws ServletException, IOException {
+            @NonNull FilterChain filterChain) throws
+            ServletException,
+            IOException,
+            MissingTokenException,
+            ExpiredTokenException,
+            InvalidTokenException {
+        if (request.getRequestURI().contains("/api/public/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         final String token = getTokenFromCookies(request, jwtService.accessCookieName);
         if (token == null) {
             throw new MissingTokenException("Access token is missing");

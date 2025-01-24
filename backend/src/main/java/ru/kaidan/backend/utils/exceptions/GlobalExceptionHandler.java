@@ -83,7 +83,7 @@ public class GlobalExceptionHandler {
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
-                "Token error",
+                "Missing token",
                 ex.getMessage(),
                 request.getRequestURI());
     }
