@@ -1,6 +1,5 @@
 package ru.kaidan.backend.modules.auth.contollers;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,8 +18,8 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
-public class AuthController {
+@RequestMapping("/api/public/auth")
+public class PublicAuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
@@ -48,20 +47,6 @@ public class AuthController {
                     .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
                     .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
                     .body(Map.of("message", "User successfully registered"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<?> refresh(HttpServletRequest request) {
-        try {
-            CookieResponse cookies = authService.refreshToken(request);
-            return ResponseEntity
-                    .ok()
-                    .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
-                    .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
-                    .body(Map.of("message", "Access token successfully refreshed"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
         }
