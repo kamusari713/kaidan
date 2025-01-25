@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+    backend:
+        container_name: spring-backend
+        image: kaidan-backend
+        build:
+            context: ./backend
+        ports:
+            - "8080:8080"
+        depends_on:
+            - mongodb
+        env_file:
+            - .env.global
+
+    mongodb:
+        container_name: mongodb
+        image: mongo:latest
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongodb-data:/data/kaidan-database
+
+volumes:
+    mongodb-data:

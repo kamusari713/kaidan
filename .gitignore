@@ -1,4 +1,4 @@
+.env*.global
 .idea
-.vscode
-**/.idea/
+**/.vscode
 **/.idea/
