@@ -15,8 +15,8 @@ export default function AuthLayout({ tabs }: { tabs: ReactNode }) {
 		router.push(`/auth/${tab}`)
 	}
 	return (
-		<main className="flex flex-col mt-[10%] gap-[100px] items-center h-screen">
-			<div className="text-center text-[60px] tracking-[11px]">KAIDAN</div>
+		<main className="flex flex-col gap-[100px] items-center h-screen">
+			<div className="text-center text-[60px] mt-[10%] tracking-[11px]">KAIDAN</div>
 			<div className="flex flex-col gap-6">
 				<Tabs value={currentTab || 'login'} onValueChange={handleTabChange}>
 					<TabsList>
