@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/graphql").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/api/private/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

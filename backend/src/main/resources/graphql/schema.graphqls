@@ -1,0 +1,104 @@
+type Query {
+    page(
+        page: Int = 1,
+        perPage: Int = 10,
+        id: String,
+        search: String
+    ): Page
+
+    anime(
+        shikimoriId: String
+    ): [Anime]
+}
+
+type Page {
+    pageInfo: PageInfo!
+    media: [Anime!]!
+}
+
+type PageInfo {
+    totalPages: Int
+    currentPage: Int
+    hasNextPage: Boolean
+    lastPage: Int
+    perPage: Int
+}
+
+type Anime {
+    id: ID!
+    title: Title
+    synonyms: [String!]
+    description: Description
+    shikimoriScore: Float
+    shikimoriUrl: String
+    shikimoriId: String
+    watchRating: String
+    episodes: Int
+    duration: Int
+    kind: Kind
+    rating: Rating
+    status: Status
+    startDate: String
+    endDate: String
+    coverImage: CoverImage
+    genres: [Genre!]
+    studios: [String!]
+
+    averageScore: Float
+    scoreCount: Int
+    comments: [Comment!]
+    tags: [Tag!]
+}
+
+type Title {
+    EN: String
+    RU: String
+    ROMAJI: String
+    NATIVE: String
+}
+
+type Description {
+    EN: String
+    RU: String
+}
+
+enum Kind {
+    tv, movie, ova, ona, special, tv_special, music, cm
+}
+
+enum Rating {
+    none, g, pg, pg_13, r, r_plus, rx
+}
+
+type Status {
+    EN: String
+    RU: String
+}
+
+type CoverImage {
+    extraLarge: String
+    large: String
+    medium: String
+    color: String
+    banner: String
+}
+
+type Genre {
+    EN: String
+    RU: String
+}
+
+type Comment {
+    id: ID!
+}
+
+type Tag {
+    RU: TagTranslations
+    EN: TagTranslations
+    rank: Int
+    isSpoiler: Boolean
+}
+
+type TagTranslations {
+    name: String
+}

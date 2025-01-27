@@ -38,7 +38,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             MissingTokenException,
             ExpiredTokenException,
             InvalidTokenException {
-        if (request.getRequestURI().contains("/api/public/")) {
+        if (request.getRequestURI().contains("/public") || request.getRequestURI().contains("/graphql")) {
             filterChain.doFilter(request, response);
             return;
         }

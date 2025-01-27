@@ -1,12 +1,12 @@
-package ru.kaidan.backend.modules.anime.entities;
+package ru.kaidan.backend.modules.anime.entities.types;
 
 import lombok.Data;
 
 @Data
-public class AnimeCoverImage {
-    private String banner;
+public class CoverImage {
     private String extraLarge;
     private String lagre;
     private String medium;
     private String color;
+    private String banner;
 }
