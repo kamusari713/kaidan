@@ -101,4 +101,5 @@ type Tag {
 
 type TagTranslations {
     name: String
+    description: String
 }
