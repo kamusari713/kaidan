@@ -1,4 +1,4 @@
-import { ArrowRight, ThumbsUp } from 'lucide-react'
+import { ArrowRight, ThumbsUp } from '@/shared/components/ui/icons'
 import React from 'react'
 
 export const SectionLatestRatings: React.FC = () => {
@@ -20,7 +20,7 @@ export const SectionLatestRatings: React.FC = () => {
 							</div>
 							<div className="flex justify-between text-[12px] px-4 py-3">
 								<div className="flex gap-2 items-center text-foreground/60">
-									<ThumbsUp className="stroke-foreground/60" size={14} />0
+									<ThumbsUp />0
 								</div>
 								<div className="text-foreground/60">9 часов назад</div>
 							</div>

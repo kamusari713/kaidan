@@ -1,5 +1,5 @@
 import { Input } from '@/shared/components/ui'
-import { Ellipsis } from 'lucide-react'
+import { Ellipsis } from '@/shared/components/ui/icons'
 import React from 'react'
 
 const tabCards: Record<string, { title?: string; watched?: string; date?: string }[]> = {
@@ -57,7 +57,7 @@ export const TitlesCardSection: React.FC<Props> = ({ tab }) => {
 									</div>
 									<div className="flex justify-center w-1/2">
 										<div className="group/item hover:cursor-pointer hover:bg-accent/20 p-3 rounded-xl">
-											<Ellipsis className="stroke-foreground fill-foreground group-hover/item:stroke-accent/60 group-hover/item:fill-accent/60" size={12} />
+											<Ellipsis />
 										</div>
 									</div>
 								</div>

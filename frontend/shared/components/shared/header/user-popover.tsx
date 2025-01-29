@@ -19,7 +19,7 @@ export const UserPopover: React.FC = () => {
 			<PopoverContent className="bg-card flex flex-col w-[200px] p-1.5 gap-1.5 text-[14px]">
 				<Link href="/profile/1/titles">
 					<Button variant="ghost" className="flex justify-start w-full group/item" onClick={() => setOpen(false)}>
-						<User className="stroke-foreground fill-foreground group-hover/item:stroke-accent/60 group-hover/item:fill-accent/60" />
+						<User />
 						Мой профиль
 					</Button>
 				</Link>
@@ -28,19 +28,19 @@ export const UserPopover: React.FC = () => {
 
 				<Link href="/profile/1/titles">
 					<Button variant="ghost" className="flex justify-start w-full group/item" onClick={() => setOpen(false)}>
-						<List className="stroke-foreground fill-foreground group-hover/item:stroke-accent/60 group-hover/item:fill-accent/60" />
+						<List />
 						Тайтлы
 					</Button>
 				</Link>
 				<Link href="/profile/1/comments">
 					<Button variant="ghost" className="flex justify-start w-full group/item" onClick={() => setOpen(false)}>
-						<MessageCircle className="stroke-foreground fill-foreground group-hover/item:stroke-accent/60 group-hover/item:fill-accent/60" />
+						<MessageCircle />
 						Комментарии
 					</Button>
 				</Link>
 				<Link href="/profile/1/notifications">
 					<Button variant="ghost" className="flex justify-start w-full group/item" onClick={() => setOpen(false)}>
-						<Bell className="stroke-foreground fill-foreground group-hover/item:stroke-accent/60 group-hover/item:fill-accent/60" />
+						<Bell />
 						Уведомления
 					</Button>
 				</Link>

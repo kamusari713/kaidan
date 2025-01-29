@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Popover, PopoverContent, PopoverTrigger, Separator } from '@/shared/components/ui'
-import { Layers } from 'lucide-react'
+import { Layers } from '@/shared/components/ui/icons'
 import Link from 'next/link'
 import React from 'react'
 
@@ -12,7 +12,7 @@ export const CatalogPopover: React.FC = () => {
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				<Button variant="ghost" className="group text-[14px]">
-					<Layers className="stroke-foreground group-hover:stroke-accent/60" size={20} absoluteStrokeWidth />
+					<Layers />
 					Каталог
 				</Button>
 			</PopoverTrigger>

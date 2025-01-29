@@ -1,11 +1,12 @@
-import { ArrowRight, MessagesSquare } from 'lucide-react'
+import { ArrowRight, MessagesSquare } from '@/shared/components/ui/icons'
 import React from 'react'
 
 export const SectionLatestForum: React.FC = () => {
 	return (
 		<div className="flex flex-col gap-2">
 			<div className="group/forum hover:cursor-pointer flex items-center gap-2 ml-4 w-fit">
-				<div className="group-hover/forum:text-accent">Последние темы форума</div> <ArrowRight className="group-hover/forum:stroke-accent stroke-foreground" size={16} />
+				<div className="group-hover/forum:text-accent">Последние темы форума</div>
+				<ArrowRight className="group-hover/forum:stroke-accent stroke-foreground" size={16} />
 			</div>
 			<div className="bg-card rounded-xl px-4 py-3 border shadow">
 				<div className="flex flex-col gap-2">

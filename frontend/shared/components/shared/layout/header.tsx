@@ -14,13 +14,13 @@ export const Header: React.FC = () => {
 				</Link>
 				<div className="flex flex-row gap-6 items-center justify-center">
 					<CatalogPopover />
-					<Button variant="ghost" className="group text-[14px]">
-						<Search className="stroke-foreground group-hover:stroke-accent/60" size={20} absoluteStrokeWidth />
+					<Button variant="ghost" className="text-[14px]">
+						<Search />
 						Поиск
 					</Button>
 					<Link href="/forum">
-						<Button variant="ghost" className="group text-[14px]">
-							<MessagesSquare className="stroke-foreground group-hover:stroke-accent/60" size={20} absoluteStrokeWidth />
+						<Button variant="ghost" className="text-[14px]">
+							<MessagesSquare />
 							Форум
 						</Button>
 					</Link>
