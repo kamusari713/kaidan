@@ -1,8 +1,8 @@
+import { TanstackQueryProvider } from '@/shared/components/shared'
 import { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import localFont from 'next/font/local'
 import './globals.css'
-import TanstackQueryProviders from './providers'
 
 const montserrat = localFont({
 	src: '../public/fonts/Montserrat[wght].woff2',
@@ -27,11 +27,11 @@ export default function RootLayout({
 		<html lang="en">
 			<head />
 			<body className={`${montserrat.className} antialiased w-auto bg-background`}>
-				<TanstackQueryProviders>
+				<TanstackQueryProvider>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 						{children}
 					</ThemeProvider>
-				</TanstackQueryProviders>
+				</TanstackQueryProvider>
 			</body>
 		</html>
 	)

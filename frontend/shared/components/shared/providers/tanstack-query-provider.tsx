@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { ReactNode } from 'react'
+import { FC, PropsWithChildren } from 'react'
 
 function makeQueryClient() {
 	return new QueryClient({
@@ -25,7 +25,7 @@ function getQueryClient() {
 	return browserQueryClient
 }
 
-export default function TanstackQueryProviders({ children }: { children: ReactNode }) {
+export const TanstackQueryProvider: FC<PropsWithChildren> = ({ children }) => {
 	const queryClient = getQueryClient()
 
 	return (
