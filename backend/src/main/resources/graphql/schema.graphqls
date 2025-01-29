@@ -7,8 +7,19 @@ type Query {
     ): Page
 
     anime(
-        shikimoriId: String
-    ): [Anime]
+        shikimoriId: String!
+    ): Anime
+}
+
+type Mutation {
+    loadDataSet(
+        dataSet: [AnimeRaw!]!
+    ): ResultMessage
+}
+
+type ResultMessage {
+    message: String!
+    total: Int!
 }
 
 type Page {
@@ -35,6 +46,7 @@ type Anime {
     watchRating: String
     episodes: Int
     duration: Int
+    externalLinks: [ExternalLink!]
     kind: Kind
     rating: Rating
     status: Status
@@ -49,7 +61,36 @@ type Anime {
     comments: [Comment!]
 }
 
+input AnimeRaw {
+    title: TitleInput
+    synonyms: [String!]
+    description: DescriptionInput
+    shikimoriScore: Float
+    shikimoriUrl: String
+    shikimoriId: String
+    watchRating: String
+    episodes: Int
+    duration: Int
+    externalLinks: [ExternalLinkInput!]
+    kind: Kind
+    rating: Rating
+    status: StatusInput
+    startDate: String
+    endDate: String
+    coverImage: CoverImageInput
+    genres: [GenreInput!]
+    studios: [String!]
+    tags: [TagInput!]
+}
+
 type Title {
+    EN: String
+    RU: String
+    ROMAJI: String
+    NATIVE: String
+}
+
+input TitleInput {
     EN: String
     RU: String
     ROMAJI: String
@@ -61,15 +102,35 @@ type Description {
     RU: String
 }
 
+input DescriptionInput {
+    EN: String
+    RU: String
+}
+
+type ExternalLink {
+    source: String
+    url: String
+}
+
+input ExternalLinkInput {
+    source: String
+    url: String
+}
+
 enum Kind {
     tv, movie, ova, ona, special, tv_special, music, cm
 }
 
 enum Rating {
-    none, g, pg, pg_13, r, r_plus, rx
+    None, g, pg, pg_13, r, r_plus, rx
 }
 
 type Status {
+    EN: String
+    RU: String
+}
+
+input StatusInput {
     EN: String
     RU: String
 }
@@ -82,12 +143,29 @@ type CoverImage {
     banner: String
 }
 
+input CoverImageInput {
+    extraLarge: String
+    large: String
+    medium: String
+    color: String
+    banner: String
+}
+
 type Genre {
     EN: String
     RU: String
 }
 
+input GenreInput {
+    EN: String
+    RU: String
+}
+
 type Comment {
+    id: ID!
+}
+
+input CommentInput {
     id: ID!
 }
 
@@ -98,7 +176,19 @@ type Tag {
     isSpoiler: Boolean
 }
 
+input TagInput {
+    RU: TagTranslationsInput
+    EN: TagTranslationsInput
+    rank: Int
+    isSpoiler: Boolean
+}
+
 type TagTranslations {
+    name: String
+    description: String
+}
+
+input TagTranslationsInput {
     name: String
     description: String
 }

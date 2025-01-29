@@ -1,21 +1,12 @@
-package ru.kaidan.backend.modules.anime.entities;
+package ru.kaidan.backend.modules.anime.entities.types;
 
-import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import ru.kaidan.backend.modules.anime.entities.types.*;
-import ru.kaidan.backend.modules.comment.entities.CommentEntity;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Builder
 @Data
-@Document(collection = "anime")
-public class Anime {
-    @Id
-    private String id;
+public class AnimeRaw {
     private Title title;
     private List<String> synonyms;
     private Description description;
@@ -34,8 +25,4 @@ public class Anime {
     private List<Genre> genres;
     private List<String> studios;
     private List<Tag> tags;
-
-    private Double averageScore;
-    private Integer scoreCount;
-    private List<CommentEntity> comments;
 }
