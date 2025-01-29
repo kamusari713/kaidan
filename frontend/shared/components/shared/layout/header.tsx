@@ -1,7 +1,7 @@
 import { CatalogPopover, NotificationPopover, UserPopover } from '@/shared/components/shared/header'
 import { Container } from '@/shared/components/shared/layout'
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@/shared/components/ui'
-import { MessagesSquare, Search } from 'lucide-react'
+import { MessagesSquare, Search } from '@/shared/components/ui/icons'
 import Link from 'next/link'
 import { FC } from 'react'
 

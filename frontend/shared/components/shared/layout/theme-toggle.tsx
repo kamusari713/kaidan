@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/shared/components/ui'
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun } from '@/shared/components/ui/icons'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 

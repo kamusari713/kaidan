@@ -1,13 +1,13 @@
 'use client'
 
 import { CommentsCardSection } from '@/shared/components/shared/profile/tabs/comments'
-import { FilterSeparator, Label, RadioGroup, RadioGroupItem, Separator } from '@/shared/components/ui'
+import { Label, RadioGroup, RadioGroupItem, Separator, TitleSeparator } from '@/shared/components/ui'
 
 export default function CommentsTab() {
 	return (
 		<div className="flex gap-6 w-full">
 			<div className="flex flex-col w-[300px] text-[14px] pb-2 bg-card rounded-xl border shadow">
-				<FilterSeparator>Сортировка</FilterSeparator>
+				<TitleSeparator>Сортировка</TitleSeparator>
 				<RadioGroup defaultValue="name_az" className="">
 					<div className="flex items-center gap-3 px-4 py-2 hover:cursor-pointer">
 						<RadioGroupItem value="name_az" id="name_az" />
