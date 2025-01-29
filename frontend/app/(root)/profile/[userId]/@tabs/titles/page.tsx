@@ -1,7 +1,7 @@
 'use client'
 
 import { TitlesCardSection } from '@/shared/components/shared/profile/tabs/titles'
-import { FilterSeparator, Label, RadioGroup, RadioGroupItem, Separator } from '@/shared/components/ui'
+import { Label, RadioGroup, RadioGroupItem, Separator, TitleSeparator } from '@/shared/components/ui'
 import { useState } from 'react'
 
 const tabs = ['Все', 'Смотрю', 'Запланированно', 'Брошено', 'Посмотренно']
@@ -12,7 +12,7 @@ export default function TitlesTab() {
 	return (
 		<div className="flex gap-6 w-full">
 			<div className="flex flex-col w-[300px] text-[14px] pb-2 bg-card rounded-xl border shadow">
-				<FilterSeparator>Списки</FilterSeparator>
+				<TitleSeparator>Списки</TitleSeparator>
 				<div className="flex flex-col gap-2">
 					{tabs.map((tab, index) => (
 						<div
@@ -28,7 +28,7 @@ export default function TitlesTab() {
 						</div>
 					))}
 				</div>
-				<FilterSeparator>Сортировка</FilterSeparator>
+				<TitleSeparator>Сортировка</TitleSeparator>
 				<RadioGroup defaultValue="name_az" className="">
 					<div className="flex items-center gap-3 px-4 py-2 hover:cursor-pointer">
 						<RadioGroupItem value="name_az" id="name_az" />
