@@ -31,9 +31,9 @@ public class Anime {
     private CoverImage coverImage;
     private List<Genre> genres;
     private List<String> studios;
+    private List<Tag> tags;
 
     private Double averageScore;
     private Integer scoreCount;
     private List<CommentEntity> comments;
-    private List<Tag> tags;
 }

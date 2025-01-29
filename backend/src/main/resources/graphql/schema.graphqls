@@ -43,11 +43,10 @@ type Anime {
     coverImage: CoverImage
     genres: [Genre!]
     studios: [String!]
-
+    tags: [Tag!]
     averageScore: Float
     scoreCount: Int
     comments: [Comment!]
-    tags: [Tag!]
 }
 
 type Title {
