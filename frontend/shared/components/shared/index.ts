@@ -1,3 +1,4 @@
+export { FormErrorMessage } from './form-error-message'
 export * from './header'
 export * from './home'
 export * from './layout'

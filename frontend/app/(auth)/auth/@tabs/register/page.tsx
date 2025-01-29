@@ -1,5 +1,6 @@
 'use client'
 
+import { FormErrorMessage } from '@/shared/components/shared'
 import { Button, Input } from '@/shared/components/ui'
 import { useRegister, useRegisterForm } from '@/shared/hooks'
 import { RegisterFormData } from '@/shared/types'
@@ -19,13 +20,19 @@ export default function RegisterPage() {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-			{error && <p className="text-red-500 text-[14px]">{error.message}</p>}
-			{!!errors.username && <p className="text-red-500 text-[14px]">{errors.username.message}</p>}
-			<Input {...register('username')} placeholder="Имя" />
-			{!!errors.email && <p className="text-red-500 text-[14px]">{errors.email.message}</p>}
-			<Input {...register('email')} type="email" placeholder="Почта" />
-			{!!errors.password && <p className="text-red-500 text-[14px]">{errors.password.message}</p>}
-			<Input {...register('password')} type="password" placeholder="Пароль" />
+			{error && <FormErrorMessage>{error.message}</FormErrorMessage>}
+			<div>
+				{!!errors.username && <FormErrorMessage>{errors.username.message}</FormErrorMessage>}
+				<Input {...register('username')} placeholder="Имя" />
+			</div>
+			<div>
+				{!!errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
+				<Input {...register('email')} type="email" placeholder="Почта" />
+			</div>
+			<div>
+				{!!errors.password && <FormErrorMessage>{errors.password.message}</FormErrorMessage>}
+				<Input {...register('password')} type="password" placeholder="Пароль" />
+			</div>
 			<Button disabled={isPending} type="submit" className="w-full">
 				Регистрация
 			</Button>

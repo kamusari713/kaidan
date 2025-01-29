@@ -1,5 +1,6 @@
 'use client'
 
+import { FormErrorMessage } from '@/shared/components/shared'
 import { Button, Input } from '@/shared/components/ui'
 import { useLogin, useLoginForm } from '@/shared/hooks'
 import { LoginFormData } from '@/shared/types'
@@ -19,11 +20,15 @@ export default function LoginPage() {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-			{error && <p className="text-red-500 text-[14px]">{error.message}</p>}
-			{!!errors.username && <p className="text-red-500 text-[14px]">{errors.username.message}</p>}
-			<Input {...register('username')} placeholder="Имя пользователя" />
-			{!!errors.password && <p className="text-red-500 text-[14px]">{errors.password.message}</p>}
-			<Input {...register('password')} placeholder="Пароль" type="password" />
+			{error && <FormErrorMessage>{error.message}</FormErrorMessage>}
+			<div>
+				{!!errors.username && <FormErrorMessage>{errors.username.message}</FormErrorMessage>}
+				<Input {...register('username')} placeholder="Имя пользователя" />
+			</div>
+			<div>
+				{!!errors.password && <FormErrorMessage>{errors.password.message}</FormErrorMessage>}
+				<Input {...register('password')} placeholder="Пароль" type="password" />
+			</div>
 			<Button disabled={isPending} type="submit" className="w-full">
 				Вход
 			</Button>
