@@ -1,6 +1,6 @@
 'use server'
 
-import { LoginData, RegisterData } from '../types/auth'
+import { LoginData, RegisterData } from '../types'
 import { apiClient } from './client'
 
 export async function login(data: LoginData) {

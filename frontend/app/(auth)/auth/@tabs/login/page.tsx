@@ -1,22 +1,11 @@
 'use client'
 
 import { Button, Input } from '@/shared/components/ui'
-import { useLogin } from '@/shared/hooks/auth'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-
-const MIN_SYMBOLS = 4
-
-const loginSchema = z.object({
-	username: z.string().min(4, `Имя должно быть минимум ${MIN_SYMBOLS} символов`),
-	password: z.string().min(4, `Пароль должен быть минимум ${MIN_SYMBOLS} символа`),
-})
-
-type LoginFormData = z.infer<typeof loginSchema>
+import { useLogin, useLoginForm } from '@/shared/hooks'
+import { LoginFormData } from '@/shared/types'
 
 export default function LoginPage() {
-	const { mutate } = useLogin()
+	const { mutate, isPending, error } = useLogin()
 
 	const onSubmit = (data: LoginFormData) => {
 		mutate(data)
@@ -26,19 +15,16 @@ export default function LoginPage() {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<LoginFormData>({
-		resolver: zodResolver(loginSchema),
-		defaultValues: {
-			username: '',
-			password: '',
-		},
-	})
+	} = useLoginForm()
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-			<Input {...register('username')} placeholder="Имя пользователя" required aria-invalid={!!errors.username} />
-			<Input {...register('password')} placeholder="Пароль" type="password" required aria-invalid={!!errors.password} />
-			<Button type="submit" className="w-full">
+			{error && <p className="text-red-500 text-[14px]">{error.message}</p>}
+			{!!errors.username && <p className="text-red-500 text-[14px]">{errors.username.message}</p>}
+			<Input {...register('username')} placeholder="Имя пользователя" />
+			{!!errors.password && <p className="text-red-500 text-[14px]">{errors.password.message}</p>}
+			<Input {...register('password')} placeholder="Пароль" type="password" />
+			<Button disabled={isPending} type="submit" className="w-full">
 				Вход
 			</Button>
 		</form>

@@ -1,20 +1,8 @@
 'use client'
 
 import { Button, Input } from '@/shared/components/ui'
-import { useRegister } from '@/shared/hooks/auth'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-
-const MIN_SYMBOLS = 4
-
-const RegisterForm = z.object({
-	email: z.string().email(),
-	username: z.string().min(4, `Имя должно быть минимум ${MIN_SYMBOLS} символов`),
-	password: z.string().min(4, `Пароль должен быть минимум ${MIN_SYMBOLS} символа`),
-})
-
-type RegisterFormData = z.infer<typeof RegisterForm>
+import { useRegister, useRegisterForm } from '@/shared/hooks'
+import { RegisterFormData } from '@/shared/types'
 
 export default function RegisterPage() {
 	const { mutate, isPending, error } = useRegister()
@@ -27,21 +15,18 @@ export default function RegisterPage() {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<RegisterFormData>({
-		resolver: zodResolver(RegisterForm),
-		defaultValues: {
-			username: '',
-			email: '',
-			password: '',
-		},
-	})
+	} = useRegisterForm()
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-			{error && <p>{error.message}</p>}
-			<Input {...register('username')} placeholder="Имя" required aria-invalid={!!errors.username} />
-			<Input {...register('email')} type="email" placeholder="Почта" required aria-invalid={!!errors.email} />
-			<Input {...register('password')} type="password" placeholder="Пароль" required aria-invalid={!!errors.password} />
-			<Button type="submit" disabled={isPending} className="w-full">
+			{error && <p className="text-red-500 text-[14px]">{error.message}</p>}
+			{!!errors.username && <p className="text-red-500 text-[14px]">{errors.username.message}</p>}
+			<Input {...register('username')} placeholder="Имя" />
+			{!!errors.email && <p className="text-red-500 text-[14px]">{errors.email.message}</p>}
+			<Input {...register('email')} type="email" placeholder="Почта" />
+			{!!errors.password && <p className="text-red-500 text-[14px]">{errors.password.message}</p>}
+			<Input {...register('password')} type="password" placeholder="Пароль" />
+			<Button disabled={isPending} type="submit" className="w-full">
 				Регистрация
 			</Button>
 		</form>

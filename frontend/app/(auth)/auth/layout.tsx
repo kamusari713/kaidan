@@ -15,15 +15,15 @@ export default function AuthLayout({ tabs }: { tabs: ReactNode }) {
 		router.push(`/auth/${tab}`)
 	}
 	return (
-		<main className="flex flex-col gap-[100px] items-center h-screen">
+		<main className="flex flex-col gap-[40px] items-center h-screen">
 			<div className="text-center text-[60px] mt-[10%] tracking-[11px]">KAIDAN</div>
-			<div className="flex flex-col gap-6">
+			<div className="flex flex-col gap-6 bg-card p-4 rounded-xl shadow">
 				<Tabs value={currentTab || 'login'} onValueChange={handleTabChange}>
-					<TabsList>
-						<TabsTrigger variant={'section'} value="login">
+					<TabsList className="w-[320px]">
+						<TabsTrigger className="flex-grow" variant={'section'} value="login">
 							Вход
 						</TabsTrigger>
-						<TabsTrigger variant={'section'} value="register">
+						<TabsTrigger className="flex-grow" variant={'section'} value="register">
 							Регистрация
 						</TabsTrigger>
 					</TabsList>
