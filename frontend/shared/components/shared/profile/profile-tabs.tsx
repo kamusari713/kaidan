@@ -2,9 +2,9 @@
 
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui'
 import { usePathname, useRouter } from 'next/navigation'
-import React from 'react'
+import { FC } from 'react'
 
-export const ProfileTabs: React.FC = () => {
+export const ProfileTabs: FC = () => {
 	const router = useRouter()
 	const pathname = usePathname()
 

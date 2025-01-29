@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@/shared/components/ui'
-import React from 'react'
+import { FC } from 'react'
 
-export const ProfileHeader: React.FC = () => {
+export const ProfileHeader: FC = () => {
 	return (
 		<div className="flex items-center justify-between px-4 py-3">
 			<div className="flex gap-4">

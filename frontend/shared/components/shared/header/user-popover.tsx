@@ -3,11 +3,11 @@
 import { Button, Popover, PopoverContent, PopoverTrigger, Separator } from '@/shared/components/ui'
 import { AlignJustify, Bell, List, MessageCircle, User } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import { FC, useState } from 'react'
 import { ThemeToggle } from '../layout'
 
-export const UserPopover: React.FC = () => {
-	const [open, setOpen] = React.useState(false)
+export const UserPopover: FC = () => {
+	const [open, setOpen] = useState(false)
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>

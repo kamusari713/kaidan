@@ -1,6 +1,6 @@
-import React from 'react'
+import { FC } from 'react'
 
-export const SectionLatestUpdates: React.FC = () => {
+export const SectionLatestUpdates: FC = () => {
 	return (
 		<div className="flex gap-4 p-4 bg-card rounded-xl overflow-x-auto border shadow">
 			{Array.from({ length: 10 }, (_, index) => (

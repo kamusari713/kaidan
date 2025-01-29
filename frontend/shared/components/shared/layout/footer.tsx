@@ -1,7 +1,7 @@
-import React from 'react'
+import { FC } from 'react'
 import { Container } from './container'
 
-export const Footer: React.FC = () => {
+export const Footer: FC = () => {
 	return (
 		<div className="w-full bg-card border-t shadow">
 			<Container className="flex justify-between items-end text-[16px] p-4">

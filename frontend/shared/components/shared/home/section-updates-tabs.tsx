@@ -1,7 +1,7 @@
 import { Separator, Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui'
-import React from 'react'
+import { FC } from 'react'
 
-export const SectionUpdatesTabs: React.FC = () => {
+export const SectionUpdatesTabs: FC = () => {
 	return (
 		<div className="bg-card rounded-xl w-1/2 h-fit border shadow">
 			<Tabs className="flex flex-col" defaultValue="tab1">

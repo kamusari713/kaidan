@@ -3,9 +3,9 @@ import { Container } from '@/shared/components/shared/layout'
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@/shared/components/ui'
 import { MessagesSquare, Search } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import { FC } from 'react'
 
-export const Header: React.FC = () => {
+export const Header: FC = () => {
 	return (
 		<div className="bg-card border-b shadow">
 			<Container className="flex flex-row items-center justify-between">

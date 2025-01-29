@@ -1,10 +1,7 @@
 import { cn } from '@/shared/lib/utils'
-import React from 'react'
+import { UiComponentProps } from '@/shared/types'
+import { FC } from 'react'
 
-interface Props {
-	className?: string
-}
-
-export const Container: React.FC<React.PropsWithChildren<Props>> = ({ className, children }) => {
+export const Container: FC<UiComponentProps> = ({ className, children }) => {
 	return <div className={cn('mx-auto max-w-[1280px] w-full', className)}>{children}</div>
 }

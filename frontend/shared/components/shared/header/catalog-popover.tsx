@@ -3,10 +3,10 @@
 import { Button, Popover, PopoverContent, PopoverTrigger, Separator } from '@/shared/components/ui'
 import { Layers } from '@/shared/components/ui/icons'
 import Link from 'next/link'
-import React from 'react'
+import { FC, useState } from 'react'
 
-export const CatalogPopover: React.FC = () => {
-	const [open, setOpen] = React.useState(false)
+export const CatalogPopover: FC = () => {
+	const [open, setOpen] = useState(false)
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
