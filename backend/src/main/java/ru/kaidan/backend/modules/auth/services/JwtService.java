@@ -4,10 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
@@ -24,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtService {
     private final TokenRepository tokenRepository;
+    private final CookieService cookieService;
     @Value("${jwt.accessToken.cookie-name}")
     public String accessCookieName;
     @Value("${jwt.refreshToken.cookie-name}")
@@ -80,24 +79,19 @@ public class JwtService {
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    public CookieResponse buildCookies(String accessToken, String refreshToken) {
-        ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, accessToken)
-                .httpOnly(true)
-                .secure(false)
-                .maxAge(accessTokenExpiration)
-                .path("/")
-                .sameSite("Strict")
+    public CookieResponse buildTokensCookies(String accessToken, String refreshToken) {
+        return CookieResponse.builder()
+                .accessCookie(cookieService.createCookie(
+                        accessCookieName,
+                        accessToken,
+                        accessTokenExpiration
+                ))
+                .refreshCookie(cookieService.createCookie(
+                        refreshCookieName,
+                        refreshToken,
+                        refreshTokenExpiration
+                ))
                 .build();
-
-        ResponseCookie refreshCookie = ResponseCookie.from(refreshCookieName, refreshToken)
-                .httpOnly(true)
-                .secure(false)
-                .maxAge(refreshTokenExpiration)
-                .path("/")
-                .sameSite("Strict")
-                .build();
-
-        return new CookieResponse(accessCookie, refreshCookie);
     }
 
     public void revokeAllUserTokens(UserEntity user) {
@@ -128,16 +122,5 @@ public class JwtService {
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
-    }
-
-    public String getTokenFromCookies(HttpServletRequest request, String cookieName) {
-        if (request.getCookies() != null) {
-            for (var cookie : request.getCookies()) {
-                if (cookieName.equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
     }
 }

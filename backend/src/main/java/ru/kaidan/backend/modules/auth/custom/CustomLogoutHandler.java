@@ -11,43 +11,37 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 import ru.kaidan.backend.modules.auth.entities.TokenType;
+import ru.kaidan.backend.modules.auth.services.CookieService;
 import ru.kaidan.backend.modules.auth.services.JwtService;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
+import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
 @Service
 @RequiredArgsConstructor
 public class CustomLogoutHandler implements LogoutHandler {
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final CookieService cookieService;
 
     @Override
     public void logout(
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication) {
-        ResponseCookie accessCookie = ResponseCookie.from(jwtService.accessCookieName)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(0)
-                .build();
 
-        ResponseCookie refreshCookie = ResponseCookie.from(jwtService.refreshCookieName)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(0)
-                .build();
-        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
-
-        final String refreshToken = jwtService.getTokenFromCookies(request, jwtService.refreshCookieName);
+        final String refreshToken = cookieService.getValueFromCookie(request, jwtService.refreshCookieName);
         if (refreshToken == null || refreshToken.isEmpty()) {
-            throw new IllegalStateException("No refresh token found in cookies");
+            throw new MissingTokenException("Refresh token is missing");
         }
         UserEntity user = userRepository.findByUsername(jwtService.extractUsername(refreshToken))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        ResponseCookie accessCookie = cookieService.deleteCookie(jwtService.accessCookieName);
+        ResponseCookie refreshCookie = cookieService.deleteCookie(jwtService.refreshCookieName);
+
+        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
         jwtService.revokeAllUserTokens(user, TokenType.REFRESH);
         SecurityContextHolder.clearContext();

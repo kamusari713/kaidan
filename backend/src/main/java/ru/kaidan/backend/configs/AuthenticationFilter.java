@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
+import ru.kaidan.backend.modules.auth.services.CookieService;
 import ru.kaidan.backend.modules.auth.services.JwtService;
 import ru.kaidan.backend.utils.exceptions.custom.ExpiredTokenException;
 import ru.kaidan.backend.utils.exceptions.custom.InvalidTokenException;
@@ -27,6 +28,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
+    private final CookieService cookieService;
 
     @Override
     protected void doFilterInternal(
@@ -42,7 +44,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        final String token = getTokenFromCookies(request, jwtService.accessCookieName);
+        final String token = cookieService.getValueFromCookie(request, jwtService.accessCookieName);
         if (token == null) {
             throw new MissingTokenException("Access token is missing");
         }
@@ -68,16 +70,5 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
         filterChain.doFilter(request, response);
-    }
-
-    private String getTokenFromCookies(HttpServletRequest request, String cookieName) {
-        if (request.getCookies() != null) {
-            for (var cookie : request.getCookies()) {
-                if (cookieName.equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
     }
 }

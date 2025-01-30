@@ -26,6 +26,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final CookieService cookieService;
 
     public CookieResponse registerUser(RegisterRequest registerRequest) {
         UserEntity user = new UserEntity();
@@ -41,7 +42,7 @@ public class AuthService {
         jwtService.saveUserToken(user, accessToken, TokenType.ACCESS);
         jwtService.saveUserToken(user, refreshToken, TokenType.REFRESH);
 
-        return jwtService.buildCookies(accessToken, refreshToken);
+        return jwtService.buildTokensCookies(accessToken, refreshToken);
     }
 
     public CookieResponse loginUser(LoginRequest authRequest) {
@@ -59,11 +60,11 @@ public class AuthService {
         jwtService.revokeAllUserTokens(user);
         jwtService.saveUserToken(user, accessToken, TokenType.ACCESS);
         jwtService.saveUserToken(user, refreshToken, TokenType.REFRESH);
-        return jwtService.buildCookies(accessToken, refreshToken);
+        return jwtService.buildTokensCookies(accessToken, refreshToken);
     }
 
     public CookieResponse refreshToken(HttpServletRequest request) {
-        String refreshToken = jwtService.getTokenFromCookies(request, jwtService.refreshCookieName);
+        String refreshToken = cookieService.getValueFromCookie(request, jwtService.refreshCookieName);
         if (refreshToken == null) {
             throw new MissingTokenException("Refresh token is missing");
         }
@@ -85,6 +86,6 @@ public class AuthService {
         jwtService.revokeAllUserTokens(user, TokenType.ACCESS);
         jwtService.saveUserToken(user, newAccessToken, TokenType.ACCESS);
 
-        return jwtService.buildCookies(newAccessToken, refreshToken);
+        return jwtService.buildTokensCookies(newAccessToken, refreshToken);
     }
 }
