@@ -1,4 +1,4 @@
-# 🚀🎥🎌 Kaidan - Full-Stack Pet Project
+# 🎥🎌 Kaidan - Full-Stack Pet Project
 
 **Kaidan** is my first full-stack pet project and coursework designed to explore modern web technologies. Inspired by **AnimeLib**, this platform aims to provide an enjoyable experience for anime fans.
 
@@ -27,3 +27,5 @@
 - ☕ **Java Spring Boot** : Backend framework.
 - 🍃 **MongoDB** : Database for anime data and user interactions.
 - 🐳 **Docker Compose**: Containerized setup for easy deployment.
+- 📡 **GraphQL**: Smart API queries.
+- 🚀 **Redis**: Fast caching & data store.
