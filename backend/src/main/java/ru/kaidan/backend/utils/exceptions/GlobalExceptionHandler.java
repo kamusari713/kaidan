@@ -22,38 +22,38 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiExceptionResponse> handleUsernameNotFoundException(
-            UsernameNotFoundException ex,
+            UsernameNotFoundException exception,
             HttpServletRequest request) {
-        log.warn("User not found: {}", ex.getMessage());
+        log.warn("User not found: {}", exception.getMessage());
 
         return buildResponse(
                 HttpStatus.NOT_FOUND,
                 "User not found",
-                ex.getMessage(),
+                exception.getMessage(),
                 request.getRequestURI());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiExceptionResponse> handleBadCredentialsException(
-            BadCredentialsException ex,
+            BadCredentialsException exception,
             HttpServletRequest request) {
-        log.info("Invalid login attempt: {}", ex.getMessage());
+        log.info("Invalid login attempt: {}", exception.getMessage());
 
         return buildResponse(
                 HttpStatus.UNAUTHORIZED,
                 "Invalid credentials",
-                ex.getMessage(),
+                exception.getMessage(),
                 request.getRequestURI());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiExceptionResponse> handleValidationException(
-            MethodArgumentNotValidException ex,
+            MethodArgumentNotValidException exception,
             HttpServletRequest request) {
-        log.warn("Validation error on {}: {}", request.getRequestURI(), ex.getMessage());
+        log.warn("Validation error on {}: {}", request.getRequestURI(), exception.getMessage());
 
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult()
+        exception.getBindingResult()
                 .getFieldErrors()
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
@@ -65,52 +65,52 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiExceptionResponse> handleGenericException(Exception ex, HttpServletRequest request) {
-        log.error("Unexpected error occurred: {}", ex.getMessage(), ex);
+    public ResponseEntity<ApiExceptionResponse> handleGenericException(Exception exception, HttpServletRequest request) {
+        log.error("Unexpected error occurred: {}", exception.getMessage(), exception);
 
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Unexpected error",
-                ex.getMessage(),
+                exception.getMessage(),
                 request.getRequestURI());
     }
 
     @ExceptionHandler(MissingTokenException.class)
     public ResponseEntity<ApiExceptionResponse> handleRefreshTokenMissing(
-            MissingTokenException ex,
+            MissingTokenException exception,
             HttpServletRequest request) {
-        log.warn("Missing token: {}", ex.getMessage());
+        log.warn("Missing token: {}", exception.getMessage());
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
                 "Missing token",
-                ex.getMessage(),
+                exception.getMessage(),
                 request.getRequestURI());
     }
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ApiExceptionResponse> handleInvalidRefreshToken(
-            InvalidTokenException ex,
+            InvalidTokenException exception,
             HttpServletRequest request) {
-        log.warn("Invalid token: {}", ex.getMessage());
+        log.warn("Invalid token: {}", exception.getMessage());
 
         return buildResponse(
                 HttpStatus.UNAUTHORIZED,
                 "Invalid token",
-                ex.getMessage(),
+                exception.getMessage(),
                 request.getRequestURI());
     }
 
     @ExceptionHandler(ExpiredTokenException.class)
     public ResponseEntity<ApiExceptionResponse> handleInvalidRefreshToken(
-            ExpiredTokenException ex,
+            ExpiredTokenException exception,
             HttpServletRequest request) {
-        log.warn("Expired token: {}", ex.getMessage());
+        log.warn("Expired token: {}", exception.getMessage());
 
         return buildResponse(
                 HttpStatus.UNAUTHORIZED,
                 "Expired token",
-                ex.getMessage(),
+                exception.getMessage(),
                 request.getRequestURI());
     }
 
