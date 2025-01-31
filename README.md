@@ -1,4 +1,4 @@
-# 🎥🎌 Kaidan - Full-Stack Pet Project
+# 🎌 Kaidan - Full-Stack Pet Project
 
 **Kaidan** is my first full-stack pet project and coursework designed to explore modern web technologies. Inspired by **AnimeLib**, this platform aims to provide an enjoyable experience for anime fans.
 
