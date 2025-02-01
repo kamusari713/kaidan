@@ -11,7 +11,7 @@ services:
         depends_on:
             - mongodb
         env_file:
-            - .env.global
+            - /backend/.env.local
 
     mongodb:
         container_name: mongodb
