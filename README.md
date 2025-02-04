@@ -22,7 +22,7 @@
 - 🎨 **ShadCN UI** : Pre-built accessible components.
 - 💅 **Tailwind CSS** : Utility-first CSS framework.
 
-### 🖧 Backend
+### ⚙️ Backend
 
 - ☕ **Java Spring Boot** : Backend framework.
 - 🍃 **MongoDB** : Database for anime data and user interactions.
