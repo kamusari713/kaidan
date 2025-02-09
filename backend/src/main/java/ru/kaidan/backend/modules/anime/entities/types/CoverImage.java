@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class CoverImage {
+
     private String extraLarge;
     private String lagre;
     private String medium;

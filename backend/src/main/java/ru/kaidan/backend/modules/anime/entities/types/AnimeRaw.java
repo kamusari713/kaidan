@@ -1,12 +1,13 @@
 package ru.kaidan.backend.modules.anime.entities.types;
 
-import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.List;
 
+import lombok.Data;
+
 @Data
 public class AnimeRaw {
+
     private Title title;
     private List<String> synonyms;
     private Description description;

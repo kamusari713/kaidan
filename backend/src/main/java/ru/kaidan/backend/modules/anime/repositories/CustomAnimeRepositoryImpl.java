@@ -1,17 +1,19 @@
 package ru.kaidan.backend.modules.anime.repositories;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+
+import lombok.RequiredArgsConstructor;
 import ru.kaidan.backend.modules.anime.entities.Anime;
 import ru.kaidan.backend.modules.anime.entities.types.Page;
 import ru.kaidan.backend.modules.anime.entities.types.PageInfo;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 public class CustomAnimeRepositoryImpl implements CustomAnimeRepository {
+
     private final MongoTemplate mongoTemplate;
 
     @Override
@@ -21,12 +23,12 @@ public class CustomAnimeRepositoryImpl implements CustomAnimeRepository {
         long skip = (long) (page - 1) * perPageMax;
 
         query.addCriteria(new Criteria().orOperator(
-                                Criteria.where("title.EN").regex(search, "i"),
-                                Criteria.where("title.RU").regex(search, "i"),
-                                Criteria.where("title.ROMAJI").regex(search, "i"),
-                                Criteria.where("title.NATIVE").regex(search, "i")
-                        )
-                )
+                Criteria.where("title.EN").regex(search, "i"),
+                Criteria.where("title.RU").regex(search, "i"),
+                Criteria.where("title.ROMAJI").regex(search, "i"),
+                Criteria.where("title.NATIVE").regex(search, "i")
+        )
+        )
                 .skip(skip)
                 .limit(perPageMax);
 

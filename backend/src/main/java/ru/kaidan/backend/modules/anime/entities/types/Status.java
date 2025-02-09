@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Status {
+
     private String EN;
     private String RU;
 }

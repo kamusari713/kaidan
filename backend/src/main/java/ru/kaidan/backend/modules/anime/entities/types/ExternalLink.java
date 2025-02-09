@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ExternalLink {
+
     private String source;
     private String url;
 }

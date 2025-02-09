@@ -1,15 +1,16 @@
 package ru.kaidan.backend.modules.auth.services;
 
+import java.util.Arrays;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class CookieService {
+
     public ResponseCookie createCookie(String cookieName, String cookieValue, Long cookieExpiration) {
         return ResponseCookie.from(cookieName, cookieValue)
                 .maxAge(cookieExpiration)

@@ -1,13 +1,15 @@
 package ru.kaidan.backend.modules.anime.mappers;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+
 import ru.kaidan.backend.modules.anime.entities.Anime;
 import ru.kaidan.backend.modules.anime.entities.types.AnimeRaw;
 
-import java.util.List;
-
 @Component
 public class AnimeMapperImpl implements AnimeMapper {
+
     @Override
     public Anime rawToEntity(AnimeRaw rawData) {
         return Anime.builder()

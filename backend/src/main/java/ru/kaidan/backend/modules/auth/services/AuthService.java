@@ -1,12 +1,13 @@
 package ru.kaidan.backend.modules.auth.services;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
 import ru.kaidan.backend.modules.auth.DTO.LoginRequest;
 import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
@@ -22,6 +23,7 @@ import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;

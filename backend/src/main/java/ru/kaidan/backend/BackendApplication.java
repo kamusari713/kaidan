@@ -8,9 +8,9 @@ import ru.kaidan.backend.configs.DotenvConfig;
 @SpringBootApplication
 public class BackendApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         DotenvConfig.init();
-		SpringApplication.run(BackendApplication.class, args);
-	}
+        SpringApplication.run(BackendApplication.class, args);
+    }
 
 }

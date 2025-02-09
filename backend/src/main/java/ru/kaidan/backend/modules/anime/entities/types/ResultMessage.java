@@ -6,6 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class ResultMessage {
+
     private String message;
     private Integer total;
 }

@@ -1,7 +1,9 @@
 package ru.kaidan.backend.utils.exceptions;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -9,17 +11,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import ru.kaidan.backend.utils.exceptions.custom.ExpiredTokenException;
 import ru.kaidan.backend.utils.exceptions.custom.InvalidTokenException;
 import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiExceptionResponse> handleUsernameNotFoundException(
             UsernameNotFoundException exception,

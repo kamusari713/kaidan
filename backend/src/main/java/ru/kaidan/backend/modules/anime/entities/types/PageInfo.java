@@ -8,6 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class PageInfo {
+
     private Long totalPages;
     private Integer currentPage;
     private Boolean hasNextPage;

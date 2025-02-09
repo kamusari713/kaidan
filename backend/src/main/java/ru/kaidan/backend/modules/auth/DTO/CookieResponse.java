@@ -9,6 +9,7 @@ import org.springframework.http.ResponseCookie;
 @Data
 @AllArgsConstructor
 public class CookieResponse {
+
     private ResponseCookie accessCookie;
     private ResponseCookie refreshCookie;
 }

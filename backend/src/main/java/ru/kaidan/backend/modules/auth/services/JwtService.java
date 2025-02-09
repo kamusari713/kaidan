@@ -1,26 +1,29 @@
 package ru.kaidan.backend.modules.auth.services;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
 import ru.kaidan.backend.modules.auth.entities.TokenEntity;
 import ru.kaidan.backend.modules.auth.entities.TokenType;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 
-import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
 public class JwtService {
+
     private final TokenRepository tokenRepository;
     private final CookieService cookieService;
     @Value("${jwt.accessToken.cookie-name}")
@@ -99,8 +102,8 @@ public class JwtService {
         if (validUserTokens.isEmpty()) {
             return;
         }
-        validUserTokens.forEach(token ->
-                token.setRevoked(true));
+        validUserTokens.forEach(token
+                -> token.setRevoked(true));
         tokenRepository.saveAll(validUserTokens);
     }
 
@@ -109,8 +112,8 @@ public class JwtService {
         if (validUserTokens.isEmpty()) {
             return;
         }
-        validUserTokens.forEach(token ->
-                token.setRevoked(true));
+        validUserTokens.forEach(token
+                -> token.setRevoked(true));
         tokenRepository.saveAll(validUserTokens);
     }
 

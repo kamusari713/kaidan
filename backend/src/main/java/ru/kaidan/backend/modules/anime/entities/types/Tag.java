@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Tag {
+
     private TagTranslation EN;
     private TagTranslation RU;
     private Integer rank;

@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Builder
 public class TokenEntity {
+
     @Id
     private String id;
     private String token;

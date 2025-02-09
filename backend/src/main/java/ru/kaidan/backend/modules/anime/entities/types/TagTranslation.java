@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class TagTranslation {
+
     private String name;
     private String description;
 }

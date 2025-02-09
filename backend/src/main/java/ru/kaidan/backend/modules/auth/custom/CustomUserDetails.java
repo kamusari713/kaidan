@@ -1,18 +1,19 @@
 package ru.kaidan.backend.modules.auth.custom;
 
-import lombok.AllArgsConstructor;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.kaidan.backend.modules.user.entities.UserEntity;
 
-import java.util.Collection;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import ru.kaidan.backend.modules.user.entities.UserEntity;
 
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private UserEntity user;
+    private final UserEntity user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

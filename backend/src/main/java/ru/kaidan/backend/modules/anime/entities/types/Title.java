@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Title {
+
     private String EN;
     private String RU;
     private String ROMAJI;

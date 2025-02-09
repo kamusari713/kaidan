@@ -1,19 +1,29 @@
 package ru.kaidan.backend.modules.anime.entities;
 
-import lombok.Builder;
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import ru.kaidan.backend.modules.anime.entities.types.*;
-import ru.kaidan.backend.modules.comment.entities.CommentEntity;
-
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.Builder;
+import lombok.Data;
+import ru.kaidan.backend.modules.anime.entities.types.CoverImage;
+import ru.kaidan.backend.modules.anime.entities.types.Description;
+import ru.kaidan.backend.modules.anime.entities.types.ExternalLink;
+import ru.kaidan.backend.modules.anime.entities.types.Genre;
+import ru.kaidan.backend.modules.anime.entities.types.Kind;
+import ru.kaidan.backend.modules.anime.entities.types.Rating;
+import ru.kaidan.backend.modules.anime.entities.types.Status;
+import ru.kaidan.backend.modules.anime.entities.types.Tag;
+import ru.kaidan.backend.modules.anime.entities.types.Title;
+import ru.kaidan.backend.modules.comment.entities.CommentEntity;
 
 @Builder
 @Data
 @Document(collection = "anime")
 public class Anime {
+
     @Id
     private String id;
     private Title title;
