@@ -13,7 +13,7 @@ import ru.kaidan.backend.modules.anime.entities.types.Page;
 import ru.kaidan.backend.modules.anime.entities.types.ResultMessage;
 import ru.kaidan.backend.modules.anime.mappers.AnimeMapper;
 import ru.kaidan.backend.modules.anime.repositories.AnimeRepository;
-z
+
 @Service
 @RequiredArgsConstructor
 public class AnimeService {
