@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
 import ru.kaidan.backend.modules.auth.DTO.LoginRequest;
 import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
+import ru.kaidan.backend.modules.auth.DTO.UserCredentials;
 import ru.kaidan.backend.modules.auth.custom.CustomUserDetails;
 import ru.kaidan.backend.modules.auth.entities.TokenType;
 import ru.kaidan.backend.modules.user.entities.RoleType;
@@ -90,4 +91,27 @@ public class AuthService {
 
         return jwtService.buildTokensCookies(newAccessToken, refreshToken);
     }
+
+    public UserCredentials findCredentials(HttpServletRequest request) {
+        String accessToken = cookieService.getValueFromCookie(request, jwtService.accessCookieName);
+        if (accessToken == null) {
+            throw new MissingTokenException("Access token is missing");
+        }
+
+        String username = jwtService.extractUsername(accessToken);
+        if (username == null) {
+            throw new InvalidTokenException("Access token is invalid");
+        }
+
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return UserCredentials.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
+    }
+
 }
