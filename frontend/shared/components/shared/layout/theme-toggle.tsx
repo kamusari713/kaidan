@@ -14,14 +14,12 @@ export const ThemeToggle = () => {
 	}, [])
 
 	const toggleTheme = () => {
-		const themes = ['system', 'dark', 'light']
-		const nextTheme = themes[(themes.indexOf(resolvedTheme || 'system') + 1) % themes.length]
-		setTheme(nextTheme)
+		const themes = ['light', 'dark']
+		const nextIndex = (themes.indexOf(resolvedTheme!) + 1) % themes.length
+		setTheme(themes[nextIndex])
 	}
 
-	if (!mounted) {
-		return null
-	}
+	if (!mounted) return null
 
 	return (
 		<Button variant="ghost" onClick={toggleTheme}>
@@ -32,8 +30,8 @@ export const ThemeToggle = () => {
 				</div>
 			)}
 			{resolvedTheme === 'dark' && (
-				<div className="flex flex-row items-center justify-start gap-2 w-full group-hover:text-accent/60">
-					<Moon className="stroke-foreground fill-foreground group-hover:stroke-accent/60 group-hover:fill-accent/60" size={5} />
+				<div className="flex flex-row items-center justify-start gap-2 w-full">
+					<Moon />
 					Темная
 				</div>
 			)}

@@ -1,6 +1,5 @@
-import { TanstackQueryProvider } from '@/shared/components/shared'
+import { TanstackQueryProvider, ThemeProvider } from '@/shared/components/shared/providers'
 import { Metadata } from 'next'
-import { ThemeProvider } from 'next-themes'
 import localFont from 'next/font/local'
 import './globals.css'
 
@@ -24,13 +23,11 @@ export default function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<head />
 			<body className={`${montserrat.className} antialiased w-auto bg-background`}>
 				<TanstackQueryProvider>
-					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-						{children}
-					</ThemeProvider>
+					<ThemeProvider>{children}</ThemeProvider>
 				</TanstackQueryProvider>
 			</body>
 		</html>
