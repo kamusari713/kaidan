@@ -16,13 +16,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
 import ru.kaidan.backend.modules.auth.services.CookieService;
 import ru.kaidan.backend.modules.auth.services.JwtService;
-import ru.kaidan.backend.utils.exceptions.custom.ExpiredTokenException;
-import ru.kaidan.backend.utils.exceptions.custom.InvalidTokenException;
-import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter {
@@ -38,22 +37,23 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws
             ServletException,
-            IOException,
-            MissingTokenException,
-            ExpiredTokenException,
-            InvalidTokenException {
+            IOException {
         if (request.getRequestURI().contains("/public") || request.getRequestURI().contains("/graphql")) {
             filterChain.doFilter(request, response);
             return;
         }
         final String token = cookieService.getValueFromCookie(request, jwtService.accessCookieName);
         if (token == null) {
-            throw new MissingTokenException("Access token is missing");
+            log.error("Missing Token");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing Token");
+            return;
         }
 
         String username = jwtService.extractUsername(token);
         if (username == null) {
-            throw new InvalidTokenException("Access token is invalid");
+            log.error("Access token is invalid");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access token is invalid");
+            return;
         }
 
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -62,7 +62,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                     .map(t -> !t.getRevoked())
                     .orElse(false);
             if (!tokenExpired) {
-                throw new ExpiredTokenException("Access token is expired");
+                log.error("Access token is expired");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access token is expired");
+                return;
             }
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,

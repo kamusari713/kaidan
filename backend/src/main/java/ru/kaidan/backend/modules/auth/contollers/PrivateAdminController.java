@@ -37,7 +37,7 @@ public class PrivateAdminController {
         UserCredentials credentials = authService.findCredentials(request);
         return ResponseEntity
                 .ok()
-                .body(Map.of("User credentials", credentials));
+                .body(credentials);
     }
 
 }
