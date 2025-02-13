@@ -1,6 +1,5 @@
 'use client'
 
-import { ThemeToggle } from '@/shared/components/shared/layout'
 import { Button, Popover, PopoverContent, PopoverTrigger, Separator } from '@/shared/components/ui'
 import { AlignJustify, Bell, List, MessageCircle, User } from '@/shared/components/ui/icons'
 import Link from 'next/link'
@@ -44,7 +43,6 @@ export const UserPopover: FC = () => {
 						Уведомления
 					</Button>
 				</Link>
-				<ThemeToggle />
 			</PopoverContent>
 		</Popover>
 	)

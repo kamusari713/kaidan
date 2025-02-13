@@ -1,6 +1,4 @@
-'use server'
-
-import { LoginData, RegisterData } from '../types'
+import { LoginData, RegisterData } from '@/shared/types'
 import { apiClient } from './client'
 
 export async function login(data: LoginData) {
@@ -10,5 +8,10 @@ export async function login(data: LoginData) {
 
 export async function register(data: RegisterData) {
 	const response = await apiClient.post('/public/auth/register', data)
+	return response.data
+}
+
+export async function me() {
+	const response = await apiClient.get('/private/auth/me')
 	return response.data
 }
