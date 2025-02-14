@@ -1,7 +1,7 @@
 'use client'
 
 import { login, me, register } from '@/shared/api/actions'
-import { AuthResponse, LoginData, RegisterData } from '@/shared/types/auth'
+import { AuthResponse, LoginData, RegisterData, UserCredentials } from '@/shared/types/auth'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
@@ -28,7 +28,7 @@ export const useRegister = () => {
 }
 
 export const useAuthorize = () => {
-	const { data, isLoading } = useQuery({
+	const { data, isLoading } = useQuery<UserCredentials, boolean>({
 		queryKey: ['auth'],
 		queryFn: me,
 		staleTime: 5 * 60 * 1000,

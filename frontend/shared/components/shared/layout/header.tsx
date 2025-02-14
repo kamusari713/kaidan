@@ -12,7 +12,6 @@ import { FC } from 'react'
 export const Header: FC = () => {
 	const router = useRouter()
 	const { data, isGuest, isLoading } = useAuthorize()
-	console.log(data)
 
 	return (
 		<div className="bg-card border-b shadow">
@@ -42,10 +41,10 @@ export const Header: FC = () => {
 						) : (
 							<div className="flex flex-row items-center justify-center gap-2">
 								<NotificationPopover />
-								<Link href={`/profile/${data.id}/titles`}>
+								<Link href={`/profile/${data!.id}/titles`}>
 									<Avatar className="bg-card">
 										<AvatarImage src="" alt="avatar"></AvatarImage>
-										<AvatarFallback>{data.username[0].toUpperCase()}</AvatarFallback>
+										<AvatarFallback>{data!.username[0].toUpperCase()}</AvatarFallback>
 									</Avatar>
 								</Link>
 
@@ -53,7 +52,9 @@ export const Header: FC = () => {
 							</div>
 						)
 					) : (
-						<Button variant="destructive"></Button>
+						<Button disabled onClick={() => router.push('/auth/login')}>
+							Вход | Регистрация
+						</Button>
 					)}
 				</div>
 			</Container>

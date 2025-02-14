@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { AxiosError } from 'axios'
 import { FC, PropsWithChildren } from 'react'
 
 function makeQueryClient() {
@@ -10,6 +11,12 @@ function makeQueryClient() {
 			queries: {
 				staleTime: 1 * 60 * 1000,
 				gcTime: 24 * 60 * 60 * 1000,
+				retry: (failureCount, error) => {
+					const axiosError = error as AxiosError
+					if (axiosError.response?.status === 401) return false
+					if (failureCount > 3) return false
+					return true
+				},
 			},
 		},
 	})

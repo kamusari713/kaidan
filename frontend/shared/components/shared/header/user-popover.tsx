@@ -1,5 +1,6 @@
 'use client'
 
+import { refresh } from '@/shared/api/actions'
 import { Button, Popover, PopoverContent, PopoverTrigger, Separator } from '@/shared/components/ui'
 import { AlignJustify, Bell, List, MessageCircle, User } from '@/shared/components/ui/icons'
 import Link from 'next/link'
@@ -41,6 +42,11 @@ export const UserPopover: FC = () => {
 					<Button variant="ghost" className="flex justify-start w-full group/item" onClick={() => setOpen(false)}>
 						<Bell />
 						Уведомления
+					</Button>
+				</Link>
+				<Link href="/auth/login">
+					<Button variant="destructive" className="flex justify-center w-full" onClick={() => refresh()}>
+						Выйти
 					</Button>
 				</Link>
 			</PopoverContent>

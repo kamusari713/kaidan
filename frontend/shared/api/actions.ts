@@ -11,7 +11,12 @@ export async function register(data: RegisterData) {
 	return response.data
 }
 
-export async function me() {
-	const response = await apiClient.get('/private/auth/me')
+export async function refresh() {
+	const response = await apiClient.post('/private/auth/logout')
+	return response.data
+}
+
+export async function me<UserCredentials>() {
+	const response = await apiClient.get<UserCredentials>('/private/auth/me')
 	return response.data
 }
