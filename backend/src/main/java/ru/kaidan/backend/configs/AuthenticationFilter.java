@@ -20,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
 import ru.kaidan.backend.modules.auth.services.CookieService;
 import ru.kaidan.backend.modules.auth.services.JwtService;
+import ru.kaidan.backend.utils.exceptions.custom.ExpiredTokenException;
+import ru.kaidan.backend.utils.exceptions.custom.InvalidTokenException;
+import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
 @Slf4j
 @Component
@@ -42,36 +45,56 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        final String token = cookieService.getValueFromCookie(request, jwtService.accessCookieName);
-        if (token == null) {
-            log.error("Missing Token");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing Token");
+
+        String token;
+
+        try {
+            token = cookieService.getValueFromCookie(request, jwtService.accessCookieName);
+        } catch (MissingTokenException e) {
+            log.warn("Cookie is missing");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Cookie is missing\"}");
+            response.getWriter().flush();
             return;
         }
 
-        String username = jwtService.extractUsername(token);
-        if (username == null) {
-            log.error("Access token is invalid");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access token is invalid");
+        String username;
+
+        try {
+            username = jwtService.extractUsername(token);
+        } catch (InvalidTokenException e) {
+            log.warn("User has invalid token");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Token is invalid\"}");
+            response.getWriter().flush();
             return;
         }
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            var tokenExpired = tokenRepository.findByToken(token)
-                    .map(t -> !t.getRevoked())
-                    .orElse(false);
-            if (!tokenExpired) {
-                log.error("Access token is expired");
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access token is expired");
-                return;
+        try {
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                var tokenExpired = tokenRepository.findByToken(token)
+                        .map(t -> !t.getRevoked())
+                        .orElse(false);
+                if (!tokenExpired) {
+                    throw new ExpiredTokenException("Token expired expired");
+                }
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities());
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+        } catch (ExpiredTokenException e) {
+            log.warn("User has expired token");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Token is expired\"}");
+            response.getWriter().flush();
+            return;
         }
         filterChain.doFilter(request, response);
     }

@@ -19,6 +19,7 @@ import ru.kaidan.backend.modules.auth.entities.TokenEntity;
 import ru.kaidan.backend.modules.auth.entities.TokenType;
 import ru.kaidan.backend.modules.auth.repositories.TokenRepository;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
+import ru.kaidan.backend.utils.exceptions.custom.InvalidTokenException;
 
 @Component
 @RequiredArgsConstructor
@@ -52,7 +53,11 @@ public class JwtService {
     }
 
     public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
+        String name = extractAllClaims(token).getSubject();
+        if (name == null) {
+            throw new InvalidTokenException("Token is invalid");
+        }
+        return name;
     }
 
     public String buildToken(String subject, long expiration) {

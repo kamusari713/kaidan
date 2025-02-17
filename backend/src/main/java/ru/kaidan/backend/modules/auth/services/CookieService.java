@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
 @Component
 public class CookieService {
@@ -34,8 +35,7 @@ public class CookieService {
         Cookie[] cookies = request.getCookies();
 
         if (cookies == null) {
-            return null;
-
+            throw new MissingTokenException("Token is missing");
         }
         return Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals(cookieName))
