@@ -10,5 +10,3 @@ export const ArrowRight: FC<IconProps> = ({ className }: IconProps) => {
 		</BaseIcon>
 	)
 }
-
-export default ArrowRight

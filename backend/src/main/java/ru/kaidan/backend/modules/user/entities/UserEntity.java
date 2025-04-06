@@ -1,18 +1,19 @@
 package ru.kaidan.backend.modules.user.entities;
 
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Data;
-
+@Builder
 @Data
-@Document(collection = "users")
+@Document("users")
 public class UserEntity {
 
-    @Id
-    private String id;
-    private String username;
-    private String email;
-    private String password;
-    private RoleType role;
+  @Id private String id;
+  private String username;
+  private String email;
+  private String password;
+  private String bio;
+  private RoleType role;
 }

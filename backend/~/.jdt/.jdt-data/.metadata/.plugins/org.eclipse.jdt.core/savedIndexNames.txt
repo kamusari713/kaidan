@@ -1,0 +1,4 @@
+INDEX VERSION 1.134+/home/kamusari/projects/kaidan/backend/~/.jdt/.jdt-data/.metadata/.plugins/org.eclipse.jdt.core
+3842426239.index
+1865797976.index
+3774934445.index

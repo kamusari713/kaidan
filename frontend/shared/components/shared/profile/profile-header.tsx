@@ -1,11 +1,16 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage, Button } from '@/shared/components/ui'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui'
 import { useAuthorize } from '@/shared/hooks/auth'
-import { FC } from 'react'
+import { BioEditor } from './bio-editor'
+import { useProfile } from '@/shared/hooks/profile'
 
-export const ProfileHeader: FC = () => {
-	const { data, isGuest, isLoading } = useAuthorize()
+export const ProfileHeader = ({ userId }: { userId: string }) => {
+	const { data: currentUser } = useAuthorize()
+	const { data: profile, isLoading } = useProfile(userId)
+	console.log(userId)
+
+	const isOwner = currentUser?.id === userId
 
 	if (isLoading) {
 		// TODO: сделать скелетон
@@ -16,19 +21,23 @@ export const ProfileHeader: FC = () => {
 		<div className="flex items-center justify-between px-4 py-3">
 			<div className="flex gap-4">
 				<div className="relative">
-					<div className="absolute z-10 bg-green-600 rounded-full w-[12px] h-[12px] right-[-5px] top-[-5px]"></div>
-					<Avatar className="w-16 h-16">
+					<Avatar className="w-24 h-24">
 						<AvatarImage src="" alt="avatar"></AvatarImage>
-						<AvatarFallback>{data!.username}</AvatarFallback>
+						<AvatarFallback>{profile!.username}</AvatarFallback>
 					</Avatar>
 				</div>
-				<div className="flex flex-col justify-center">
-					<div className="font-bold">{data!.username}</div>
-					<div className="text-foreground/60 text-[13px]">Уровень - 1</div>
+				<div className="flex flex-col justify-start gap-2 pt-4">
+					<div>Имя пользователя: </div>
+					<div className="font-bold">{profile!.username}</div>
 				</div>
-			</div>
-			<div>
-				<Button variant="outline">Настройки</Button>
+				{isOwner ? (
+					<BioEditor initialValue={profile!.bio} userId={userId} />
+				) : (
+					<div className="flex flex-col justify-start gap-2 text-m pt-4">
+						<div>Биография:</div>
+						<div> {profile!.bio}</div>
+					</div>
+				)}
 			</div>
 		</div>
 	)

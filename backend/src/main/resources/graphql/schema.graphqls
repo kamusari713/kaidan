@@ -2,7 +2,7 @@ type Query {
     page(
         page: Int = 1,
         perPage: Int = 10,
-        id: String,
+        sort: Sort = {orderBy: "shikimoriId", direction: "ASC"},
         search: String
     ): Page
 
@@ -11,15 +11,9 @@ type Query {
     ): Anime
 }
 
-type Mutation {
-    loadDataSet(
-        dataSet: [AnimeRaw!]!
-    ): ResultMessage
-}
-
-type ResultMessage {
-    message: String!
-    total: Int!
+input Sort {
+    orderBy: String
+    direction: String
 }
 
 type Page {
@@ -58,7 +52,6 @@ type Anime {
     tags: [Tag!]
     averageScore: Float
     scoreCount: Int
-    comments: [Comment!]
 }
 
 input AnimeRaw {
@@ -159,14 +152,6 @@ type Genre {
 input GenreInput {
     EN: String
     RU: String
-}
-
-type Comment {
-    id: ID!
-}
-
-input CommentInput {
-    id: ID!
 }
 
 type Tag {

@@ -1,4 +1,4 @@
-import { TanstackQueryProvider, ThemeProvider } from '@/shared/components/shared/providers'
+import { ApolloClientProvider, TanstackQueryProvider, ThemeProvider } from '@/shared/components/shared/providers'
 import { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
@@ -26,9 +26,11 @@ export default function RootLayout({
 		<html lang="en" suppressHydrationWarning>
 			<head />
 			<body className={`${montserrat.className} antialiased w-auto bg-background`}>
-				<TanstackQueryProvider>
-					<ThemeProvider>{children}</ThemeProvider>
-				</TanstackQueryProvider>
+				<ApolloClientProvider>
+					<TanstackQueryProvider>
+						<ThemeProvider>{children}</ThemeProvider>
+					</TanstackQueryProvider>
+				</ApolloClientProvider>
 			</body>
 		</html>
 	)

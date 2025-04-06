@@ -6,6 +6,7 @@
 	.text-balance {
 		text-wrap: balance;
 	}
+
 	* {
 		@apply text-foreground;
 
@@ -76,9 +77,11 @@
 		scrollbar-width: thin;
 		scrollbar-color: hsl(var(--border)) transparent;
 	}
+
 	html {
 		@apply scroll-smooth;
 	}
+
 	body {
 		@apply bg-background text-foreground overscroll-none;
 		/* font-feature-settings: "rlig" 1, "calt" 1; */
@@ -98,9 +101,11 @@
 	::-webkit-scrollbar {
 		width: 5px;
 	}
+
 	::-webkit-scrollbar-track {
 		background: transparent;
 	}
+
 	::-webkit-scrollbar-thumb {
 		background: hsl(var(--border));
 		border-radius: 5px;

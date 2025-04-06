@@ -1,13 +1,14 @@
 'use client'
 
-import { refresh } from '@/shared/api/actions'
 import { Button, Popover, PopoverContent, PopoverTrigger, Separator } from '@/shared/components/ui'
 import { AlignJustify, Bell, List, MessageCircle, User } from '@/shared/components/ui/icons'
+import { useLogout } from '@/shared/hooks/auth'
 import Link from 'next/link'
 import { FC, useState } from 'react'
 
 export const UserPopover: FC = () => {
 	const [open, setOpen] = useState(false)
+	const logout = useLogout()
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -44,11 +45,9 @@ export const UserPopover: FC = () => {
 						Уведомления
 					</Button>
 				</Link>
-				<Link href="/auth/login">
-					<Button variant="destructive" className="flex justify-center w-full" onClick={() => refresh()}>
-						Выйти
-					</Button>
-				</Link>
+				<Button variant="destructive" className="flex justify-center w-full" onClick={() => logout.mutate()}>
+					Выйти
+				</Button>
 			</PopoverContent>
 		</Popover>
 	)

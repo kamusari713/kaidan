@@ -1,16 +1,11 @@
 package ru.kaidan.backend.modules.anime.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
 import ru.kaidan.backend.modules.anime.entities.Anime;
-import ru.kaidan.backend.modules.anime.entities.types.AnimeRaw;
-import ru.kaidan.backend.modules.anime.entities.types.Page;
-import ru.kaidan.backend.modules.anime.entities.types.ResultMessage;
+import ru.kaidan.backend.modules.anime.entities.types.*;
 import ru.kaidan.backend.modules.anime.mappers.AnimeMapper;
 import ru.kaidan.backend.modules.anime.repositories.AnimeRepository;
 
@@ -18,34 +13,32 @@ import ru.kaidan.backend.modules.anime.repositories.AnimeRepository;
 @RequiredArgsConstructor
 public class AnimeService {
 
-    private final AnimeRepository animeRepository;
-    private final AnimeMapper animeMapper;
+  private final AnimeRepository animeRepository;
+  private final AnimeMapper animeMapper;
 
-    public Anime findByShikimoriId(String shikimoriId) {
-        if (shikimoriId != null) {
-            return animeRepository.findByShikimoriId(shikimoriId).orElse(null);
-        } else {
-            throw new IllegalArgumentException("Must provide id");
-        }
+  public Anime findByShikimoriId(String shikimoriId) {
+    if (shikimoriId != null) {
+      return animeRepository.findByShikimoriId(shikimoriId).orElse(null);
+    } else {
+      throw new IllegalArgumentException("Must provide id");
     }
+  }
 
-    public Page findByPageInfo(String id, String search, int page, int perPage) {
-        if (id != null || search != null) {
-            return animeRepository.findPageWithFilters(id, search, page, perPage);
-        } else {
-            throw new IllegalArgumentException("Must provide either id or search");
-        }
+  public Page findPage(int page, int perPage, Sort sort, String search) {
+    if (search != null || sort.getDirection() != null || sort.getOrderBy() != null) {
+      return animeRepository.findPageWithFilters(page, perPage, sort, search);
+    } else {
+      throw new IllegalArgumentException("Must provide search string or ids");
     }
+  }
 
-    @Transactional
-    public ResultMessage addRawAnimeList(List<AnimeRaw> dataSet) {
-        List<Anime> mappedAnime = dataSet.stream()
-                .map(animeMapper::rawToEntity)
-                .collect(Collectors.toList());
-        animeRepository.saveAll(mappedAnime);
-        return ResultMessage.builder()
-                .message("Anime added successfully")
-                .total(mappedAnime.size())
-                .build();
-    }
+  @Transactional
+  public ResultMessage addRawAnimeList(List<AnimeRaw> dataSet) {
+    List<Anime> mappedAnime = dataSet.stream().map(animeMapper::rawToEntity).toList();
+    animeRepository.saveAll(mappedAnime);
+    return ResultMessage.builder()
+        .message("Anime added successfully")
+        .total(mappedAnime.size())
+        .build();
+  }
 }

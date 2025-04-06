@@ -1,5 +1,7 @@
 package ru.kaidan.backend.configs;
 
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,49 +14,56 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final AuthenticationFilter jwtAuthenticationFilter;
-    private final LogoutHandler logoutHandler;
-    private final AuthenticationProvider authenticationProvider;
+  private final AuthenticationFilter jwtAuthenticationFilter;
+  private final LogoutHandler logoutHandler;
+  private final AuthenticationProvider authenticationProvider;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
-        return http
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .authenticationProvider(authenticationProvider)
-                .authorizeHttpRequests(request -> request
-                .requestMatchers("/graphql").permitAll()
-                .requestMatchers("/api/public/**").permitAll()
-                .requestMatchers("/api/private/**").authenticated()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/moderator/**").hasAnyRole("ADMIN", "MODERATOR")
-                )
-                .cors(cors -> cors
-                .configurationSource(corsConfigurationSource)
-                )
-                .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(handler -> handler
-                .authenticationEntryPoint((request, response, authException) -> {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.getWriter().write("Unauthorized access");
-                }))
-                .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .logout(logout -> logout
-                .logoutUrl("/api/private/auth/logout")
-                .addLogoutHandler(logoutHandler)
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    response.getWriter().write("Logout successful!");
-                }))
-                .build();
-    }
+  @Bean
+  public SecurityFilterChain securityFilterChain(
+      HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
+    return http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        .authenticationProvider(authenticationProvider)
+        .authorizeHttpRequests(
+            request ->
+                request
+                    .requestMatchers("/graphql")
+                    .permitAll()
+                    .requestMatchers("/graphiql")
+                    .permitAll()
+                    .requestMatchers("/api/public/**")
+                    .permitAll()
+                    .requestMatchers("/api/private/**")
+                    .authenticated()
+                    .requestMatchers("/api/admin/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/api/moderator/**")
+                    .hasAnyRole("ADMIN", "MODERATOR"))
+        .cors(cors -> cors.configurationSource(corsConfigurationSource))
+        .csrf(AbstractHttpConfigurer::disable)
+        .exceptionHandling(
+            handler ->
+                handler.authenticationEntryPoint(
+                    (request, response, authException) -> {
+                      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                      response.getWriter().write("Unauthorized access");
+                    }))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .logout(
+            logout ->
+                logout
+                    .logoutUrl("/api/private/auth/logout")
+                    .addLogoutHandler(logoutHandler)
+                    .logoutSuccessHandler(
+                        (request, response, authentication) -> {
+                          response.setStatus(HttpServletResponse.SC_OK);
+                          response.getWriter().write("Logout successful!");
+                        }))
+        .build();
+  }
 }

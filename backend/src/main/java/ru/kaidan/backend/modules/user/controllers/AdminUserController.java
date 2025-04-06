@@ -12,15 +12,15 @@ import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.services.UserService;
 
 @RestController
-@RequestMapping("/api/admin/users")
+@RequestMapping("/api/admin/user")
 @RequiredArgsConstructor
 public class AdminUserController {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<UserEntity>> getAllUsers() {
-        List<UserEntity> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
-    }
+  @GetMapping("/all")
+  public ResponseEntity<List<UserEntity>> getAllUsers() {
+    List<UserEntity> users = userService.getAllUsers();
+    return ResponseEntity.ok(users);
+  }
 }

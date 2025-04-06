@@ -9,7 +9,7 @@ export const Footer: FC = () => {
 					<div>Обращайтесь на почту manfigy@mail.ru</div>
 					<div>Этот проект создан исключительно в образовательных целях. Вдохновлён дизайном [anilib.me]</div>
 				</div>
-				<div>©2024 KAIDAN</div>
+				<div>©2025 KAIDAN</div>
 			</Container>
 		</div>
 	)

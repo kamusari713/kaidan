@@ -1,16 +1,19 @@
 'use client'
 
-import { login, me, register } from '@/shared/api/actions'
+import { login, logout, me, register } from '@/shared/api/actions'
 import { AuthResponse, LoginData, RegisterData, UserCredentials } from '@/shared/types/auth'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
 export const useLogin = () => {
 	const router = useRouter()
+	const queryClient = useQueryClient()
 
 	return useMutation<AuthResponse, Error, LoginData>({
 		mutationFn: login,
-		onSuccess: () => {
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: ['auth'] })
+
 			router.push('/')
 		},
 	})
@@ -18,10 +21,28 @@ export const useLogin = () => {
 
 export const useRegister = () => {
 	const router = useRouter()
+	const queryClient = useQueryClient()
 
 	return useMutation<AuthResponse, Error, RegisterData>({
 		mutationFn: register,
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: ['auth'] })
+
+			router.push('/')
+		},
+	})
+}
+
+export const useLogout = () => {
+	const router = useRouter()
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationFn: logout,
+
 		onSuccess: () => {
+			queryClient.setQueryData(['auth'], null)
+
 			router.push('/')
 		},
 	})
