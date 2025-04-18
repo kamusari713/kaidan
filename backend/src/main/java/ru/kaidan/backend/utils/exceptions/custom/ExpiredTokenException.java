@@ -1,8 +1,12 @@
 package ru.kaidan.backend.utils.exceptions.custom;
 
-public class ExpiredTokenException extends RuntimeException {
+import lombok.Getter;
 
-    public ExpiredTokenException(String message) {
-        super(message);
-    }
+@Getter
+public class ExpiredTokenException extends RuntimeException {
+  private final String code = "EXPIRED_TOKEN";
+
+  public ExpiredTokenException(String message) {
+    super(message);
+  }
 }

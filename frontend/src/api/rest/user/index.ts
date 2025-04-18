@@ -1,0 +1,1 @@
+export { getUserCredentials } from './getUserCredentials'

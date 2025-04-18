@@ -3,9 +3,7 @@ package ru.kaidan.backend.modules.user.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.kaidan.backend.modules.user.DTO.UserProfileBioRequest;
 import ru.kaidan.backend.modules.user.DTO.UserProfileResponse;
-import ru.kaidan.backend.modules.user.DTO.UserProfileUsernameRequest;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
 
@@ -15,27 +13,21 @@ import ru.kaidan.backend.modules.user.repositories.UserRepository;
 public class UserProfileService {
   private final UserRepository userRepository;
 
-  public UserProfileResponse updateUsername(UserProfileUsernameRequest usernameRequest) {
+  public UserProfileResponse updateUsername(String userId, String newUsername) {
 
-    UserEntity userEntity = userRepository.findById(usernameRequest.getUserId()).orElse(null);
+    UserEntity userEntity = userRepository.findById(userId).orElse(null);
     assert userEntity != null;
-    userEntity.setUsername(usernameRequest.getNewUsername());
+    userEntity.setUsername(newUsername);
     userRepository.save(userEntity);
-    return UserProfileResponse.builder()
-        .username(usernameRequest.getNewUsername())
-        .bio(userEntity.getBio())
-        .build();
+    return UserProfileResponse.builder().username(newUsername).bio(userEntity.getBio()).build();
   }
 
-  public UserProfileResponse updateUserBio(UserProfileBioRequest bioRequest) {
-    UserEntity userEntity = userRepository.findById(bioRequest.getUserId()).orElse(null);
+  public UserProfileResponse updateUserBio(String userId, String newBio) {
+    UserEntity userEntity = userRepository.findById(userId).orElse(null);
     assert userEntity != null;
-    userEntity.setBio(bioRequest.getNewBio());
+    userEntity.setBio(newBio);
     userRepository.save(userEntity);
-    return UserProfileResponse.builder()
-        .username(userEntity.getUsername())
-        .bio(bioRequest.getNewBio())
-        .build();
+    return UserProfileResponse.builder().username(userEntity.getUsername()).bio(newBio).build();
   }
 
   public UserProfileResponse findUserProfile(String userId) {

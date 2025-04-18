@@ -1,0 +1,1 @@
+export { createComment } from './createComment'

@@ -29,8 +29,9 @@ public class CommentService {
     return buildCommentTree(commentRepository.findByReviewId(reviewId));
   }
 
-  public CommentEntity addComment(CommentDTO commentDTO) {
-    return commentMapper.dtoToEntity(commentDTO);
+  public CommentEntity createComment(CommentDTO commentDTO) {
+    CommentEntity newComment = commentMapper.dtoToEntity(commentDTO);
+    return commentRepository.save(newComment);
   }
 
   private List<CommentEntity> buildCommentTree(List<CommentEntity> comments) {

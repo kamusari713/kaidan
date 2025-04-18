@@ -1,134 +1,123 @@
 package ru.kaidan.backend.utils.exceptions;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
-import ru.kaidan.backend.utils.exceptions.custom.ExpiredTokenException;
-import ru.kaidan.backend.utils.exceptions.custom.InvalidTokenException;
-import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
+import ru.kaidan.backend.utils.exceptions.custom.*;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ApiExceptionResponse> handleUsernameNotFoundException(
-            UsernameNotFoundException exception,
-            HttpServletRequest request) {
-        log.warn("User not found: {}", exception.getMessage());
+  @ExceptionHandler(UsernameNotFoundException.class)
+  public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(
+      UsernameNotFoundException exception, HttpServletRequest request) {
+    log.warn("User not found: {}", exception.getMessage());
+    return buildErrorResponse(
+        HttpStatus.NOT_FOUND,
+        "NOT_FOUND",
+        "Пользователь не найден: " + exception.getMessage(),
+        request.getRequestURI());
+  }
 
-        return buildResponse(
-                HttpStatus.NOT_FOUND,
-                "User not found",
-                exception.getMessage(),
-                request.getRequestURI());
-    }
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<ErrorResponse> handleNotFoundException(
+      NotFoundException exception, HttpServletRequest request) {
+    log.warn("Resource not found: {}", exception.getMessage());
+    return buildErrorResponse(
+        HttpStatus.NOT_FOUND,
+        exception.getCode(),
+        "Ресурс не найден: " + exception.getMessage(),
+        request.getRequestURI());
+  }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiExceptionResponse> handleBadCredentialsException(
-            BadCredentialsException exception,
-            HttpServletRequest request) {
-        log.info("Invalid login attempt: {}", exception.getMessage());
+  @ExceptionHandler(BadCredentialsException.class)
+  public ResponseEntity<ErrorResponse> handleBadCredentialsException(
+      BadCredentialsException exception, HttpServletRequest request) {
+    log.info("Invalid login attempt: {}", exception.getMessage());
+    return buildErrorResponse(
+        HttpStatus.UNAUTHORIZED,
+        "INVALID_CREDENTIALS",
+        "Неверные учетные данные: " + exception.getMessage(),
+        request.getRequestURI());
+  }
 
-        return buildResponse(
-                HttpStatus.UNAUTHORIZED,
-                "Invalid credentials",
-                exception.getMessage(),
-                request.getRequestURI());
-    }
+  @ExceptionHandler(ValidationException.class)
+  public ResponseEntity<ErrorResponse> handleCustomValidationException(
+      ValidationException exception, HttpServletRequest request) {
+    log.warn("Validation error: {}", exception.getMessage());
+    return buildErrorResponse(
+        HttpStatus.BAD_REQUEST,
+        exception.getCode(),
+        "Ошибка валидации: " + exception.getMessage(),
+        request.getRequestURI());
+  }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiExceptionResponse> handleValidationException(
-            MethodArgumentNotValidException exception,
-            HttpServletRequest request) {
-        log.warn("Validation error on {}: {}", request.getRequestURI(), exception.getMessage());
+  @ExceptionHandler(ConflictException.class)
+  public ResponseEntity<ErrorResponse> handleConflictException(
+      ConflictException exception, HttpServletRequest request) {
+    log.warn("Conflict: {}", exception.getMessage());
+    return buildErrorResponse(
+        HttpStatus.CONFLICT,
+        exception.getCode(),
+        "Конфликт: " + exception.getMessage(),
+        request.getRequestURI());
+  }
 
-        Map<String, String> errors = new HashMap<>();
-        exception.getBindingResult()
-                .getFieldErrors()
-                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+  @ExceptionHandler(MissingTokenException.class)
+  public ResponseEntity<ErrorResponse> handleRefreshTokenMissing(
+      MissingTokenException exception, HttpServletRequest request) {
+    log.warn("Missing token: {}", exception.getMessage());
+    return buildErrorResponse(
+        HttpStatus.BAD_REQUEST,
+        exception.getCode(),
+        "Токен отсутствует: " + exception.getMessage(),
+        request.getRequestURI());
+  }
 
-        return buildResponse(
-                HttpStatus.BAD_REQUEST,
-                "Validation error",
-                errors.toString(),
-                request.getRequestURI());
-    }
+  @ExceptionHandler(InvalidTokenException.class)
+  public ResponseEntity<ErrorResponse> handleInvalidRefreshToken(
+      InvalidTokenException exception, HttpServletRequest request) {
+    log.warn("Invalid token: {}", exception.getMessage());
+    return buildErrorResponse(
+        HttpStatus.UNAUTHORIZED,
+        exception.getCode(),
+        "Неверный токен: " + exception.getMessage(),
+        request.getRequestURI());
+  }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiExceptionResponse> handleGenericException(Exception exception, HttpServletRequest request) {
-        log.error("Unexpected error occurred: {}", exception.getMessage(), exception);
+  @ExceptionHandler(ExpiredTokenException.class)
+  public ResponseEntity<ErrorResponse> handleExpiredRefreshToken(
+      ExpiredTokenException exception, HttpServletRequest request) {
+    log.warn("Expired token: {}", exception.getMessage());
+    return buildErrorResponse(
+        HttpStatus.UNAUTHORIZED,
+        exception.getCode(),
+        "Токен истёк: " + exception.getMessage(),
+        request.getRequestURI());
+  }
 
-        return buildResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "Unexpected error",
-                exception.getMessage(),
-                request.getRequestURI());
-    }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ErrorResponse> handleGenericException(
+      Exception exception, HttpServletRequest request) {
+    log.error(
+        "Unexpected error occurred on {}: {}", request.getRequestURI(), exception.getMessage());
+    return buildErrorResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "SERVER_ERROR",
+        "Внутренняя ошибка сервера",
+        request.getRequestURI());
+  }
 
-    @ExceptionHandler(MissingTokenException.class)
-    public ResponseEntity<ApiExceptionResponse> handleRefreshTokenMissing(
-            MissingTokenException exception,
-            HttpServletRequest request) {
-        log.warn("Missing token: {}", exception.getMessage());
-
-        return buildResponse(
-                HttpStatus.BAD_REQUEST,
-                "Missing token",
-                exception.getMessage(),
-                request.getRequestURI());
-    }
-
-    @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<ApiExceptionResponse> handleInvalidRefreshToken(
-            InvalidTokenException exception,
-            HttpServletRequest request) {
-        log.warn("Invalid token: {}", exception.getMessage());
-
-        return buildResponse(
-                HttpStatus.UNAUTHORIZED,
-                "Invalid token",
-                exception.getMessage(),
-                request.getRequestURI());
-    }
-
-    @ExceptionHandler(ExpiredTokenException.class)
-    public ResponseEntity<ApiExceptionResponse> handleInvalidRefreshToken(
-            ExpiredTokenException exception,
-            HttpServletRequest request) {
-        log.warn("Expired token: {}", exception.getMessage());
-
-        return buildResponse(
-                HttpStatus.UNAUTHORIZED,
-                "Expired token",
-                exception.getMessage(),
-                request.getRequestURI());
-    }
-
-    private ResponseEntity<ApiExceptionResponse> buildResponse(
-            HttpStatus status,
-            String error,
-            String message,
-            String path) {
-        ApiExceptionResponse apiException = new ApiExceptionResponse(
-                LocalDateTime.now(),
-                status.value(),
-                error,
-                message,
-                path
-        );
-
-        return ResponseEntity.status(status).body(apiException);
-    }
+  private ResponseEntity<ErrorResponse> buildErrorResponse(
+      HttpStatus status, String code, String message, String path) {
+    ErrorResponse responseBody =
+        ErrorResponse.builder().code(code).message(message).path(path).build();
+    return ResponseEntity.status(status).body(responseBody);
+  }
 }

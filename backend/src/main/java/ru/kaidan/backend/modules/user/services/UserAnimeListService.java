@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.kaidan.backend.modules.anime.entities.Anime;
 import ru.kaidan.backend.modules.anime.repositories.AnimeRepository;
+import ru.kaidan.backend.modules.user.DTO.AnimeListAddRequest;
 import ru.kaidan.backend.modules.user.DTO.AnimeListResponse;
 import ru.kaidan.backend.modules.user.entities.AnimeListStatus;
 import ru.kaidan.backend.modules.user.entities.UserAnimeListEntity;
@@ -23,26 +24,26 @@ public class UserAnimeListService {
   private final AnimeRepository animeRepository;
 
   public List<UserAnimeListEntity> findUserAnimeLists(String userId) {
-    return userAnimeListRepository.findAllByUserId(userId);
+    return userAnimeListRepository.findByUserId(userId);
   }
 
-  public UserAnimeListEntity addOrUpdate(String userId, String animeId, AnimeListStatus status) {
-    UserAnimeListEntity entry =
+  public UserAnimeListEntity addOrUpdate(
+      String userId, String animeId, AnimeListAddRequest requestBody) {
+    UserAnimeListEntity animeListEntity =
         userAnimeListRepository
             .findByUserIdAndAnimeId(userId, animeId)
             .orElseGet(
                 () -> {
-                  UserAnimeListEntity newEntry = new UserAnimeListEntity();
-                  newEntry.setUserId(userId);
-                  newEntry.setAnimeId(animeId);
-                  newEntry.setCreatedAt(Instant.now());
-                  return newEntry;
+                  UserAnimeListEntity newAnimeListEntity = new UserAnimeListEntity();
+                  newAnimeListEntity.setUserId(userId);
+                  newAnimeListEntity.setAnimeId(animeId);
+                  newAnimeListEntity.setCreatedAt(Instant.now());
+                  return newAnimeListEntity;
                 });
 
-    entry.setStatus(status);
-    entry.setUpdatedAt(Instant.now());
-
-    return userAnimeListRepository.save(entry);
+    animeListEntity.setStatus(requestBody.getStatus());
+    animeListEntity.setUpdatedAt(Instant.now());
+    return userAnimeListRepository.save(animeListEntity);
   }
 
   public Optional<AnimeListStatus> findStatus(String userId, String animeId) {
@@ -51,18 +52,13 @@ public class UserAnimeListService {
         .map(UserAnimeListEntity::getStatus);
   }
 
-  public UserAnimeListEntity remove(String userId, String animeId) {
-    UserAnimeListEntity entry =
+  public void removeAnimeFromList(String userId, String animeId) {
+    UserAnimeListEntity animeListEntity =
         userAnimeListRepository
             .findByUserIdAndAnimeId(userId, animeId)
             .orElseThrow(() -> new RuntimeException("Entry not found"));
 
-    userAnimeListRepository.delete(entry);
-    return entry;
-  }
-
-  public List<UserAnimeListEntity> findUserAnimeList(String userId) {
-    return userAnimeListRepository.findAllByUserId(userId);
+    userAnimeListRepository.delete(animeListEntity);
   }
 
   public List<AnimeListResponse> findProfileUserAnimeList(String userId) {
@@ -78,16 +74,16 @@ public class UserAnimeListService {
 
     return entries.stream()
         .map(
-            entry -> {
-              Anime anime = animeMap.get(entry.getAnimeId());
+            animeListEntity -> {
+              Anime anime = animeMap.get(animeListEntity.getAnimeId());
               if (anime == null) {
-                throw new RuntimeException("Аниме не найдено: " + entry.getAnimeId());
+                throw new RuntimeException("Аниме не найдено: " + animeListEntity.getAnimeId());
               }
               return AnimeListResponse.builder()
                   .animeId(anime.getShikimoriId())
                   .image(anime.getCoverImage().getExtraLarge())
                   .title(anime.getTitle().getRU())
-                  .addedAt(LocalDate.from(entry.getCreatedAt()))
+                  .addedAt(LocalDate.from(animeListEntity.getCreatedAt()))
                   .build();
             })
         .toList();

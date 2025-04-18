@@ -1,8 +1,12 @@
 package ru.kaidan.backend.utils.exceptions.custom;
 
-public class InvalidTokenException extends RuntimeException {
+import lombok.Getter;
 
-    public InvalidTokenException(String message) {
-        super(message);
-    }
+@Getter
+public class InvalidTokenException extends RuntimeException {
+  private final String code = "INVALID_TOKEN";
+
+  public InvalidTokenException(String message) {
+    super(message);
+  }
 }

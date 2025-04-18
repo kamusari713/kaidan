@@ -1,12 +1,10 @@
 package ru.kaidan.backend.modules.auth.services;
 
-import java.util.Arrays;
-
-import org.springframework.http.ResponseCookie;
-import org.springframework.stereotype.Component;
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import org.springframework.http.ResponseCookie;
+import org.springframework.stereotype.Component;
 import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
 @Component

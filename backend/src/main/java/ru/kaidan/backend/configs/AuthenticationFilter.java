@@ -1,11 +1,13 @@
 package ru.kaidan.backend.configs;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import static java.util.Arrays.*;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 @RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter {
 
+  private static final List<String> EXCLUDED_PATHS = asList("/public", "/graphql", "/graphiql");
   private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
   private final TokenRepository tokenRepository;
@@ -39,61 +42,48 @@ public class AuthenticationFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain)
       throws ServletException, IOException {
-    if (request.getRequestURI().contains("/public")
-        || request.getRequestURI().contains("/graphql")
-        || request.getRequestURI().contains("/graphiql")) {
+
+    String requestUri = request.getRequestURI();
+    if (isExcludedPath(requestUri)) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    String token;
-
-    try {
-      token = cookieService.getValueFromCookie(request, jwtService.accessCookieName);
-    } catch (MissingTokenException | ExpiredTokenException | ExpiredJwtException e) {
-      log.warn("Cookie is missing");
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.setContentType("application/json");
-      response.getWriter().write("{\"error\": \"Cookie is missing\"}");
-      response.getWriter().flush();
-      return;
+    String token = cookieService.getValueFromCookie(request, jwtService.accessCookieName);
+    if (token == null) {
+      log.warn("Missing token for request: {}", requestUri);
+      throw new MissingTokenException("Токен отсутствует в куки");
     }
 
-    String username;
-
-    try {
-      username = jwtService.extractUsername(token);
-    } catch (InvalidTokenException e) {
-      log.warn("User has invalid token");
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.setContentType("application/json");
-      response.getWriter().write("{\"error\": \"Token is invalid\"}");
-      response.getWriter().flush();
-      return;
+    String username = jwtService.extractUsername(token);
+    if (username == null) {
+      log.warn("Invalid token for request: {}", requestUri);
+      throw new InvalidTokenException("Токен недействителен");
     }
 
-    try {
-      if (SecurityContextHolder.getContext().getAuthentication() == null) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        var tokenExpired =
-            tokenRepository.findByToken(token).map(t -> !t.getRevoked()).orElse(false);
-        if (!tokenExpired) {
-          throw new ExpiredTokenException("Token expired expired");
-        }
-        UsernamePasswordAuthenticationToken authToken =
-            new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities());
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-      }
-    } catch (ExpiredTokenException e) {
-      log.warn("User has expired token");
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.setContentType("application/json");
-      response.getWriter().write("{\"error\": \"Token is expired\"}");
-      response.getWriter().flush();
-      return;
+    boolean isTokenValid =
+        tokenRepository
+            .findByToken(token)
+            .map(tokenEntity -> !tokenEntity.getRevoked())
+            .orElse(false);
+    if (!isTokenValid) {
+      log.warn("Expired or revoked token for user: {} on request: {}", username, requestUri);
+      throw new ExpiredTokenException("Токен истёк или был отозван");
     }
+
+    if (SecurityContextHolder.getContext().getAuthentication() == null) {
+      UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+      UsernamePasswordAuthenticationToken authToken =
+          new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+      authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+      SecurityContextHolder.getContext().setAuthentication(authToken);
+      log.debug("Successfully authenticated user: {} for request: {}", username, requestUri);
+    }
+
     filterChain.doFilter(request, response);
+  }
+
+  private boolean isExcludedPath(String requestUri) {
+    return EXCLUDED_PATHS.stream().anyMatch(requestUri::contains);
   }
 }

@@ -1,8 +1,12 @@
 package ru.kaidan.backend.utils.exceptions.custom;
 
-public class MissingTokenException extends RuntimeException {
+import lombok.Getter;
 
-    public MissingTokenException(String message) {
-        super(message);
-    }
+@Getter
+public class MissingTokenException extends RuntimeException {
+  private final String code = "MISSING_TOKEN";
+
+  public MissingTokenException(String message) {
+    super(message);
+  }
 }
