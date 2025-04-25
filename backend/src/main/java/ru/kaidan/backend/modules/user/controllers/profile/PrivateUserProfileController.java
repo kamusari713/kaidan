@@ -1,9 +1,12 @@
 package ru.kaidan.backend.modules.user.controllers.profile;
 
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kaidan.backend.modules.user.DTO.UserProfileResponse;
+import ru.kaidan.backend.modules.auth.DTO.CookieResponse;
+import ru.kaidan.backend.modules.user.DTO.UserUpdateRequest;
 import ru.kaidan.backend.modules.user.services.UserProfileService;
 
 @RestController
@@ -12,15 +15,13 @@ import ru.kaidan.backend.modules.user.services.UserProfileService;
 public class PrivateUserProfileController {
   private final UserProfileService userProfileService;
 
-  @PostMapping("/username")
-  public ResponseEntity<UserProfileResponse> updateUsername(
-      @PathVariable String userId, @RequestBody String newUsername) {
-    return ResponseEntity.ok().body(userProfileService.updateUsername(userId, newUsername));
-  }
-
-  @PostMapping("/bio")
-  public ResponseEntity<UserProfileResponse> updateUserBio(
-      @PathVariable String userId, @RequestBody String newBio) {
-    return ResponseEntity.ok().body(userProfileService.updateUserBio(userId, newBio));
+  @PostMapping
+  public ResponseEntity<Null> updateUsername(
+      @PathVariable String userId, @RequestBody UserUpdateRequest userProfileDto) {
+    CookieResponse cookies = userProfileService.updateUserProfile(userId, userProfileDto);
+    return ResponseEntity.noContent()
+        .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
+        .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
+        .build();
   }
 }

@@ -1,6 +1,7 @@
-import { ApolloClientProvider, TanstackQueryProvider, ThemeProvider } from '@/src/components/common/providers'
+import { ApolloClientProvider, TanstackQueryProvider, ThemeProvider } from '@/components/common/providers'
 import { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { Toaster } from 'react-hot-toast'
 import './globals.css'
 
 const montserrat = localFont({
@@ -17,11 +18,11 @@ export const metadata: Metadata = {
 	},
 }
 
-export default function RootLayout({
+const RootLayout = ({
 	children,
 }: Readonly<{
 	children: React.ReactNode
-}>) {
+}>) => {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head />
@@ -31,7 +32,10 @@ export default function RootLayout({
 						<ThemeProvider>{children}</ThemeProvider>
 					</TanstackQueryProvider>
 				</ApolloClientProvider>
+				<Toaster position="top-center" />
 			</body>
 		</html>
 	)
 }
+
+export default RootLayout

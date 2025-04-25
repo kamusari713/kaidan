@@ -1,6 +1,7 @@
-import { addToAnimeList } from '@/src/api/rest/user/animeList'
-import { AnimeListStatus, UserAnimeList } from '@/src/lib/types/animeList'
+import { addToAnimeList } from '@/services/rest/user/anime'
+import { AnimeListStatus, UserAnimeList } from '@/types/animeList'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 interface AddContext {
 	previous?: AnimeListStatus | null
@@ -25,6 +26,8 @@ export const useAddToList = (userId: string, animeId: string) => {
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: ['anime-status', animeId] })
+			queryClient.invalidateQueries({ queryKey: ['user-anime-list', userId] })
+			toast.success('Аниме добавленно в список!')
 		},
 	})
 }

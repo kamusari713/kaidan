@@ -1,7 +1,11 @@
 package ru.kaidan.backend.modules.review.services;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.kaidan.backend.modules.review.DTO.ReviewVoteRequest;
@@ -64,5 +68,11 @@ public class ReviewVoteService {
     review.setDislikes(dislikes);
 
     return reviewRepository.save(review);
+  }
+
+  public Map<String, ReviewVoteType> findVotesByUserAndReviews(
+      String userId, List<String> reviewIds) {
+    return reviewVoteRepository.findByUserIdAndReviewIdIn(userId, reviewIds).stream()
+        .collect(Collectors.toMap(ReviewVoteEntity::getReviewId, ReviewVoteEntity::getVote));
   }
 }

@@ -1,4 +1,4 @@
-import { NewComment } from '@/src/lib/types/comments'
+import { NewComment } from '@/types/comments'
 
 export const getQueryKey = (comment: NewComment): string[] => {
 	if (comment.animeId) return ['anime-comments', comment.animeId]

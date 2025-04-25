@@ -1,7 +1,9 @@
-import { animeListStatusLabels } from '@/src/lib/constants'
-import { AnimeListStatus } from '@/src/lib/types/animeList'
+interface DisplayNameProps<T> {
+	status?: T | null
+	labels: Record<string, string>
+}
 
-export const useDisplayName = (status?: AnimeListStatus | null): string | null => {
+export const useDisplayName = <T extends string>({ status, labels }: DisplayNameProps<T>) => {
 	if (!status) return null
-	return animeListStatusLabels[status] || null
+	return labels[status] || null
 }

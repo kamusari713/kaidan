@@ -1,14 +1,7 @@
-import { AnimeListStatus } from './animeList'
-
 export interface UserProfile {
 	username: string
 	bio: string
+	banned: boolean
 }
 
-export type UserAnimeListShortDTO = {
-	animeId: string
-	title: string
-	status: AnimeListStatus
-	addedAt: string
-	image: string
-}
+export type UserPublicProfile = Omit<UserProfile, 'banned'>

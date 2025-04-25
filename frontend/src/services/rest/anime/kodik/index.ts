@@ -1,0 +1,1 @@
+export { getKodikData } from './getKodikData'

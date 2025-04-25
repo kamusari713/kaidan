@@ -5,11 +5,11 @@
 ## 🌟 Features
 
 - 💬 **Forum** [❌]: A community space for discussions.
-- 🔍 **Advanced Sorting** [❌]: Filter anime by tags, genres, ratings, types, and more.
-- 🎬 **Anime Streaming** [❌]: Watch anime using embedded players from Kodik and - SovetRomantica.
+- 🔍 **Advanced Sorting** [🤕]: Filter anime by tags, genres, ratings, types, and more.
+- 🎬 **Anime Streaming** [✔️]: Watch anime using embedded players from Kodik and - SovetRomantica.
 - 🌐 **Anime Dataset** [✔️]: Prefetched and curated using Anilist and Shikimori APIs.
-- 📝 **Comments and Reviews** [❌]: Comment on anime titles and individual episodes, write detailed reviews.
-- 📚 **Personal Lists** [❌]: Add anime to custom lists (e.g., "Plan to Watch", "Watching", "Completed").
+- 📝 **Comments and Reviews** [✔️]: Comment on anime titles and individual episodes, write detailed reviews.
+- 📚 **Personal Lists** [✔️]: Add anime to custom lists (e.g., "Plan to Watch", "Watching", "Completed").
 - 🔐**Authentication** [✔️]: JWT-based authorization (OAuth2 planned).
 - 🔔**Notifications** [❌] : Real-time notifications for various activities.
 

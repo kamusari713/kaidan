@@ -1,4 +1,4 @@
-import { IconProps } from '@/src/lib/types/ui'
+import { IconProps } from '@/types/ui'
 import React, { FC } from 'react'
 import { BaseIcon } from './base-icon'
 

@@ -15,3 +15,12 @@ export const registerSchema = z.object({
 })
 
 export type RegisterFormData = z.infer<typeof registerSchema>
+
+export const createUserSchema = z.object({
+	email: z.string().nonempty('Строка должна содержать не менее 1 символа').email(),
+	username: z.string().nonempty('Строка должна содержать не менее 1 символа'),
+	password: z.string().nonempty('Строка должна содержать не менее 1 символа').min(4, `Пароль должен быть минимум ${MIN_PASSWORD_FIELD_CHARACTERS} символа`),
+	role: z.string().nonempty(''),
+})
+
+export type CreateUserFormData = z.infer<typeof createUserSchema>

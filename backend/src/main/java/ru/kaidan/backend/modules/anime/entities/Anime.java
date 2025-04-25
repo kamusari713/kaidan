@@ -5,15 +5,14 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ru.kaidan.backend.modules.anime.entities.types.CoverImage;
 import ru.kaidan.backend.modules.anime.entities.types.Description;
 import ru.kaidan.backend.modules.anime.entities.types.ExternalLink;
-import ru.kaidan.backend.modules.anime.entities.types.Genre;
 import ru.kaidan.backend.modules.anime.entities.types.Kind;
 import ru.kaidan.backend.modules.anime.entities.types.Rating;
 import ru.kaidan.backend.modules.anime.entities.types.Status;
-import ru.kaidan.backend.modules.anime.entities.types.Tag;
 import ru.kaidan.backend.modules.anime.entities.types.Title;
 
 @Builder
@@ -22,12 +21,16 @@ import ru.kaidan.backend.modules.anime.entities.types.Title;
 public class Anime {
 
   @Id private String id;
+
+  @Indexed(unique = true)
+  private String shikimoriId;
+
   private Title title;
   private List<String> synonyms;
   private Description description;
   private Double shikimoriScore;
   private String shikimoriUrl;
-  private String shikimoriId;
+
   private List<ExternalLink> externalLinks;
   private Kind kind;
   private Rating rating;

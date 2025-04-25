@@ -15,6 +15,7 @@ import ru.kaidan.backend.modules.comment.entities.CommentEntity;
 import ru.kaidan.backend.modules.comment.services.CommentService;
 import ru.kaidan.backend.modules.review.entities.ReviewEntity;
 import ru.kaidan.backend.modules.review.services.ReviewService;
+import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +37,7 @@ public class PublicAnimeController {
       UserCredentials credentials = authService.findCredentials(request);
       return ResponseEntity.ok()
           .body(reviewService.findByUserIdAndAnimeId(credentials.getId(), animeId));
-    } catch (ExpiredJwtException e) {
+    } catch (ExpiredJwtException | MissingTokenException e) {
       return ResponseEntity.ok().body(reviewService.findByAnime(animeId));
     }
   }

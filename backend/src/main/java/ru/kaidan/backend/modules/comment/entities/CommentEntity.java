@@ -1,7 +1,6 @@
 package ru.kaidan.backend.modules.comment.entities;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +22,5 @@ public class CommentEntity {
   private String reviewId;
   private String animeId;
 
-  private List<CommentEntity> children = new ArrayList<>();
+  private List<CommentEntity> children;
 }

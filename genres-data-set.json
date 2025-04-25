@@ -1,0 +1,18 @@
+{"_id":{"$oid":"680a31cfd4867647ca42293b"},"EN":"Action","RU":"Экшн","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca42293c"},"EN":"Adventure","RU":"Приключение","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca42293d"},"EN":"Comedy","RU":"Комедия","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca42293e"},"EN":"Drama","RU":"Драма","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca42293f"},"EN":"Ecchi","RU":"Этти","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422940"},"EN":"Fantasy","RU":"Фэнтези","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422941"},"EN":"Horror","RU":"Хоррор","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422942"},"EN":"Mahou Shoujo","RU":"Махо-сёдзё","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422943"},"EN":"Mecha","RU":"Меха","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422944"},"EN":"Music","RU":"Музыка","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422945"},"EN":"Mystery","RU":"Мистическое","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422946"},"EN":"Psychological","RU":"Психологический","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422947"},"EN":"Romance","RU":"Романтика","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422948"},"EN":"Sci-Fi","RU":"Научная фантастика","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca422949"},"EN":"Slice of Life","RU":"Повседневность","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca42294a"},"EN":"Sports","RU":"Спорт","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca42294b"},"EN":"Supernatural","RU":"Сверхъестественное","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}
+{"_id":{"$oid":"680a31cfd4867647ca42294c"},"EN":"Thriller","RU":"Триллер","_class":"ru.kaidan.backend.modules.anime.entities.Genre"}

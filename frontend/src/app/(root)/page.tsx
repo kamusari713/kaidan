@@ -1,19 +1,18 @@
-import { AnimeCarouselSection, ForumRecentThreadsSection, RecentReviewsSection, RecentUpdatesSection } from '@/src/components/common/sections'
-import { Container } from '@/src/components/layout'
+import { Container } from '@/components/layout'
+import { AnimeCarouselSection, RecentReviewsSection, RecentUpdatesSection } from '@/components/pages/home'
 
-export default function HomePage() {
+const HomePage = () => {
 	return (
-		<>
-			<Container className="flex flex-col gap-10">
-				<AnimeCarouselSection />
-				<div className="flex gap-6">
-					<RecentUpdatesSection />
-					<div className="flex flex-col gap-6 w-1/2">
-						<ForumRecentThreadsSection />
-						<RecentReviewsSection />
-					</div>
+		<Container className="flex flex-col gap-10">
+			<AnimeCarouselSection />
+			<div className="flex gap-6">
+				<RecentUpdatesSection />
+				<div className="flex flex-col gap-6 w-1/2">
+					<RecentReviewsSection />
 				</div>
-			</Container>
-		</>
+			</div>
+		</Container>
 	)
 }
+
+export default HomePage

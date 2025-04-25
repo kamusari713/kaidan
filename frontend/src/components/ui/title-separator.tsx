@@ -1,5 +1,5 @@
-import { cn } from '@/src/lib/utils'
-import { UiComponentProps } from '@/src/lib/types/ui'
+import { cn } from '@/lib/utils'
+import { UiComponentProps } from '@/types/ui'
 import { FC } from 'react'
 
 export const TitleSeparator: FC<UiComponentProps> = ({ children, className }) => {

@@ -10,9 +10,5 @@ import ru.kaidan.backend.modules.auth.entities.TokenType;
 
 public interface TokenRepository extends MongoRepository<TokenEntity, String> {
 
-    List<TokenEntity> findByUserIdAndRevokedFalse(String id);
-
-    List<TokenEntity> findByUserIdAndRevokedFalseAndType(String id, TokenType type);
-
-    Optional<TokenEntity> findByToken(String token);
+  List<TokenEntity> findByUserIdAndRevokedFalse(String id);
 }

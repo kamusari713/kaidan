@@ -1,5 +1,8 @@
 package ru.kaidan.backend.modules.auth.custom;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
@@ -7,11 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import ru.kaidan.backend.modules.auth.entities.TokenType;
 import ru.kaidan.backend.modules.auth.services.CookieService;
 import ru.kaidan.backend.modules.auth.services.JwtService;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
@@ -46,7 +44,7 @@ public class CustomLogoutHandler implements LogoutHandler {
     response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
     response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-    jwtService.revokeAllUserTokens(user, TokenType.REFRESH);
+    jwtService.revokeAllUserTokens(user);
     SecurityContextHolder.clearContext();
   }
 }

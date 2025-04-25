@@ -1,4 +1,5 @@
 export { useProfile } from './useProfile'
-export { useUpdateProfileBio } from './useUpdateProfileBio'
-export { useUpdateProfileUsername } from './useUpdateProfileUsername'
+export { useUpdateProfile } from './useUpdateProfile'
 export { useUserAnimeList } from './useUserAnimeList'
+export { useUserComments } from './useUserComments'
+export { useUserReviews } from './useUserReviews'

@@ -10,5 +10,6 @@ dayjs.extend(timezone)
 dayjs.locale('ru')
 
 export const useTimeAgo = (isoString: string, timeZone = 'Europe/Astrakhan') => {
-	return dayjs.utc(isoString).tz(timeZone).fromNow()
+	const result = dayjs.utc(isoString).tz(timeZone).fromNow()
+	return result.match('несколько') ? 'только что' : result
 }

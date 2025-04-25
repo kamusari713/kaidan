@@ -1,4 +1,4 @@
-import { RegisterFormData, registerSchema } from '@/src/lib/types/form'
+import { RegisterFormData, registerSchema } from '@/types/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 

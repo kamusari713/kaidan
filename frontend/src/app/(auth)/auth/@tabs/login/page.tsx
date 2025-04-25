@@ -1,12 +1,12 @@
 'use client'
 
-import { FormErrorMessage } from '@/src/components/layout'
-import { Button, Input } from '@/src/components/ui'
-import { useLogin } from '@/src/hooks/authentication'
-import { useLoginForm } from '@/src/hooks/form'
-import { LoginFormData } from '@/src/lib/types/form'
+import { FormErrorMessage } from '@/components/layout'
+import { Button, Input } from '@/components/ui'
+import { useLogin } from '@/hooks/authentication'
+import { useLoginForm } from '@/hooks/form'
+import { LoginFormData } from '@/lib/types/form'
 
-export default function LoginPage() {
+const LoginPage = () => {
 	const { mutate: loginMutation, isPending, error } = useLogin()
 
 	const onSubmit = (data: LoginFormData) => {
@@ -36,3 +36,5 @@ export default function LoginPage() {
 		</form>
 	)
 }
+
+export default LoginPage

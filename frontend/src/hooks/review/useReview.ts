@@ -1,8 +1,9 @@
-import { GET_ANIME_DATA } from '@/src/api/graphql/anime'
-import { createReview } from '@/src/api/rest/review'
-import { apolloClient } from '@/src/lib/apolloClient'
-import { NewReview, Review } from '@/src/lib/types/review'
+import { apolloClient } from '@/lib/clients'
+import { GET_ANIME_DATA } from '@/services/graphql/anime'
+import { createReview } from '@/services/rest/review'
+import { NewReview, Review } from '@/types/review'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 interface ReviewContext {
 	previousReviews?: Review[]
@@ -28,6 +29,7 @@ export const useReview = (animeId: string) => {
 				likes: 0,
 				dislikes: 0,
 				userVote: null,
+				status: newReview.score >= 7 ? 'POSITIVE' : newReview.score <= 3 ? 'NEGATIVE' : 'NEUTRAL',
 			}
 			queryClient.setQueryData<Review[]>(reviewsKey, (old) => (old ? [optimisticReview, ...old] : [optimisticReview]))
 
@@ -85,9 +87,11 @@ export const useReview = (animeId: string) => {
 
 		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: ['anime-reviews', animeId] })
+			queryClient.invalidateQueries({ queryKey: ['recent-reviews'] })
 			apolloClient.refetchQueries({
 				include: [GET_ANIME_DATA],
 			})
+			toast.success('Отзыв успешно опубликован!')
 		},
 	})
 }

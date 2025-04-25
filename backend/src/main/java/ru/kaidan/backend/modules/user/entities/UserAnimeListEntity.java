@@ -1,20 +1,22 @@
 package ru.kaidan.backend.modules.user.entities;
 
-import java.time.Instant;
+import java.time.LocalDate;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Builder
 @Data
 @Document("user_anime_lists")
 public class UserAnimeListEntity {
   @Id private String id;
 
   private String userId;
-  private String animeId;
+  private String shikimoriId;
 
   private AnimeListStatus status;
 
-  private Instant createdAt = Instant.now();
-  private Instant updatedAt = Instant.now();
+  private LocalDate createdAt;
+  private LocalDate updatedAt;
 }

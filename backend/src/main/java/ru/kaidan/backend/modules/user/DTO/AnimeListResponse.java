@@ -8,9 +8,11 @@ import ru.kaidan.backend.modules.user.entities.AnimeListStatus;
 @Builder
 @Data
 public class AnimeListResponse {
+  private String userId;
   private String animeId;
   private String title;
   private AnimeListStatus status;
-  private LocalDate addedAt;
+  private LocalDate createdAt;
+  private LocalDate updatedAt;
   private String image;
 }

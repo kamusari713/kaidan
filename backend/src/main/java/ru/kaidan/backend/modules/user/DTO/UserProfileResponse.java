@@ -8,4 +8,5 @@ import lombok.Data;
 public class UserProfileResponse {
   private String username;
   private String bio;
+  private boolean banned;
 }

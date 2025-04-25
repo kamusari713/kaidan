@@ -1,18 +1,15 @@
-import { fetchApi } from '@/src/api/rest/fetchApi'
-import { PageableContent } from '@/src/lib/types/pagination'
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
+'use client'
+
+import { PageableContent, PaginationParams } from '@/types/pagination'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-export const usePagination = <T>(endpoint: string, initialPage = 0, size = 10) => {
+export const usePagination = <T>(queryKey: string, fetchFunction: (params: PaginationParams) => Promise<PageableContent<T>>, initialPage = 0, size = 10) => {
 	const [page, setPage] = useState(initialPage)
 
-	const { isLoading, isError, error, data, isFetching, isPlaceholderData } = useQuery({
-		queryKey: ['pagination', endpoint, page, size],
-		queryFn: () =>
-			fetchApi<PageableContent<T>>({
-				method: 'GET',
-				url: `/${endpoint}?page=${page}&size=${size}`,
-			}),
+	const { data, isLoading, isError, error, isPlaceholderData } = useQuery({
+		queryKey: ['pagination', queryKey, page, size],
+		queryFn: () => fetchFunction({ page, size }),
 		placeholderData: keepPreviousData,
 	})
 
@@ -32,9 +29,8 @@ export const usePagination = <T>(endpoint: string, initialPage = 0, size = 10) =
 		data,
 		isLoading,
 		isError,
-		isFetching,
-		isPlaceholderData,
 		error,
+		isPlaceholderData,
 		page,
 		totalPages: data?.totalPages || 0,
 		handleNextPage,

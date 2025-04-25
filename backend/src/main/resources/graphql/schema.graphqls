@@ -1,15 +1,42 @@
 type Query {
     page(
-        page: Int = 1,
-        perPage: Int = 10,
-        sort: Sort = {orderBy: "shikimoriId", direction: "ASC"},
+        page: Int = 1
+        perPage: Int = 10
+        sort: Sort = {orderBy: "shikimoriId", direction: "ASC"}
         search: String
+        filter: AnimeFilter
     ): Page
 
     anime(
         shikimoriId: String!
     ): Anime
+
+    genres: [Genre!]
+    tags(
+        search: String,
+        limit: Int
+    ): [Tag!]
+    studios: [String!]
+    kinds: [String!]
+    ratings: [String!]
 }
+
+type Mutation {
+    createAnime(input: AnimeRaw): Anime!
+    updateAnime(shikimoriId: String!, input: AnimeRaw!): Anime!
+}
+
+input AnimeFilter {
+    genres: [String!]
+    tags: [String!]
+    studios: [String!]
+    kind: [Kind!]
+    rating: [Rating!]
+    status: String
+    episodes: Int
+    score: Float
+}
+
 
 input Sort {
     orderBy: String
@@ -54,6 +81,61 @@ type Anime {
     scoreCount: Int
 }
 
+type Title {
+    EN: String
+    RU: String
+    ROMAJI: String
+    NATIVE: String
+}
+
+type Description {
+    EN: String
+    RU: String
+}
+
+type ExternalLink {
+    source: String
+    url: String
+}
+
+enum Kind {
+    tv, movie, ova, ona, special, tv_special, music, cm
+}
+
+enum Rating {
+    g, pg, pg_13, r, r_plus
+}
+
+type Status {
+    EN: String
+    RU: String
+}
+
+type CoverImage {
+    extraLarge: String
+    large: String
+    medium: String
+    color: String
+    banner: String
+}
+
+type Genre {
+    EN: String
+    RU: String
+}
+
+type Tag {
+    RU: TagTranslations
+    EN: TagTranslations
+    rank: Int
+    isSpoiler: Boolean
+}
+
+type TagTranslations {
+    name: String
+    description: String
+}
+
 input AnimeRaw {
     title: TitleInput
     synonyms: [String!]
@@ -76,13 +158,6 @@ input AnimeRaw {
     tags: [TagInput!]
 }
 
-type Title {
-    EN: String
-    RU: String
-    ROMAJI: String
-    NATIVE: String
-}
-
 input TitleInput {
     EN: String
     RU: String
@@ -90,19 +165,9 @@ input TitleInput {
     NATIVE: String
 }
 
-type Description {
-    EN: String
-    RU: String
-}
-
 input DescriptionInput {
     EN: String
     RU: String
-}
-
-type ExternalLink {
-    source: String
-    url: String
 }
 
 input ExternalLinkInput {
@@ -110,30 +175,9 @@ input ExternalLinkInput {
     url: String
 }
 
-enum Kind {
-    tv, movie, ova, ona, special, tv_special, music, cm
-}
-
-enum Rating {
-    None, g, pg, pg_13, r, r_plus, rx
-}
-
-type Status {
-    EN: String
-    RU: String
-}
-
 input StatusInput {
     EN: String
     RU: String
-}
-
-type CoverImage {
-    extraLarge: String
-    large: String
-    medium: String
-    color: String
-    banner: String
 }
 
 input CoverImageInput {
@@ -144,21 +188,9 @@ input CoverImageInput {
     banner: String
 }
 
-type Genre {
-    EN: String
-    RU: String
-}
-
 input GenreInput {
     EN: String
     RU: String
-}
-
-type Tag {
-    RU: TagTranslations
-    EN: TagTranslations
-    rank: Int
-    isSpoiler: Boolean
 }
 
 input TagInput {
@@ -166,11 +198,6 @@ input TagInput {
     EN: TagTranslationsInput
     rank: Int
     isSpoiler: Boolean
-}
-
-type TagTranslations {
-    name: String
-    description: String
 }
 
 input TagTranslationsInput {

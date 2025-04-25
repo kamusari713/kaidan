@@ -1,17 +1,22 @@
 package ru.kaidan.backend.modules.user.controllers.profile;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kaidan.backend.modules.comment.entities.CommentEntity;
+import ru.kaidan.backend.modules.auth.DTO.UserCredentials;
+import ru.kaidan.backend.modules.auth.services.AuthService;
+import ru.kaidan.backend.modules.comment.DTO.CommentCardDTO;
 import ru.kaidan.backend.modules.comment.services.CommentService;
-import ru.kaidan.backend.modules.review.entities.ReviewEntity;
+import ru.kaidan.backend.modules.review.DTO.ReviewProfileDTO;
 import ru.kaidan.backend.modules.review.services.ReviewService;
 import ru.kaidan.backend.modules.user.DTO.AnimeListResponse;
 import ru.kaidan.backend.modules.user.DTO.UserProfileResponse;
 import ru.kaidan.backend.modules.user.services.UserAnimeListService;
 import ru.kaidan.backend.modules.user.services.UserProfileService;
+import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ public class PublicProfileController {
   private final UserAnimeListService userAnimeListService;
   private final CommentService commentService;
   private final ReviewService reviewService;
+  private final AuthService authService;
 
   @GetMapping
   public ResponseEntity<UserProfileResponse> getUserProfile(@PathVariable String userId) {
@@ -33,12 +39,24 @@ public class PublicProfileController {
   }
 
   @GetMapping("/comments")
-  public ResponseEntity<List<CommentEntity>> getUserComments(@PathVariable String userId) {
+  public ResponseEntity<List<CommentCardDTO>> getUserComments(@PathVariable String userId) {
     return ResponseEntity.ok().body(commentService.getUserCommentTree(userId));
   }
 
   @GetMapping("/reviews")
-  public ResponseEntity<List<ReviewEntity>> getUserReviews(@PathVariable String userId) {
-    return ResponseEntity.ok().body(reviewService.findByUser(userId));
+  public ResponseEntity<List<ReviewProfileDTO>> getUserReviews(
+      @PathVariable String userId, HttpServletRequest request) {
+    try {
+      UserCredentials credentials = authService.findCredentials(request);
+      String currentUserId = credentials.getId();
+
+      if (currentUserId.equals(userId)) {
+        return ResponseEntity.ok().body(reviewService.findByUserId(currentUserId, userId));
+      } else {
+        return ResponseEntity.ok().body(reviewService.findByUserId(userId));
+      }
+    } catch (ExpiredJwtException | MissingTokenException e) {
+      return ResponseEntity.ok().body(reviewService.findByUserId(userId));
+    }
   }
 }

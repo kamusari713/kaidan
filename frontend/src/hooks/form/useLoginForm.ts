@@ -1,4 +1,4 @@
-import { LoginFormData, loginSchema } from '@/src/lib/types/form'
+import { LoginFormData, loginSchema } from '@/types/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 

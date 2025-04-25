@@ -16,4 +16,5 @@ public class UserEntity {
   private String password;
   private String bio;
   private RoleType role;
+  private Boolean banned;
 }

@@ -1,5 +1,6 @@
 package ru.kaidan.backend.utils.exceptions;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class GlobalExceptionHandler {
       BadCredentialsException exception, HttpServletRequest request) {
     log.info("Invalid login attempt: {}", exception.getMessage());
     return buildErrorResponse(
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.BAD_REQUEST,
         "INVALID_CREDENTIALS",
         "Неверные учетные данные: " + exception.getMessage(),
         request.getRequestURI());
@@ -70,7 +71,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(MissingTokenException.class)
-  public ResponseEntity<ErrorResponse> handleRefreshTokenMissing(
+  public ResponseEntity<ErrorResponse> handleMissingToken(
       MissingTokenException exception, HttpServletRequest request) {
     log.warn("Missing token: {}", exception.getMessage());
     return buildErrorResponse(
@@ -81,23 +82,23 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(InvalidTokenException.class)
-  public ResponseEntity<ErrorResponse> handleInvalidRefreshToken(
+  public ResponseEntity<ErrorResponse> handleInvalidToken(
       InvalidTokenException exception, HttpServletRequest request) {
     log.warn("Invalid token: {}", exception.getMessage());
     return buildErrorResponse(
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.BAD_REQUEST,
         exception.getCode(),
         "Неверный токен: " + exception.getMessage(),
         request.getRequestURI());
   }
 
-  @ExceptionHandler(ExpiredTokenException.class)
-  public ResponseEntity<ErrorResponse> handleExpiredRefreshToken(
-      ExpiredTokenException exception, HttpServletRequest request) {
-    log.warn("Expired token: {}", exception.getMessage());
+  @ExceptionHandler(ExpiredJwtException.class)
+  public ResponseEntity<ErrorResponse> handleExpiredJwt(
+      ExpiredJwtException exception, HttpServletRequest request) {
+    log.warn("Expired jwt : {}", exception.getMessage());
     return buildErrorResponse(
         HttpStatus.UNAUTHORIZED,
-        exception.getCode(),
+        "EXPIRED_TOKEN",
         "Токен истёк: " + exception.getMessage(),
         request.getRequestURI());
   }

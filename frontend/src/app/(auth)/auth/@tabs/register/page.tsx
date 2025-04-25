@@ -1,12 +1,12 @@
 'use client'
 
-import { FormErrorMessage } from '@/src/components/layout'
-import { Button, Input } from '@/src/components/ui'
-import { useRegister } from '@/src/hooks/authentication'
-import { useRegisterForm } from '@/src/hooks/form'
-import { RegisterFormData } from '@/src/lib/types/form'
+import { FormErrorMessage } from '@/components/layout'
+import { Button, Input } from '@/components/ui'
+import { useRegister } from '@/hooks/authentication'
+import { useRegisterForm } from '@/hooks/form'
+import { RegisterFormData } from '@/types/form'
 
-export default function RegisterPage() {
+const RegisterPage = () => {
 	const { mutate: registerMutation, isPending, error } = useRegister()
 
 	const onSubmit = (data: RegisterFormData) => {
@@ -40,3 +40,5 @@ export default function RegisterPage() {
 		</form>
 	)
 }
+
+export default RegisterPage

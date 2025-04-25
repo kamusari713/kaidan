@@ -1,4 +1,6 @@
 export { useAnimeReviews } from './useAnimeReviews'
+export { useRecentReviews } from './useRecentReviews'
 export { useReview } from './useReview'
 export { useReviewComments } from './useReviewComments'
+export { useUserVoteStatus } from './useUserVoteStatus'
 export { useVoteForReview } from './useVoteForReview'

@@ -1,7 +1,10 @@
 package ru.kaidan.backend.modules.auth.services;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,25 +15,26 @@ import ru.kaidan.backend.modules.auth.DTO.LoginRequest;
 import ru.kaidan.backend.modules.auth.DTO.RegisterRequest;
 import ru.kaidan.backend.modules.auth.DTO.UserCredentials;
 import ru.kaidan.backend.modules.auth.custom.CustomUserDetails;
-import ru.kaidan.backend.modules.auth.entities.TokenType;
 import ru.kaidan.backend.modules.user.entities.RoleType;
 import ru.kaidan.backend.modules.user.entities.UserEntity;
 import ru.kaidan.backend.modules.user.repositories.UserAnimeListRepository;
 import ru.kaidan.backend.modules.user.repositories.UserRepository;
-import ru.kaidan.backend.utils.exceptions.custom.ExpiredTokenException;
 import ru.kaidan.backend.utils.exceptions.custom.InvalidTokenException;
 import ru.kaidan.backend.utils.exceptions.custom.MissingTokenException;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
   private final UserRepository userRepository;
   private final UserAnimeListRepository userAnimeListRepository;
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final JwtService jwtService;
   private final CookieService cookieService;
+  private final StringRedisTemplate stringRedisTemplate;
+
+  @Value("${jwt.accessToken.expiration}")
+  private Long accessExpiration;
 
   public CookieResponse registerUser(RegisterRequest registerRequest) {
     UserEntity user =
@@ -40,14 +44,17 @@ public class AuthService {
             .email(registerRequest.getEmail())
             .bio("")
             .role(RoleType.ROLE_USER)
+            .banned(false)
             .build();
     userRepository.save(user);
 
     CustomUserDetails customUserDetails = new CustomUserDetails(user);
     String accessToken = jwtService.generateAccessToken(customUserDetails);
     String refreshToken = jwtService.generateRefreshToken(customUserDetails);
-    jwtService.saveUserToken(user, accessToken, TokenType.ACCESS);
-    jwtService.saveUserToken(user, refreshToken, TokenType.REFRESH);
+    stringRedisTemplate
+        .opsForValue()
+        .set(user.getUsername(), accessToken, accessExpiration, TimeUnit.MILLISECONDS);
+    jwtService.saveUserToken(user, refreshToken);
 
     return jwtService.buildTokensCookies(accessToken, refreshToken);
   }
@@ -65,8 +72,10 @@ public class AuthService {
     String accessToken = jwtService.generateAccessToken(customUserDetails);
     String refreshToken = jwtService.generateRefreshToken(customUserDetails);
     jwtService.revokeAllUserTokens(user);
-    jwtService.saveUserToken(user, accessToken, TokenType.ACCESS);
-    jwtService.saveUserToken(user, refreshToken, TokenType.REFRESH);
+    stringRedisTemplate
+        .opsForValue()
+        .set(user.getUsername(), accessToken, accessExpiration, TimeUnit.MILLISECONDS);
+    jwtService.saveUserToken(user, refreshToken);
     return jwtService.buildTokensCookies(accessToken, refreshToken);
   }
 
@@ -87,14 +96,12 @@ public class AuthService {
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
     CustomUserDetails customUserDetails = new CustomUserDetails(user);
-    if (!jwtService.isTokenValid(refreshToken, customUserDetails)) {
-      throw new ExpiredTokenException(" Refresh token is expired");
-    }
 
     String newAccessToken = jwtService.generateAccessToken(customUserDetails);
-    jwtService.revokeAllUserTokens(user, TokenType.ACCESS);
-    jwtService.saveUserToken(user, newAccessToken, TokenType.ACCESS);
-
+    jwtService.revokeAllUserTokens(user);
+    stringRedisTemplate
+        .opsForValue()
+        .set(user.getUsername(), newAccessToken, accessExpiration, TimeUnit.MILLISECONDS);
     return jwtService.buildTokensCookies(newAccessToken, refreshToken);
   }
 
@@ -119,6 +126,7 @@ public class AuthService {
         .username(user.getUsername())
         .email(user.getEmail())
         .role(user.getRole())
+        .banned(user.getBanned())
         .build();
   }
 }

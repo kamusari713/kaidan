@@ -1,5 +1,6 @@
 package ru.kaidan.backend.modules.auth.contollers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +21,16 @@ public class PublicAuthController {
 
   private final AuthService authService;
 
-  @PostMapping("/login")
+  @PostMapping("/credentials")
+  public ResponseEntity<Null> refresh(HttpServletRequest request) {
+    CookieResponse cookies = authService.refreshToken(request);
+    return ResponseEntity.noContent()
+        .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
+        .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
+        .build();
+  }
+
+  @PostMapping("/sessions")
   public ResponseEntity<Null> login(@RequestBody LoginRequest authRequest) {
     CookieResponse cookies = authService.loginUser(authRequest);
     return ResponseEntity.noContent()
@@ -29,7 +39,7 @@ public class PublicAuthController {
         .build();
   }
 
-  @PostMapping("/register")
+  @PostMapping("/users")
   public ResponseEntity<Null> register(@RequestBody RegisterRequest registerRequest) {
     CookieResponse cookies = authService.registerUser(registerRequest);
     return ResponseEntity.noContent()

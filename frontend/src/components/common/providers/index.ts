@@ -1,3 +1,3 @@
-export { ApolloClientProvider } from './apolloProvider'
-export { TanstackQueryProvider } from './tanstackQueryProvider'
-export { ThemeProvider } from './themeProvider'
+export { ApolloClientProvider } from './ApolloProvider'
+export { TanstackQueryProvider } from './TanstackQueryProvider'
+export { ThemeProvider } from './ThemeProvider'

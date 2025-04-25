@@ -13,4 +13,6 @@ public interface ReviewRepository extends MongoRepository<ReviewEntity, String> 
   List<ReviewEntity> findByAnimeId(String animeId);
 
   Page<ReviewEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+  List<ReviewEntity> findAllByOrderByCreatedAtDesc();
 }

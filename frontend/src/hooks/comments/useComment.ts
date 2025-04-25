@@ -1,7 +1,9 @@
-import { createComment } from '@/src/api/rest/comment'
-import { getQueryKey } from '@/src/lib'
-import { Comment, NewComment } from '@/src/lib/types/comments'
+import { getQueryKey } from '@/lib/getQueryKey'
+import { createComment } from '@/services/rest/comment'
+import { Comment, NewComment } from '@/types/comment'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
+import { useAuthorize } from '../authentication'
 
 interface CommentContext {
 	previous?: Comment[]
@@ -10,6 +12,7 @@ interface CommentContext {
 
 export const useComment = () => {
 	const queryClient = useQueryClient()
+	const { userData } = useAuthorize()
 
 	return useMutation<Comment, Error, NewComment, CommentContext>({
 		mutationFn: (newComment: NewComment) => createComment(newComment),
@@ -37,9 +40,15 @@ export const useComment = () => {
 		},
 
 		onSettled: (_error, _variables, _result, context) => {
-			if (context?.queryKey) {
-				queryClient.invalidateQueries({ queryKey: context.queryKey })
+			queryClient.invalidateQueries({ queryKey: context?.queryKey })
+			queryClient.invalidateQueries({ queryKey: ['user-comments'] })
+
+			if (userData?.id) {
+				queryClient.invalidateQueries({
+					queryKey: ['user-comments', userData.id],
+				})
 			}
+			toast.success('Комментарий успешно опубликован!')
 		},
 	})
 }

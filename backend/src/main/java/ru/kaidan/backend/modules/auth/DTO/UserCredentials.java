@@ -10,9 +10,9 @@ import ru.kaidan.backend.modules.user.entities.RoleType;
 @Builder
 public class UserCredentials {
 
-    @Id
-    private String id;
-    private String username;
-    private String email;
-    private RoleType role;
+  @Id private String id;
+  private String username;
+  private String email;
+  private RoleType role;
+  private Boolean banned;
 }

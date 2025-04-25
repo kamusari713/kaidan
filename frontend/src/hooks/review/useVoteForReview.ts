@@ -1,6 +1,7 @@
-import { createReviewVote } from '@/src/api/rest/review'
-import { Review, ReviewVoteDTO } from '@/src/lib/types/review'
+import { createReviewVote } from '@/services/rest/review'
+import { Review, ReviewVoteDTO } from '@/types/review'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 interface VoteContext {
 	previous?: Review[]
@@ -38,6 +39,9 @@ export const useVoteForReview = (animeId: string) => {
 
 		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: ['anime-reviews', animeId] })
+			queryClient.invalidateQueries({ queryKey: ['recent-reviews'] })
+			queryClient.invalidateQueries({ queryKey: ['user-reviews'] })
+			toast.success('Голос успешно опубликован!')
 		},
 	})
 }

@@ -1,6 +1,7 @@
-import { deleteFromAnimeList } from '@/src/api/rest/user/animeList'
-import { UserAnimeList } from '@/src/lib/types/animeList'
+import { deleteFromAnimeList } from '@/services/rest/user/anime'
+import { UserAnimeList } from '@/types/animeList'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 interface DeleteContext {
 	previous?: UserAnimeList[]
@@ -38,6 +39,7 @@ export const useDeleteFromAnimeList = (userId: string, animeId: string) => {
 				queryClient.invalidateQueries({ queryKey: ['user-anime-list', userId] })
 			}
 			queryClient.invalidateQueries({ queryKey: ['anime-status', animeId] })
+			toast.success('Аниме удалено из списка!')
 		},
 	})
 }

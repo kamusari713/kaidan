@@ -2,24 +2,24 @@ import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 
-import { cn } from '@/src/lib/utils'
+import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-	'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+	'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
 	{
 		variants: {
 			variant: {
 				default: 'bg-primary text-primary-foreground hover:bg-primary/90',
 				destructive: 'hover:bg-destructive/60 hover:text-destructive-foreground font-normal',
-				outline: 'border border-input bg-background hover:bg-accent hover:text-primary-foreground',
+				outline: 'border border-input bg-background hover:bg-primary/80 hover:text-primary-foreground',
 				secondary: 'bg-secondary text-secondary hover:bg-secondary/80',
-				ghost: 'hover:bg-accent/20 font-normal',
+				ghost: 'hover:bg-primary/20 font-normal',
 				link: 'text-primary underline-offset-4 hover:underline',
 			},
 			size: {
 				default: 'h-10 px-4 py-2',
-				sm: 'h-9 rounded-xl px-3',
-				lg: 'h-11 rounded-xl px-8',
+				sm: 'h-9 rounded-md px-3',
+				lg: 'h-11 rounded-md px-8',
 				icon: 'h-10 w-10',
 			},
 		},

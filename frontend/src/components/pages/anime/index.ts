@@ -1,0 +1,5 @@
+export { AnimeInfoCard } from './AnimeInfoCard'
+export { AnimeCommentsTab } from './tabs/comments/AnimeCommentsTab'
+export { AnimeInfoTab } from './tabs/info/AnimeInfoTab'
+export { AnimeReviewTab } from './tabs/reviews/AnimeReviewTab'
+export { AnimeVideoTab } from './tabs/video/AnimeVideoTab'

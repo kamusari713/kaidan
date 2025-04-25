@@ -1,3 +1,7 @@
+export interface AnimeData {
+	anime: AnimeInfo
+}
+
 export interface AnimeInfo {
 	id: string
 

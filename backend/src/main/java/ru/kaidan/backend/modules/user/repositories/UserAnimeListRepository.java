@@ -7,9 +7,7 @@ import ru.kaidan.backend.modules.user.entities.UserAnimeListEntity;
 
 public interface UserAnimeListRepository extends MongoRepository<UserAnimeListEntity, String> {
 
-  Optional<UserAnimeListEntity> findByUserIdAndAnimeId(String userId, String animeId);
-
-  List<UserAnimeListEntity> findAllByUserId(String userId);
-
   List<UserAnimeListEntity> findByUserId(String userId);
+
+  Optional<UserAnimeListEntity> findByUserIdAndShikimoriId(String userId, String animeId);
 }

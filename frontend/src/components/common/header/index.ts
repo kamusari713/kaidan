@@ -1,4 +1,3 @@
-export { CatalogPopover } from './catalogPopover'
-export { NotificationPopover } from './notificationPopover'
-export { ThemeToggle } from './themeToggle'
-export { UserPopover } from './userPopover'
+export { CatalogPopover } from './CatalogPopover'
+export { ThemeToggle } from './ThemeToggle'
+export { UserPopover } from './UserPopover'

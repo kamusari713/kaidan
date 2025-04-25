@@ -14,10 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class TokenEntity {
 
-    @Id
-    private String id;
-    private String token;
-    private Boolean revoked;
-    private TokenType type;
-    private String userId;
+  @Id private String id;
+  private String token;
+  private Boolean revoked;
+  private String userId;
 }
