@@ -1,1 +1,182 @@
-[{"_id":{"$oid":"680214374ccce5464d95d4a9"},"userId":"67ae621134ef540ef429c26e","reviewId":"680214354ccce5464d95d4a8","vote":"LIKE","createdAt":{"$date":"2025-04-18T08:58:31.458Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"680214a24ccce5464d95d4ae"},"userId":"67ae621134ef540ef429c26e","reviewId":"6802149e4ccce5464d95d4ad","vote":"DISLIKE","createdAt":{"$date":"2025-04-18T09:00:18.495Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"680215284ccce5464d95d4b2"},"userId":"67fecf9e065fe87a8133dcb7","reviewId":"6802149e4ccce5464d95d4ad","vote":"LIKE","createdAt":{"$date":"2025-04-18T09:02:32.735Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"680215324ccce5464d95d4b4"},"userId":"67fecf9e065fe87a8133dcb7","reviewId":"6802152f4ccce5464d95d4b3","vote":"DISLIKE","createdAt":{"$date":"2025-04-18T09:02:42.923Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"6804ddeb79b8005c4cf2b1e7"},"userId":"67fecf9e065fe87a8133dcb7","reviewId":"6804dde279b8005c4cf2b1e6","vote":"LIKE","createdAt":{"$date":"2025-04-20T11:43:39.378Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"6804fbcb79b8005c4cf2b1ee"},"userId":"67ae621134ef540ef429c26e","reviewId":"6804fb2a79b8005c4cf2b1ed","vote":"LIKE","createdAt":{"$date":"2025-04-20T13:51:09.692Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"6804fbcc79b8005c4cf2b1ef"},"userId":"67ae621134ef540ef429c26e","reviewId":"6804dde279b8005c4cf2b1e6","vote":"DISLIKE","createdAt":{"$date":"2025-04-20T13:51:08.985Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"680648b3ee7a075318720d1e"},"userId":"67ae621134ef540ef429c26e","reviewId":"68053246cc8e3a0ddccbb164","vote":"LIKE","createdAt":{"$date":"2025-04-23T23:02:22.015Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"6806499dee7a075318720d21"},"userId":"67ae621134ef540ef429c26e","reviewId":"6806499cee7a075318720d20","vote":"LIKE","createdAt":{"$date":"2025-04-23T12:12:38.343Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"68064b08ee7a075318720d23"},"userId":"67ae621134ef540ef429c26e","reviewId":"68064b07ee7a075318720d22","vote":"LIKE","createdAt":{"$date":"2025-04-21T13:41:28.253Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"6808e8b3cd40f33ab4c6c0d9"},"userId":"67ae621134ef540ef429c26e","reviewId":"6808e8a6cd40f33ab4c6c0d8","vote":"LIKE","createdAt":{"$date":"2025-04-23T13:18:43.111Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"6808e8bccd40f33ab4c6c0db"},"userId":"67fecf9e065fe87a8133dcb7","reviewId":"6808e8a6cd40f33ab4c6c0d8","vote":"LIKE","createdAt":{"$date":"2025-04-23T13:18:52.956Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"6808e8cccd40f33ab4c6c0dd"},"userId":"6805a63681df97076b8c3360","reviewId":"6808e8a6cd40f33ab4c6c0d8","vote":"LIKE","createdAt":{"$date":"2025-04-23T13:19:08.947Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"68091a852e35a509ec032840"},"userId":"67ae621134ef540ef429c26e","reviewId":"68053048cc8e3a0ddccbb162","vote":"DISLIKE","createdAt":{"$date":"2025-04-23T16:51:18.004Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"},{"_id":{"$oid":"680925d82e35a509ec032841"},"userId":"67ae621134ef540ef429c26e","reviewId":"680500dc79b8005c4cf2b1f0","vote":"LIKE","createdAt":{"$date":"2025-04-23T17:39:36.048Z"},"_class":"ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"}]
+[
+  {
+    "_id": {
+      "$oid": "680214374ccce5464d95d4a9"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "680214354ccce5464d95d4a8",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-18T08:58:31.458Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "680214a24ccce5464d95d4ae"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "6802149e4ccce5464d95d4ad",
+    "vote": "DISLIKE",
+    "createdAt": {
+      "$date": "2025-04-18T09:00:18.495Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "680215284ccce5464d95d4b2"
+    },
+    "userId": "67fecf9e065fe87a8133dcb7",
+    "reviewId": "6802149e4ccce5464d95d4ad",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-18T09:02:32.735Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "680215324ccce5464d95d4b4"
+    },
+    "userId": "67fecf9e065fe87a8133dcb7",
+    "reviewId": "6802152f4ccce5464d95d4b3",
+    "vote": "DISLIKE",
+    "createdAt": {
+      "$date": "2025-04-18T09:02:42.923Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6804ddeb79b8005c4cf2b1e7"
+    },
+    "userId": "67fecf9e065fe87a8133dcb7",
+    "reviewId": "6804dde279b8005c4cf2b1e6",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-20T11:43:39.378Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6804fbcb79b8005c4cf2b1ee"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "6804fb2a79b8005c4cf2b1ed",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-20T13:51:09.692Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6804fbcc79b8005c4cf2b1ef"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "6804dde279b8005c4cf2b1e6",
+    "vote": "DISLIKE",
+    "createdAt": {
+      "$date": "2025-04-20T13:51:08.985Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "680648b3ee7a075318720d1e"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "68053246cc8e3a0ddccbb164",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-23T23:02:22.015Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6806499dee7a075318720d21"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "6806499cee7a075318720d20",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-23T12:12:38.343Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "68064b08ee7a075318720d23"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "68064b07ee7a075318720d22",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-21T13:41:28.253Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6808e8b3cd40f33ab4c6c0d9"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "6808e8a6cd40f33ab4c6c0d8",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-23T13:18:43.111Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6808e8bccd40f33ab4c6c0db"
+    },
+    "userId": "67fecf9e065fe87a8133dcb7",
+    "reviewId": "6808e8a6cd40f33ab4c6c0d8",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-23T13:18:52.956Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6808e8cccd40f33ab4c6c0dd"
+    },
+    "userId": "6805a63681df97076b8c3360",
+    "reviewId": "6808e8a6cd40f33ab4c6c0d8",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-23T13:19:08.947Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "68091a852e35a509ec032840"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "68053048cc8e3a0ddccbb162",
+    "vote": "DISLIKE",
+    "createdAt": {
+      "$date": "2025-04-23T16:51:18.004Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  },
+  {
+    "_id": {
+      "$oid": "680925d82e35a509ec032841"
+    },
+    "userId": "67ae621134ef540ef429c26e",
+    "reviewId": "680500dc79b8005c4cf2b1f0",
+    "vote": "LIKE",
+    "createdAt": {
+      "$date": "2025-04-23T17:39:36.048Z"
+    },
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewVoteEntity"
+  }
+]

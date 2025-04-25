@@ -1,1 +1,164 @@
-[{"_id":{"$oid":"680500dc79b8005c4cf2b1f0"},"title":"Ну название какое то допустим заебали блять","text":"Ну говно ебаное чо сказать то","userId":"67ae621134ef540ef429c26e","userName":"admin","animeId":"1535","createdAt":{"$date":"2025-04-20T14:12:44.04Z"},"score":0,"likes":1,"dislikes":0,"status":"NEGATIVE","_class":"ru.kaidan.backend.modules.review.entities.ReviewEntity"},{"_id":{"$oid":"68053048cc8e3a0ddccbb162"},"title":"ебаное говно","text":"только дауны это смотрят","userId":"67ae621134ef540ef429c26e","userName":"admin","animeId":"31964","createdAt":{"$date":"2025-04-20T17:35:04.106Z"},"score":1,"likes":0,"dislikes":1,"status":"NEGATIVE","_class":"ru.kaidan.backend.modules.review.entities.ReviewEntity"},{"_id":{"$oid":"68053246cc8e3a0ddccbb164"},"title":"норм но говнище ебаное","text":"ебаное говнище но сойдет","userId":"67ae621134ef540ef429c26e","userName":"admin","animeId":"16498","createdAt":{"$date":"2025-04-20T17:43:34.835Z"},"score":5,"likes":1,"dislikes":0,"status":"NEUTRAL","_class":"ru.kaidan.backend.modules.review.entities.ReviewEntity"},{"_id":{"$oid":"680648ccee7a075318720d1f"},"title":"для пидоров","text":"хуйня для пидорасов","userId":"67ae621134ef540ef429c26e","userName":"admin","animeId":"57181","createdAt":{"$date":"2025-04-21T13:31:56.604Z"},"score":0,"likes":0,"dislikes":0,"status":"NEGATIVE","_class":"ru.kaidan.backend.modules.review.entities.ReviewEntity"},{"_id":{"$oid":"6806499cee7a075318720d20"},"title":"доя норм пацанов","text":"для норм пацанчиков","userId":"67ae621134ef540ef429c26e","userName":"admin","animeId":"22319","createdAt":{"$date":"2025-04-21T13:35:23.974Z"},"score":10,"likes":1,"dislikes":0,"status":"POSITIVE","_class":"ru.kaidan.backend.modules.review.entities.ReviewEntity"},{"_id":{"$oid":"68064b07ee7a075318720d22"},"title":"ваще для педиков","text":"сука для заднеприводных наъуй","userId":"67ae621134ef540ef429c26e","userName":"admin","animeId":"40748","createdAt":{"$date":"2025-04-21T13:41:27.452Z"},"score":0,"likes":1,"dislikes":0,"status":"NEGATIVE","_class":"ru.kaidan.backend.modules.review.entities.ReviewEntity"},{"_id":{"$oid":"6806651bee7a075318720d2b"},"title":"ну такое","text":"50/50 ну для дауноф крч","userId":"67ae621134ef540ef429c26e","userName":"admin","animeId":"513","createdAt":{"$date":"2025-04-21T15:32:43.572Z"},"score":5,"likes":0,"dislikes":0,"status":"NEUTRAL","_class":"ru.kaidan.backend.modules.review.entities.ReviewEntity"},{"_id":{"$oid":"68066584ee7a075318720d2c"},"title":"пиздец.....","text":"это же хуйня для даунофж","userId":"67ae621134ef540ef429c26e","userName":"admin","animeId":"z235","createdAt":{"$date":"2025-04-21T15:34:28.059Z"},"score":3,"likes":0,"dislikes":0,"status":"NEGATIVE","_class":"ru.kaidan.backend.modules.review.entities.ReviewEntity"},{"_id":{"$oid":"6808e8a6cd40f33ab4c6c0d8"},"title":"я у которого ебалась мама","text":"ну думаю раза 3 было","userId":"67ae621134ef540ef429c26e","userName":"admin","animeId":"54857","createdAt":{"$date":"2025-04-23T13:18:30.714Z"},"score":10,"likes":3,"dislikes":0,"status":"POSITIVE","_class":"ru.kaidan.backend.modules.review.entities.ReviewEntity"}]
+[
+  {
+    "_id": {
+      "$oid": "680500dc79b8005c4cf2b1f0"
+    },
+    "title": "Ну название какое то допустим заебали блять",
+    "text": "Ну говно ебаное чо сказать то",
+    "userId": "67ae621134ef540ef429c26e",
+    "userName": "admin",
+    "animeId": "1535",
+    "createdAt": {
+      "$date": "2025-04-20T14:12:44.04Z"
+    },
+    "score": 0,
+    "likes": 1,
+    "dislikes": 0,
+    "status": "NEGATIVE",
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewEntity"
+  },
+  {
+    "_id": {
+      "$oid": "68053048cc8e3a0ddccbb162"
+    },
+    "title": "ебаное говно",
+    "text": "только дауны это смотрят",
+    "userId": "67ae621134ef540ef429c26e",
+    "userName": "admin",
+    "animeId": "31964",
+    "createdAt": {
+      "$date": "2025-04-20T17:35:04.106Z"
+    },
+    "score": 1,
+    "likes": 0,
+    "dislikes": 1,
+    "status": "NEGATIVE",
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewEntity"
+  },
+  {
+    "_id": {
+      "$oid": "68053246cc8e3a0ddccbb164"
+    },
+    "title": "норм но говнище ебаное",
+    "text": "ебаное говнище но сойдет",
+    "userId": "67ae621134ef540ef429c26e",
+    "userName": "admin",
+    "animeId": "16498",
+    "createdAt": {
+      "$date": "2025-04-20T17:43:34.835Z"
+    },
+    "score": 5,
+    "likes": 1,
+    "dislikes": 0,
+    "status": "NEUTRAL",
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewEntity"
+  },
+  {
+    "_id": {
+      "$oid": "680648ccee7a075318720d1f"
+    },
+    "title": "для пидоров",
+    "text": "хуйня для пидорасов",
+    "userId": "67ae621134ef540ef429c26e",
+    "userName": "admin",
+    "animeId": "57181",
+    "createdAt": {
+      "$date": "2025-04-21T13:31:56.604Z"
+    },
+    "score": 0,
+    "likes": 0,
+    "dislikes": 0,
+    "status": "NEGATIVE",
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6806499cee7a075318720d20"
+    },
+    "title": "доя норм пацанов",
+    "text": "для норм пацанчиков",
+    "userId": "67ae621134ef540ef429c26e",
+    "userName": "admin",
+    "animeId": "22319",
+    "createdAt": {
+      "$date": "2025-04-21T13:35:23.974Z"
+    },
+    "score": 10,
+    "likes": 1,
+    "dislikes": 0,
+    "status": "POSITIVE",
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewEntity"
+  },
+  {
+    "_id": {
+      "$oid": "68064b07ee7a075318720d22"
+    },
+    "title": "ваще для педиков",
+    "text": "сука для заднеприводных наъуй",
+    "userId": "67ae621134ef540ef429c26e",
+    "userName": "admin",
+    "animeId": "40748",
+    "createdAt": {
+      "$date": "2025-04-21T13:41:27.452Z"
+    },
+    "score": 0,
+    "likes": 1,
+    "dislikes": 0,
+    "status": "NEGATIVE",
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6806651bee7a075318720d2b"
+    },
+    "title": "ну такое",
+    "text": "50/50 ну для дауноф крч",
+    "userId": "67ae621134ef540ef429c26e",
+    "userName": "admin",
+    "animeId": "513",
+    "createdAt": {
+      "$date": "2025-04-21T15:32:43.572Z"
+    },
+    "score": 5,
+    "likes": 0,
+    "dislikes": 0,
+    "status": "NEUTRAL",
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewEntity"
+  },
+  {
+    "_id": {
+      "$oid": "68066584ee7a075318720d2c"
+    },
+    "title": "пиздец.....",
+    "text": "это же хуйня для даунофж",
+    "userId": "67ae621134ef540ef429c26e",
+    "userName": "admin",
+    "animeId": "z235",
+    "createdAt": {
+      "$date": "2025-04-21T15:34:28.059Z"
+    },
+    "score": 3,
+    "likes": 0,
+    "dislikes": 0,
+    "status": "NEGATIVE",
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6808e8a6cd40f33ab4c6c0d8"
+    },
+    "title": "я у которого ебалась мама",
+    "text": "ну думаю раза 3 было",
+    "userId": "67ae621134ef540ef429c26e",
+    "userName": "admin",
+    "animeId": "54857",
+    "createdAt": {
+      "$date": "2025-04-23T13:18:30.714Z"
+    },
+    "score": 10,
+    "likes": 3,
+    "dislikes": 0,
+    "status": "POSITIVE",
+    "_class": "ru.kaidan.backend.modules.review.entities.ReviewEntity"
+  }
+]

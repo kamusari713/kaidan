@@ -1,1 +1,74 @@
-[{"_id":{"$oid":"67ae621134ef540ef429c26e"},"username":"admin","email":"admin@a.ru","password":"$2a$10$5Csm49VmQctKqgZsRGnEyOHV3VlYGqW.3biUeFP2/Q2hJ7TMYz4.K","bio":"hi im new here, im homophobic btw","role":"ROLE_ADMIN","banned":false,"_class":"ru.kaidan.backend.modules.user.entities.UserEntity"},{"_id":{"$oid":"67fecf9e065fe87a8133dcb7"},"username":"user1","email":"user1@a.ru","password":"$2a$10$XM8y0YCcs6u..PtkPTZFI.WV62BzX/PgteaNTOlomZ833iYePEY.6","bio":"graphql говно","role":"ROLE_USER","banned":false,"_class":"ru.kaidan.backend.modules.user.entities.UserEntity"},{"_id":{"$oid":"6805a63681df97076b8c3360"},"username":"user2","email":"user2@mail.ru","password":"$2a$10$DJTzdEaXofIHBLWVQlOE8uHTTQibzYW56K/d4jlbwdOL0PvkzD8PS","bio":"","role":"ROLE_USER","banned":false,"_class":"ru.kaidan.backend.modules.user.entities.UserEntity"},{"_id":{"$oid":"68064f80ee7a075318720d26"},"username":"user3","email":"user3@a.ru","password":"$2a$10$uIur4Io/Mad3izMTT7FT7OznqHHCVnmZpffBBvMi2SFndyubn0lxK","bio":"","role":"ROLE_USER","banned":false,"_class":"ru.kaidan.backend.modules.user.entities.UserEntity"},{"_id":{"$oid":"680663aeee7a075318720d29"},"username":"user4","email":"user4@a.ru","password":"$2a$10$.CxjqZlgQ9Bwt5ikGil/xOZsXdkLIFJi/Disfrdn7QEpNr9kxFFSi","bio":"","role":"ROLE_USER","banned":false,"_class":"ru.kaidan.backend.modules.user.entities.UserEntity"},{"_id":{"$oid":"6806649aee7a075318720d2a"},"username":"user6","email":"user6@a.ru","password":"$2a$10$t9R9/Oq5ky.Q3nRgH8j82ul/dUTo/NkNHKt2hi/hDcCciYyfkfxMa","bio":"","role":"ROLE_USER","banned":false,"_class":"ru.kaidan.backend.modules.user.entities.UserEntity"}]
+[
+  {
+    "_id": {
+      "$oid": "67ae621134ef540ef429c26e"
+    },
+    "username": "admin",
+    "email": "admin@a.ru",
+    "password": "$2a$10$5Csm49VmQctKqgZsRGnEyOHV3VlYGqW.3biUeFP2/Q2hJ7TMYz4.K",
+    "bio": "hi im new here, im homophobic btw",
+    "role": "ROLE_ADMIN",
+    "banned": false,
+    "_class": "ru.kaidan.backend.modules.user.entities.UserEntity"
+  },
+  {
+    "_id": {
+      "$oid": "67fecf9e065fe87a8133dcb7"
+    },
+    "username": "user1",
+    "email": "user1@a.ru",
+    "password": "$2a$10$XM8y0YCcs6u..PtkPTZFI.WV62BzX/PgteaNTOlomZ833iYePEY.6",
+    "bio": "graphql говно",
+    "role": "ROLE_USER",
+    "banned": false,
+    "_class": "ru.kaidan.backend.modules.user.entities.UserEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6805a63681df97076b8c3360"
+    },
+    "username": "user2",
+    "email": "user2@mail.ru",
+    "password": "$2a$10$DJTzdEaXofIHBLWVQlOE8uHTTQibzYW56K/d4jlbwdOL0PvkzD8PS",
+    "bio": "",
+    "role": "ROLE_USER",
+    "banned": false,
+    "_class": "ru.kaidan.backend.modules.user.entities.UserEntity"
+  },
+  {
+    "_id": {
+      "$oid": "68064f80ee7a075318720d26"
+    },
+    "username": "user3",
+    "email": "user3@a.ru",
+    "password": "$2a$10$uIur4Io/Mad3izMTT7FT7OznqHHCVnmZpffBBvMi2SFndyubn0lxK",
+    "bio": "",
+    "role": "ROLE_USER",
+    "banned": false,
+    "_class": "ru.kaidan.backend.modules.user.entities.UserEntity"
+  },
+  {
+    "_id": {
+      "$oid": "680663aeee7a075318720d29"
+    },
+    "username": "user4",
+    "email": "user4@a.ru",
+    "password": "$2a$10$.CxjqZlgQ9Bwt5ikGil/xOZsXdkLIFJi/Disfrdn7QEpNr9kxFFSi",
+    "bio": "",
+    "role": "ROLE_USER",
+    "banned": false,
+    "_class": "ru.kaidan.backend.modules.user.entities.UserEntity"
+  },
+  {
+    "_id": {
+      "$oid": "6806649aee7a075318720d2a"
+    },
+    "username": "user6",
+    "email": "user6@a.ru",
+    "password": "$2a$10$t9R9/Oq5ky.Q3nRgH8j82ul/dUTo/NkNHKt2hi/hDcCciYyfkfxMa",
+    "bio": "",
+    "role": "ROLE_USER",
+    "banned": false,
+    "_class": "ru.kaidan.backend.modules.user.entities.UserEntity"
+  }
+]
