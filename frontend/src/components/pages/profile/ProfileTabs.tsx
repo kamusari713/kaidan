@@ -17,7 +17,7 @@ export const ProfileTabs = ({ userId }: { userId: string }) => {
 		<Tabs value={currentTab || 'titles'} onValueChange={handleTabChange}>
 			<TabsList className="px-4">
 				<TabsTrigger variant="section" value="titles">
-					Тайтлы
+					Коллекции
 				</TabsTrigger>
 				<TabsTrigger variant="section" value="comments">
 					Комментарии

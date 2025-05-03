@@ -26,6 +26,11 @@ import { UserDTO } from '@/types/user'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useUserComments, useUserReviews } from '@/hooks/profile'
+import { useQuery } from '@tanstack/react-query'
+import { CommentCardDTO } from '@/types/comment'
+import { getUserCommens, getUserReviews } from '@/services/rest/user/profile'
+import { Review } from '@/types/review'
 
 const roleOptions = [
 	{ value: 'ROLE_ADMIN', label: 'Админ' },
@@ -51,6 +56,41 @@ const AdminPage = () => {
 	const updateMutation = useUpdateUser()
 	const registerForm = useForm<CreateUserFormData>()
 	const updateForm = useForm<UserDTO>()
+
+	const {
+		data: commentsData,
+	} = useQuery<CommentCardDTO[]>({
+		queryKey: ['user-comments', selectedUser?.id],
+		queryFn: () => getUserCommens(selectedUser?.id),
+		enabled: !!selectedUser
+	})
+
+	const {
+		data: reviewsData,
+	} = useQuery<Review[]>({
+		queryKey: ['user-reviews', selectedUser?.id],
+		queryFn: () => getUserReviews(selectedUser?.id),
+		enabled: !!selectedUser
+	})
+
+	const exportUserData = () => {
+		if (!selectedUser) return
+
+		const data = {
+			user: selectedUser.username,
+			comments: commentsData || [],
+			reviews: reviewsData || []
+		}
+
+		const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+		const url = URL.createObjectURL(blob)
+		const link = document.createElement('a')
+		link.href = url
+		link.download = `${selectedUser.username}.json`
+		document.body.appendChild(link)
+		link.click()
+		document.body.removeChild(link)
+	}
 
 	const handleSort = (column: string) => {
 		if (orderBy === column) {
@@ -105,7 +145,7 @@ const AdminPage = () => {
 
 	return (
 		<div className="p-6">
-			<h1 className="text-2xl font-bold mb-4">Админ панель - Пользователи</h1>
+			<h1 className="text-2xl font-bold mb-4">Панель администратора - Пользователи</h1>
 
 			{/* Pagination Controls */}
 			<div className="my-4 flex items-center gap-4">
@@ -160,6 +200,16 @@ const AdminPage = () => {
 									}}
 								>
 									Изменить
+								</Button>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={(e) => {
+										e.stopPropagation()
+										exportUserData(user)
+									}}
+								>
+									Экспорт
 								</Button>
 								<Button
 									variant={user.banned ? 'default' : 'destructive'}

@@ -24,6 +24,7 @@ type Query {
 type Mutation {
     createAnime(input: AnimeRaw): Anime!
     updateAnime(shikimoriId: String!, input: AnimeRaw!): Anime!
+    deleteAnime(shikimoriId: String!): Anime
 }
 
 input AnimeFilter {

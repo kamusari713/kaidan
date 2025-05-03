@@ -3,6 +3,7 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Label, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Textarea } from '@/components/ui'
 import { apolloClient } from '@/lib/clients'
 import { gql, useMutation, useQuery } from '@apollo/client'
+import {useQuery as tanstackUseQuery} from '@tanstack/react-query'
 import debounce from 'lodash.debounce'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -10,6 +11,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ReactSelect from 'react-select'
 import AsyncSelect from 'react-select/async'
+import { getAnimeComments, getAnimeReviews } from '@/services/rest/anime'
 
 const CREATE_ANIME = gql`
 	mutation CreateAnime($input: AnimeRaw!) {
@@ -21,6 +23,7 @@ const CREATE_ANIME = gql`
 			kind
 			rating
 			episodes
+            duration
 			coverImage {
 				extraLarge
 				banner
@@ -136,9 +139,15 @@ const GET_ANIMES = gql`
 				rating
 				status {
 					RU
+					EN
 				}
 				shikimoriScore
 				episodes
+				duration
+				externalLinks {
+					source
+					url
+				}
 				coverImage {
 					extraLarge
 					banner
@@ -173,6 +182,57 @@ export default function AdminAnimeComponent() {
 	const kindOptions = kindsData?.kinds?.map((k) => ({ value: k, label: k })) || []
 	const ratingOptions = ratingsData?.ratings?.map((r) => ({ value: r, label: r })) || []
 	const studioOptions = studiosData?.studios?.map((s) => ({ value: s, label: s })) || []
+	const statusOptions = [
+		{ value: 'ВЫШЕЛ', label: 'ВЫШЕЛ' },
+		{ value: 'ОНГОИНГ', label: 'ОНГОИНГ' }
+	];
+
+	const [page, setPage] = useState(1)
+	const [perPage] = useState(10)
+	const [sort, setSort] = useState({ orderBy: 'shikimoriId', direction: 'ASC' })
+	const [search, setSearch] = useState('')
+	const [inputValue, setInputValue] = useState('')
+	const [isAddOpen, setIsAddOpen] = useState(false)
+	const [isEditOpen, setIsEditOpen] = useState(false)
+	const [selectedAnime, setSelectedAnime] = useState(null)
+
+	const {
+		data: commentsData,
+	} = tanstackUseQuery({
+		queryKey: ['anime-comments', selectedAnime?.shikimoriId],
+		queryFn: () => getAnimeComments(selectedAnime?.shikimoriId),
+		staleTime: 5 * 60 * 1000,
+		enabled: !!selectedAnime,
+	})
+
+	const {
+		data: reviewsData,
+	} = tanstackUseQuery({
+		queryKey: ['anime-reviews', selectedAnime?.shikimoriId],
+		queryFn: () => getAnimeReviews(selectedAnime?.shikimoriId),
+		enabled: !!selectedAnime,
+	})
+
+
+	const exportAnimeData = () => {
+		if (!selectedAnime || !commentsData || !reviewsData) return;
+
+		const exportData = {
+			anime: selectedAnime.title.RU,
+			comments: commentsData,
+			reviews: reviewsData,
+		};
+
+		const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = `${selectedAnime.title.RU}.json`;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	};
+
 
 	const loadTags = async (input) => {
 		const { data } = await apolloClient.query({
@@ -195,17 +255,20 @@ export default function AdminAnimeComponent() {
 			kind: '',
 			rating: '',
 			episodes: 0,
+			duration: 0,
+			startDate: '',
+			endDate: '',
+			status: { EN: '', RU: '' },
+			coverImage: { extraLarge: '', banner: '' },
 			genres: [],
 			tags: [],
 			studios: [],
-			coverImageExtraLarge: '',
-			coverImageBanner: '',
-			descriptionRU: '',
-			descriptionEN: '',
+			description: { RU: '', EN: '' },
+			externalLinks: [],
 		},
-	})
+	});
 
-	addForm.register('coverImageExtraLarge', {
+	addForm.register('coverImage.extraLarge', {
 		pattern: {
 			value: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))/i,
 			message: 'Введите корректный URL изображения',
@@ -226,17 +289,13 @@ export default function AdminAnimeComponent() {
 			coverImageBanner: '',
 			descriptionRU: '',
 			descriptionEN: '',
+			externalLinks: [],
+			duration: 0,
+			startDate: '',
+			endDate: '',
+			status: { EN: '', RU: '' },
 		},
 	})
-
-	const [page, setPage] = useState(1)
-	const [perPage] = useState(10)
-	const [sort, setSort] = useState({ orderBy: 'shikimoriId', direction: 'ASC' })
-	const [search, setSearch] = useState('')
-	const [inputValue, setInputValue] = useState('')
-	const [isAddOpen, setIsAddOpen] = useState(false)
-	const [isEditOpen, setIsEditOpen] = useState(false)
-	const [selectedAnime, setSelectedAnime] = useState(null)
 
 	const { data, loading, error } = useQuery(GET_ANIMES, {
 		variables: { page, perPage, sort, search },
@@ -260,22 +319,44 @@ export default function AdminAnimeComponent() {
 
 	const formatAnimeInput = (data) => ({
 		shikimoriId: data.shikimoriId,
-		title: { RU: data.titleRU },
-		kind: data.kind,
-		rating: data.rating,
-		episodes: data.episodes,
-		coverImage: {
-			extraLarge: data.coverImageExtraLarge,
-			banner: data.coverImageBanner,
+		title: {
+			RU: data.titleRU,
+			EN: "", // добавьте другие языки если нужно
+			ROMAJI: "",
+			NATIVE: ""
 		},
 		description: {
-			RU: data.descriptionRU,
-			EN: data.descriptionEN,
+			RU: data.description.RU,
+			EN: data.description.EN
 		},
-		genres: data.genres.map((genre) => ({ RU: genre })),
-		tags: data.tags.map((tag) => ({ RU: { name: tag } })),
+		episodes: data.episodes,
+		duration: data.duration,
+		startDate: data.startDate,
+		endDate: data.endDate,
+		status: {
+			RU: data.status.RU,
+			EN: data.status.EN
+		},
+		coverImage: {
+			extraLarge: data.coverImage?.extraLarge,
+			banner: data.coverImage?.banner,
+			large: "",
+			medium: "",
+			color: ""
+		},
+		genres: data.genres.map(g => ({ RU: g, EN: "" })),
+		tags: data.tags.map(t => ({
+			RU: { name: t, description: "" },
+			EN: { name: "", description: "" },
+			rank: 0,
+			isSpoiler: false
+		})),
 		studios: data.studios,
-	})
+		externalLinks: data.externalLinks.map(link => ({
+			source: link.source,
+			url: link.url
+		}))
+	});
 
 	const animes = data?.page?.media || []
 	const totalPages = data?.page?.pageInfo?.totalPages || 1
@@ -321,17 +402,15 @@ export default function AdminAnimeComponent() {
 		}
 	}
 
-	const onDeleteSubmit = async () => {
-		if (selectedAnime) {
+	const onDeleteSubmit = async (shikimoriId) => {
 			try {
 				await deleteAnime({
-					variables: { shikimoriId: selectedAnime.shikimoriId },
+					variables: { shikimoriId: shikimoriId },
 				})
 				setSelectedAnime(null)
 			} catch (err) {
 				console.error('Ошибка удаления аниме:', err)
 			}
-		}
 	}
 
 	useEffect(() => {
@@ -342,16 +421,25 @@ export default function AdminAnimeComponent() {
 				kind: selectedAnime.kind || '',
 				rating: selectedAnime.rating || '',
 				episodes: selectedAnime.episodes || 0,
-				genres: selectedAnime.genres?.map((g) => g.RU) || [],
-				tags: selectedAnime.tags?.map((t) => t.RU.name) || [],
+				duration: selectedAnime.duration || 0,
+				startDate: selectedAnime.startDate || '',
+				endDate: selectedAnime.endDate || '',
+				status: selectedAnime.status || { EN: '', RU: '' },
+				coverImage: {
+					extraLarge: selectedAnime.coverImage?.extraLarge || '',
+					banner: selectedAnime.coverImage?.banner || '',
+				},
+				genres: selectedAnime.genres?.map(g => g.RU) || [],
+				tags: selectedAnime.tags?.map(t => t.RU.name) || [],
 				studios: selectedAnime.studios || [],
-				coverImageExtraLarge: selectedAnime.coverImage?.extraLarge || '',
-				coverImageBanner: selectedAnime.coverImage?.banner || '',
-				descriptionRU: selectedAnime.description?.RU || '',
-				descriptionEN: selectedAnime.description?.EN || '',
-			})
+				description: {
+					RU: selectedAnime.description?.RU || '',
+					EN: selectedAnime.description?.EN || '',
+				},
+				externalLinks: selectedAnime.externalLinks || [],
+			});
 		}
-	}, [selectedAnime, editForm])
+	}, [selectedAnime, editForm]);
 
 	const debouncedSearch = useCallback(
 		debounce((value) => {
@@ -384,7 +472,7 @@ export default function AdminAnimeComponent() {
 
 	return (
 		<div className="p-6">
-			<h1 className="text-2xl font-bold mb-4">Админ панель - Аниме</h1>
+			<h1 className="text-2xl font-bold mb-4">Панель администратора - Аниме</h1>
 
 			{/* Панель поиска и пагинации */}
 			<div className="my-4 flex items-center gap-4">
@@ -449,18 +537,28 @@ export default function AdminAnimeComponent() {
 									disabled={updateLoading}
 								>
 									{updateLoading ? 'Обновление...' : 'Редактировать'}
-								</Button>
+								</Button><Button
+								variant="outline"
+								size="sm"
+								onClick={(e) => {
+									e.stopPropagation()
+									exportAnimeData(anime)}}
+							>
+								Экспорт
+							</Button>
 								<Button
 									variant="destructive"
 									size="sm"
-									onClick={(e) => {
+									onClick={async (e) => {
 										e.stopPropagation()
 										setSelectedAnime(anime)
+										await onDeleteSubmit(anime.shikimoriId)
 									}}
 									disabled={deleteLoading}
 								>
 									{deleteLoading ? 'Удаление...' : 'Удалить'}
 								</Button>
+
 							</TableCell>
 						</TableRow>
 					))}
@@ -469,122 +567,214 @@ export default function AdminAnimeComponent() {
 
 			{/* Модалка добавления */}
 			<Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-				<DialogContent>
+				<DialogContent className="max-w-7xl">
 					<DialogHeader>
 						<DialogTitle>Добавить аниме</DialogTitle>
 					</DialogHeader>
 					<form onSubmit={addForm.handleSubmit(onAddSubmit)}>
-						<div className="space-y-4">
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+							{/* Колонка 1: Основные данные */}
 							<div>
-								<Label>Shikimori ID</Label>
-								<Input {...addForm.register('shikimoriId', { required: true })} placeholder="Введите Shikimori ID" />
+								<div>
+									<Label>Shikimori ID</Label>
+									<Input {...addForm.register('shikimoriId', { required: true })} placeholder="12345" />
+								</div>
+								<div>
+									<Label>Название (RU)</Label>
+									<Input {...addForm.register('titleRU', { required: true })} placeholder="Введи название" />
+								</div>
+								<div>
+									<Label>Тип</Label>
+									<Controller
+										control={addForm.control}
+										name="kind"
+										render={({ field }) => (
+											<ReactSelect
+												options={kindOptions}
+												value={field.value ? kindOptions.find(opt => opt.value === field.value) : null}
+												onChange={(selected) => field.onChange(selected?.value)}
+												placeholder="Выберите тип"
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Рейтинг</Label>
+									<Controller
+										control={addForm.control}
+										name="rating"
+										render={({ field }) => (
+											<ReactSelect
+												options={ratingOptions}
+												value={field.value ? ratingOptions.find(opt => opt.value === field.value) : null}
+												onChange={(selected) => field.onChange(selected?.value)}
+												placeholder="Выберите рейтинг"
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Количество эпизодов</Label>
+									<Input type="number" {...addForm.register('episodes', { valueAsNumber: true })} placeholder="0" />
+								</div>
+								<div>
+									<Label>Продолжительность (мин)</Label>
+									<Input type="number" {...addForm.register('duration', { valueAsNumber: true })} placeholder="24" />
+								</div>
+								<div>
+									<Label>Дата начала</Label>
+									<Input type="date" {...addForm.register('startDate')} />
+								</div>
+								<div>
+									<Label>Дата окончания</Label>
+									<Input type="date" {...addForm.register('endDate')} />
+								</div>
+
+								<div>
+									<Label>Обложки</Label>
+									<div className="grid grid-cols-2 gap-4">
+										<div>
+											<Label>Extra Large</Label>
+											<Input {...addForm.register('coverImage.extraLarge')} placeholder="URL" />
+											{addForm.watch('coverImage.extraLarge') && (
+												<Image
+													src={addForm.watch('coverImage.extraLarge')}
+													alt="Обложка"
+													width={200}
+													height={300}
+													className="mt-2 object-cover rounded-md"
+												/>
+											)}
+										</div>
+										<div>
+											<Label>Banner</Label>
+											<Input {...addForm.register('coverImage.banner')} placeholder="URL" />
+											{addForm.watch('coverImage.banner') && (
+												<Image
+													src={addForm.watch('coverImage.banner')}
+													alt="Баннер"
+													width={400}
+													height={200}
+													className="mt-2 object-cover rounded-md"
+												/>
+											)}
+										</div>
+									</div>
+								</div>
 							</div>
+
+							{/* Колонка 2: Категории и связи */}
 							<div>
-								<Label>Название (RU)</Label>
-								<Input {...addForm.register('titleRU', { required: true })} placeholder="Введите название" />
+								<div>
+									<Label>Жанры</Label>
+									<Controller
+										control={addForm.control}
+										name="genres"
+										render={({ field }) => (
+											<ReactSelect
+												isMulti
+												options={genreOptions}
+												value={field.value?.map(v => genreOptions.find(opt => opt.value === v)) || []}
+												onChange={(selected) => field.onChange(selected?.map(opt => opt.value))}
+												placeholder="Выберите жанры"
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Теги</Label>
+									<Controller
+										control={addForm.control}
+										name="tags"
+										render={({ field }) => (
+											<AsyncSelect
+												isMulti
+												cacheOptions
+												defaultOptions
+												loadOptions={loadTags}
+												value={field.value?.map(v => ({ value: v, label: v })) || []}
+												onChange={(selected) => field.onChange(selected?.map(opt => opt.value))}
+												placeholder="Поиск тегов..."
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Студии</Label>
+									<Controller
+										control={addForm.control}
+										name="studios"
+										render={({ field }) => (
+											<ReactSelect
+												isMulti
+												options={studioOptions}
+												value={field.value?.map(v => studioOptions.find(opt => opt.value === v)) || []}
+												onChange={(selected) => field.onChange(selected?.map(opt => opt.value))}
+												placeholder="Выберите студии"
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Статус</Label>
+									<Controller
+										control={addForm.control}
+										name="status"
+										render={({ field }) => (
+											<ReactSelect
+												options={statusOptions} // Добавьте запрос для получения статусов
+												value={field.value.RU ? statusOptions.find(opt => opt.value === field.value.RU) : null}
+												onChange={(selected) => {
+													field.onChange({ EN: selected?.label, RU: selected?.value });
+												}}
+												placeholder="Выберите статус"
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Описание (RU)</Label>
+									<Textarea {...addForm.register('description.RU')} placeholder="Описание на русском" />
+								</div>
+								<div>
+									<Label>Описание (EN)</Label>
+									<Textarea {...addForm.register('description.EN')} placeholder="Описание на английском" />
+								</div>
+								<div>
+									<Label>Внешние ссылки</Label>
+									<div className="space-y-2">
+										{addForm.watch('externalLinks').map((_, index) => (
+											<div key={index} className="flex gap-2">
+												<Input placeholder="Источник" {...addForm.register(`externalLinks[${index}].source`)} />
+												<Input placeholder="URL" {...addForm.register(`externalLinks[${index}].url`)} />
+												<Button
+													variant="outline"
+													onClick={() => {
+														const links = addForm.getValues('externalLinks');
+														links.splice(index, 1);
+														addForm.setValue('externalLinks', links);
+													}}
+												>
+													Удалить
+												</Button>
+											</div>
+										))}
+										<Button
+											variant="outline"
+											onClick={() => {
+												const newLink = addForm.getValues('externalLinks');
+												newLink.push({ source: '', url: '' });
+												addForm.setValue('externalLinks', newLink);
+											}}
+										>
+											Добавить ссылку
+										</Button>
+									</div>
+								</div>
 							</div>
-							<div>
-								<Label>Тип</Label>
-								<Controller
-									control={addForm.control}
-									name="kind"
-									render={({ field }) => (
-										<ReactSelect
-											options={kindOptions}
-											value={field.value ? kindOptions.find((opt) => opt.value === field.value) : null}
-											onChange={(selected) => field.onChange(selected?.value)}
-											placeholder="Выберите тип"
-										/>
-									)}
-								/>
-							</div>
-							<div>
-								<Label>Рейтинг</Label>
-								<Controller
-									control={addForm.control}
-									name="rating"
-									render={({ field }) => (
-										<ReactSelect
-											options={ratingOptions}
-											value={field.value ? ratingOptions.find((opt) => opt.value === field.value) : null}
-											onChange={(selected) => field.onChange(selected?.value)}
-											placeholder="Выберите рейтинг"
-										/>
-									)}
-								/>
-							</div>
-							<div>
-								<Label>Эпизоды</Label>
-								<Input type="number" {...addForm.register('episodes', { valueAsNumber: true })} placeholder="Количество эпизодов" />
-							</div>
-							<div>
-								<Label>Жанры</Label>
-								<Controller
-									control={addForm.control}
-									name="genres"
-									render={({ field }) => (
-										<ReactSelect
-											isMulti
-											options={genreOptions}
-											value={field.value?.map((v) => genreOptions.find((opt) => opt.value === v)) || []}
-											onChange={(selected) => field.onChange(selected?.map((opt) => opt.value) || [])}
-											placeholder="Выберите жанры"
-										/>
-									)}
-								/>
-							</div>
-							<div>
-								<Label>Теги</Label>
-								<Controller
-									control={addForm.control}
-									name="tags"
-									render={({ field }) => (
-										<AsyncSelect
-											isMulti
-											cacheOptions
-											defaultOptions
-											loadOptions={loadTags}
-											value={field.value?.map((v) => ({ value: v, label: v })) || []}
-											onChange={(selected) => field.onChange(selected?.map((opt) => opt.value) || [])}
-											placeholder="Поиск тегов..."
-										/>
-									)}
-								/>
-							</div>
-							<div>
-								<Label>Студии</Label>
-								<Controller
-									control={addForm.control}
-									name="studios"
-									render={({ field }) => (
-										<ReactSelect
-											isMulti
-											options={studioOptions}
-											value={field.value?.map((v) => studioOptions.find((opt) => opt.value === v)) || []}
-											onChange={(selected) => field.onChange(selected?.map((opt) => opt.value) || [])}
-											placeholder="Выберите студии"
-										/>
-									)}
-								/>
-							</div>
-							<div>
-								<Label>Обложка (Extra Large)</Label>
-								<Input {...addForm.register('coverImageExtraLarge')} placeholder="URL обложки (extra large)" />
-								{addForm.watch('coverImageExtraLarge') && <Image src={addForm.watch('coverImageExtraLarge')} alt="Обложка" width={200} height={300} className="mt-2 object-cover" />}
-							</div>
-							<div>
-								<Label>Баннер</Label>
-								<Input {...addForm.register('coverImageBanner')} placeholder="URL баннера" />
-								{addForm.watch('coverImageBanner') && <Image src={addForm.watch('coverImageBanner')} alt="Баннер" width={400} height={200} className="mt-2 object-cover" />}
-							</div>
-							<div>
-								<Label>Описание (RU)</Label>
-								<Textarea {...addForm.register('descriptionRU')} placeholder="Описание на русском" />
-							</div>
-							<div>
-								<Label>Описание (EN)</Label>
-								<Textarea {...addForm.register('descriptionEN')} placeholder="Описание на английском" />
-							</div>
+
+						</div>
+						<div className="flex justify-end mt-6">
 							<Button type="submit" disabled={createLoading}>
 								{createLoading ? 'Создание...' : 'Добавить'}
 							</Button>
@@ -592,130 +782,225 @@ export default function AdminAnimeComponent() {
 					</form>
 				</DialogContent>
 			</Dialog>
-
 			{/* Модалка редактирования */}
 			<Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-				<DialogContent>
+				<DialogContent className="max-w-7xl">
 					<DialogHeader>
 						<DialogTitle>Редактировать аниме</DialogTitle>
 					</DialogHeader>
 					<form onSubmit={editForm.handleSubmit(onEditSubmit)}>
-						<div className="space-y-4">
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+							{/* Колонка 1: Основные данные */}
 							<div>
-								<Label>Shikimori ID</Label>
-								<Input {...editForm.register('shikimoriId', { required: true })} placeholder="Введите Shikimori ID" />
+								<div>
+									<Label>Shikimori ID</Label>
+									<Input {...editForm.register('shikimoriId', { required: true })} readOnly />
+								</div>
+								<div>
+									<Label>Название (RU)</Label>
+									<Input {...editForm.register('titleRU', { required: true })} />
+								</div>
+								<div>
+									<Label>Тип</Label>
+									<Controller
+										control={editForm.control}
+										name="kind"
+										render={({ field }) => (
+											<ReactSelect
+												options={kindOptions}
+												value={field.value ? kindOptions.find(opt => opt.value === field.value) : null}
+												onChange={(selected) => field.onChange(selected?.value)}
+												placeholder="Выберите тип"
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Рейтинг</Label>
+									<Controller
+										control={editForm.control}
+										name="rating"
+										render={({ field }) => (
+											<ReactSelect
+												options={ratingOptions}
+												value={field.value ? ratingOptions.find(opt => opt.value === field.value) : null}
+												onChange={(selected) => field.onChange(selected?.value)}
+												placeholder="Выберите рейтинг"
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Количество эпизодов</Label>
+									<Input type="number" {...editForm.register('episodes', { valueAsNumber: true })} />
+								</div>
+								<div>
+									<Label>Продолжительность (мин)</Label>
+									<Input type="number" {...editForm.register('duration', { valueAsNumber: true })} />
+								</div>
+								<div>
+									<Label>Дата начала</Label>
+									<Input type="date" {...editForm.register('startDate')} />
+								</div>
+								<div>
+									<Label>Дата окончания</Label>
+									<Input type="date" {...editForm.register('endDate')} />
+								</div>
+								<div>
+									<Label>Обложки</Label>
+									<div className="grid grid-cols-2 gap-4">
+										<div>
+											<Label>Extra Large</Label>
+											<Input {...editForm.register('coverImage.extraLarge')} placeholder="URL" />
+											{editForm.watch('coverImage.extraLarge') && (
+												<Image
+													src={editForm.watch('coverImage.extraLarge')}
+													alt="Обложка"
+													width={200}
+													height={300}
+													className="mt-2 object-cover rounded-md"
+												/>
+											)}
+										</div>
+										<div>
+											<Label>Banner</Label>
+											<Input {...editForm.register('coverImage.banner')} placeholder="URL" />
+											{editForm.watch('coverImage.banner') && (
+												<Image
+													src={editForm.watch('coverImage.banner')}
+													alt="Баннер"
+													width={400}
+													height={200}
+													className="mt-2 object-cover rounded-md"
+												/>
+											)}
+										</div>
+									</div>
+								</div>
 							</div>
+
+							{/* Колонка 2: Категории и связи */}
 							<div>
-								<Label>Название (RU)</Label>
-								<Input {...editForm.register('titleRU', { required: true })} placeholder="Введите название" />
+								<div>
+									<Label>Жанры</Label>
+									<Controller
+										control={editForm.control}
+										name="genres"
+										render={({ field }) => (
+											<ReactSelect
+												isMulti
+												options={genreOptions}
+												value={field.value?.map(v => genreOptions.find(opt => opt.value === v)) || []}
+												onChange={(selected) => field.onChange(selected?.map(opt => opt.value))}
+												placeholder="Выберите жанры"
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Теги</Label>
+									<Controller
+										control={editForm.control}
+										name="tags"
+										render={({ field }) => (
+											<AsyncSelect
+												isMulti
+												cacheOptions
+												defaultOptions
+												loadOptions={loadTags}
+												value={field.value?.map(v => ({ value: v, label: v })) || []}
+												onChange={(selected) => field.onChange(selected?.map(opt => opt.value))}
+												placeholder="Поиск тегов..."
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Студии</Label>
+									<Controller
+										control={editForm.control}
+										name="studios"
+										render={({ field }) => (
+											<ReactSelect
+												isMulti
+												options={studioOptions}
+												value={field.value?.map(v => studioOptions.find(opt => opt.value === v)) || []}
+												onChange={(selected) => field.onChange(selected?.map(opt => opt.value))}
+												placeholder="Выберите студии"
+											/>
+										)}
+									/>
+								</div>
+								<div>
+									<Label>Статус</Label>
+									<Controller
+										control={editForm.control}
+										name="status"
+										render={({ field }) => (
+											<ReactSelect
+												options={statusOptions} // Добавьте запрос для получения статусов
+												value={field.value.RU ? statusOptions.find(opt => opt.value === field.value.RU) : null}
+												onChange={(selected) => {
+													field.onChange({ EN: selected?.label, RU: selected?.value });
+												}}
+												placeholder="Выберите статус"
+											/>
+										)}
+									/>
+								</div>
 							</div>
+
+							{/* Колонка 3: Описание и медиа */}
 							<div>
-								<Label>Тип</Label>
-								<Controller
-									control={editForm.control}
-									name="kind"
-									render={({ field }) => (
-										<ReactSelect
-											options={kindOptions}
-											value={field.value ? kindOptions.find((opt) => opt.value === field.value) : null}
-											onChange={(selected) => field.onChange(selected?.value)}
-											placeholder="Выберите тип"
-										/>
-									)}
-								/>
+								<div>
+									<Label>Описание (RU)</Label>
+									<Textarea {...editForm.register('description.RU')} />
+								</div>
+								<div>
+									<Label>Описание (EN)</Label>
+									<Textarea {...editForm.register('description.EN')} />
+								</div>
+								<div>
+									<Label>Внешние ссылки</Label>
+									<div className="space-y-2">
+										{editForm.watch('externalLinks').map((_, index) => (
+											<div key={index} className="flex gap-2">
+												<Input placeholder="Источник" {...editForm.register(`externalLinks[${index}].source`)} />
+												<Input placeholder="URL" {...editForm.register(`externalLinks[${index}].url`)} />
+												<Button
+													variant="outline"
+													onClick={() => {
+														const links = editForm.getValues('externalLinks');
+														links.splice(index, 1);
+														editForm.setValue('externalLinks', links);
+													}}
+												>
+													Удалить
+												</Button>
+											</div>
+										))}
+										<Button
+											variant="outline"
+											onClick={() => {
+												const newLink = editForm.getValues('externalLinks');
+												newLink.push({ source: '', url: '' });
+												editForm.setValue('externalLinks', newLink);
+											}}
+										>
+											Добавить ссылку
+										</Button>
+									</div>
+								</div>
+
 							</div>
-							<div>
-								<Label>Рейтинг</Label>
-								<Controller
-									control={editForm.control}
-									name="rating"
-									render={({ field }) => (
-										<ReactSelect
-											options={ratingOptions}
-											value={field.value ? ratingOptions.find((opt) => opt.value === field.value) : null}
-											onChange={(selected) => field.onChange(selected?.value)}
-											placeholder="Выберите рейтинг"
-										/>
-									)}
-								/>
-							</div>
-							<div>
-								<Label>Эпизоды</Label>
-								<Input type="number" {...editForm.register('episodes', { valueAsNumber: true })} placeholder="Количество эпизодов" />
-							</div>
-							<div>
-								<Label>Жанры</Label>
-								<Controller
-									control={editForm.control}
-									name="genres"
-									render={({ field }) => (
-										<ReactSelect
-											isMulti
-											options={genreOptions}
-											value={field.value?.map((v) => genreOptions.find((opt) => opt.value === v)) || []}
-											onChange={(selected) => field.onChange(selected?.map((opt) => opt.value) || [])}
-											placeholder="Выберите жанры"
-										/>
-									)}
-								/>
-							</div>
-							<div>
-								<Label>Теги</Label>
-								<Controller
-									control={editForm.control}
-									name="tags"
-									render={({ field }) => (
-										<AsyncSelect
-											isMulti
-											cacheOptions
-											defaultOptions
-											loadOptions={loadTags}
-											value={field.value?.map((v) => ({ value: v, label: v })) || []}
-											onChange={(selected) => field.onChange(selected?.map((opt) => opt.value) || [])}
-											placeholder="Поиск тегов..."
-										/>
-									)}
-								/>
-							</div>
-							<div>
-								<Label>Студии</Label>
-								<Controller
-									control={editForm.control}
-									name="studios"
-									render={({ field }) => (
-										<ReactSelect
-											isMulti
-											options={studioOptions}
-											value={field.value?.map((v) => studioOptions.find((opt) => opt.value === v)) || []}
-											onChange={(selected) => field.onChange(selected?.map((opt) => opt.value) || [])}
-											placeholder="Выберите студии"
-										/>
-									)}
-								/>
-							</div>
-							<div>
-								<Label>Обложка (Extra Large)</Label>
-								<Input {...editForm.register('coverImageExtraLarge')} placeholder="URL обложки (extra large)" />
-							</div>
-							<div>
-								<Label>Баннер</Label>
-								<Input {...editForm.register('coverImageBanner')} placeholder="URL баннера" />
-							</div>
-							<div>
-								<Label>Описание (RU)</Label>
-								<Textarea {...editForm.register('descriptionRU')} placeholder="Описание на русском" />
-							</div>
-							<div>
-								<Label>Описание (EN)</Label>
-								<Textarea {...editForm.register('descriptionEN')} placeholder="Описание на английском" />
-							</div>
+						</div>
+						<div className="flex justify-end mt-6">
 							<Button type="submit" disabled={updateLoading}>
 								{updateLoading ? 'Сохранение...' : 'Сохранить изменения'}
 							</Button>
 						</div>
 					</form>
 				</DialogContent>
-			</Dialog>
-		</div>
+			</Dialog>		</div>
 	)
 }
